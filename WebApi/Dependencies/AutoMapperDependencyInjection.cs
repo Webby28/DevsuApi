@@ -45,5 +45,6 @@ public class MappingProfile : Profile
         CreateMap<ClienteEntity, ClienteUpdateRequest>()
            .ReverseMap();
         CreateMap<CuentaEntity, CuentaRequest>().ReverseMap();
+        CreateMap<MovimientosEntity, MovimientosRequest>().ReverseMap();
     }
 }

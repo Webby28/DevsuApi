@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +17,7 @@ public class CuentaEntity
 
     [Required]
     [Description("Saldo inicial de la cuenta")]
-    public decimal SaldoInicial { get; set; }
+    public int SaldoInicial { get; set; }
 
     [Required]
     [Description("Estado de la cuenta")]

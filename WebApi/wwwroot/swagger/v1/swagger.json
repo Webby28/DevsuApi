@@ -701,8 +701,8 @@
           "MovimientosController"
         ],
         "summary": "InsertarCuenta",
-        "description": "Inserta los datos de la persona en la tabla Cuenta.",
-        "operationId": "Movimientos_InsertarMovimiento",
+        "description": "Crea una cuenta para un cliente.",
+        "operationId": "Movimientos_InsertarCuenta",
         "parameters": [
           {
             "name": "X-API-KEY",
@@ -730,7 +730,558 @@
         },
         "responses": {
           "201": {
-            "description": "Operación exitosa. Devuelve la cuenta que fue insertada en la base de datos.",
+            "description": "Operación exitosa. Devuelve la cuenta creada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CuentaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/movimientos": {
+      "post": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "InsertarMovimientos",
+        "description": "Inserta los datos de los movimientos realizados por una cuenta.",
+        "operationId": "Movimientos_InsertarMovimientos",
+        "parameters": [
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "movimiento",
+          "description": "Datos a insertar en tabla Cuenta",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovimientosRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Operación exitosa. Devuelve el movimiento realizado por la cuenta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/cuenta/{id}": {
+      "get": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "ObtenerCuenta",
+        "description": "Obtiene los datos de una cuenta.",
+        "operationId": "Movimientos_ObtenerCuenta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la cuenta",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve la cuenta de un cliente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado la cuenta."
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "ActualizarCuenta",
+        "description": "Inserta los datos de la persona en la tabla Cuenta.",
+        "operationId": "Movimientos_ActualizarCuenta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la cuenta a actualizar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "cuenta",
+          "description": "Datos a actualizar en tabla Cuenta",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CuentaRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "Operación exitosa. Se han actualizado los datos con éxito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "EliminarCuenta",
+        "description": "Endpoint que elimina la cuenta del cliente.",
+        "operationId": "Movimientos_EliminarCuenta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Cuenta a eliminar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Se ha eliminado el registro con éxito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/movimientos/{id}": {
+      "get": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "ObtenerMovimientos",
+        "description": "Obtiene el movimiento de una cuenta.",
+        "operationId": "Movimientos_ObtenerMovimientos",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id del movimiento",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve el movimiento de una cuenta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado el movimiento."
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "ActualizarMovimientos",
+        "description": "Endpoint para actualizar los datos de los movimientos.",
+        "operationId": "Movimientos_ActualizarMovimientos",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id del movimiento a actualizar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "movimientos",
+          "description": "Datos a insertar en tabla Cuenta",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovimientosRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "Operación exitosa. Se han actualizado los datos con éxito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "EliminarMovimientos",
+        "description": "Endpont que elimina un movimiento.",
+        "operationId": "Movimientos_EliminarMovimientos",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numero de la cuenta a eliminar",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Se ha eliminado el registro con éxito.",
             "content": {
               "application/json": {
                 "schema": {
@@ -818,7 +1369,10 @@
           "SIN_USUARIO",
           "USUARIO_NO_ACTIVO",
           "CUENTA_DUPLICADA",
-          "CLIENTE_NO_EXISTE"
+          "CLIENTE_NO_EXISTE",
+          "MOVIMIENTO_NO_EXISTE",
+          "CUENTA_NO_EXISTE",
+          "SALDO_EXCEDIDO"
         ],
         "enum": [
           0,
@@ -832,7 +1386,10 @@
           8,
           9,
           10,
-          11
+          11,
+          12,
+          13,
+          14
         ]
       },
       "PersonaRequest": {
@@ -957,6 +1514,15 @@
           }
         }
       },
+      "CuentaResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "numeroCuenta": {
+            "type": "string"
+          }
+        }
+      },
       "CuentaRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -970,9 +1536,9 @@
             "description": "Tipo de cuenta"
           },
           "saldoInicial": {
-            "type": "number",
+            "type": "integer",
             "description": "Saldo inicial de la cuenta",
-            "format": "decimal"
+            "format": "int32"
           },
           "estado": {
             "type": "string",
@@ -984,6 +1550,50 @@
             "format": "int32"
           }
         }
+      },
+      "MovimientosRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fecha"
+        ],
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "description": "Fecha del movimiento",
+            "minLength": 1
+          },
+          "tipoMovimiento": {
+            "description": "Tipo de movimiento",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TipoMovimiento"
+              }
+            ]
+          },
+          "valor": {
+            "type": "integer",
+            "description": "Valor del movimiento",
+            "format": "int32"
+          },
+          "numeroCuenta": {
+            "type": "integer",
+            "description": "Numero de Cuenta asociada al movimiento",
+            "format": "int32"
+          }
+        }
+      },
+      "TipoMovimiento": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "DEPOSITO",
+          "RETIRO"
+        ],
+        "enum": [
+          0,
+          1
+        ]
       }
     }
   },

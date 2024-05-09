@@ -159,9 +159,6 @@ public class ClientePersonaRepository : IClientePersonaRepository
             passCorrecto = VerifyPassword(parametros.ContraseñaAnterior, datosCliente.Contraseña);
         }
         return passCorrecto;
-
-
-
     }
     public async Task<bool> ExistePersona(int codigoPersona)
     {

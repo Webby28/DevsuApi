@@ -92,7 +92,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogInformation("Inicio solicitud de InsertarPersona {@cuenta}", movimiento);
                 var result = await _movimientosService.InsertarMovimiento(movimiento);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result.IdMovimiento != 0)
                 {
                     _logger.LogInformation("El movimiento se ha registrado con éxito {@cuenta}", movimiento);
                     return StatusCode(StatusCodes.Status201Created, result);
@@ -180,7 +180,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogInformation("Inicio solicitud de ObtenerMovimientos {@id}", id);
                 var result = await _movimientosService.ObtenerMovimientos(id);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result.IdMovimiento != 0)
                 {
                     _logger.LogInformation("Se lista el movimiento con éxito {@id}", id);
                     return StatusCode(StatusCodes.Status200OK, result);
@@ -216,12 +216,12 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> ActualizarCuenta([Description("Datos a actualizar en tabla Cuenta")][FromBody] CuentaRequest cuenta)
+        public async Task<IActionResult> ActualizarCuenta([Description("Id de la cuenta a actualizar")][FromRoute] int id, [Description("Datos a actualizar en tabla Cuenta")][FromBody] CuentaRequest cuenta)
         {
             try
             {
-                _logger.LogInformation("Inicio solicitud de InsertarPersona {@cuenta}", cuenta);
-                var result = await _movimientosService.ActualizarCuenta(cuenta);
+                _logger.LogInformation("Inicio solicitud de ActualizarCuenta {@cuenta}", cuenta);
+                var result = await _movimientosService.ActualizarCuenta(cuenta, id);
 
                 if (!string.IsNullOrWhiteSpace(result.Estado))
                 {
@@ -259,14 +259,14 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> ActualizarMovimientos([Description("Datos a insertar en tabla Cuenta")][FromBody] MovimientosRequest movimientos)
+        public async Task<IActionResult> ActualizarMovimientos([Description("Id del movimiento a actualizar")][FromRoute] int id, [Description("Datos a insertar en tabla Cuenta")][FromBody] MovimientosRequest movimientos)
         {
             try
             {
                 _logger.LogInformation("Inicio solicitud de InsertarPersona {@movimientos}", movimientos);
-                var result = await _movimientosService.ActualizarMovimiento(movimientos);
+                var result = await _movimientosService.ActualizarMovimiento(movimientos, id);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result.IdMovimiento != 0)
                 {
                     _logger.LogInformation("Se han actualizado los datos con éxito {@movimientos}", movimientos);
                     return StatusCode(StatusCodes.Status201Created, result);
@@ -309,7 +309,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogInformation("Inicio solicitud de InsertarPersona {@id}", id);
                 var result = await _movimientosService.EliminarCuenta(id);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result)
                 {
                     _logger.LogInformation("Se ha eliminado el registro con éxito.{@id}", id);
                     return StatusCode(StatusCodes.Status201Created, result);
@@ -345,27 +345,27 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> EliminarMovimientos([Description("Datos a insertar en tabla Cuenta")][FromBody] CuentaRequest cuenta)
+        public async Task<IActionResult> EliminarMovimientos([Description("Numero de la cuenta a eliminar")][FromRoute] int id)
         {
             try
             {
-                _logger.LogInformation("Inicio solicitud de InsertarPersona {@cuenta}", cuenta);
-                var result = await _movimientosService.EliminarMovimiento(cuenta);
+                _logger.LogInformation("Inicio solicitud de InsertarPersona {@id}", id);
+                var result = await _movimientosService.EliminarMovimiento(id);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result)
                 {
-                    _logger.LogInformation("Se ha eliminado el registro con éxito {@cuenta}", cuenta);
+                    _logger.LogInformation("Se ha eliminado el registro con éxito {@id}", id);
                     return StatusCode(StatusCodes.Status201Created, result);
                 }
                 else
                 {
-                    _logger.LogInformation("Ha ocurrido un error al eliminar el movimiento {@cuenta}", cuenta);
+                    _logger.LogInformation("Ha ocurrido un error al eliminar el movimiento {@id}", id);
                     return StatusCode(StatusCodes.Status400BadRequest, "Ha ocurrido un error  al crear la cuenta.");
                 }
             }
             catch (ReglaNegociosException ex)
             {
-                _logger.LogError(ex, "Ha ocurrido un error al eliminar el movimiento {@cuenta}", cuenta);
+                _logger.LogError(ex, "Ha ocurrido un error al eliminar el movimiento {@id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
                     ErrorType = ErrorType.validacion_parametro_entrada,
@@ -374,7 +374,7 @@ namespace WebApi.Controllers.V1
             }
             catch (System.Exception e)
             {
-                _logger.LogError(e, "Respuesta del servidor sobre la eliminación del movimiento {@persona}", cuenta);
+                _logger.LogError(e, "Respuesta del servidor sobre la eliminación del movimiento {@id}", id);
                 return StatusCode(500, new ErrorResponse
                 {
                     ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,

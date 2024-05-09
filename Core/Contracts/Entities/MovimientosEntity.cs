@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Core.Contracts.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,16 +17,18 @@ public class MovimientosEntity
 
     [Required]
     [Description("Tipo de movimiento")]
-    public required string TipoMovimiento { get; set; }
+    public required TipoMovimiento TipoMovimiento { get; set; }
 
     [Required]
     [Description("Valor del movimiento")]
-    public decimal Valor { get; set; }
+    public int Valor { get; set; }
 
     [Required]
     [Description("Saldo resultante después del movimiento")]
-    public decimal Saldo { get; set; }
+    public int Saldo { get; set; }
     [Required]
     [Description("Numero de cuenta asociada al movimiento")]
     public int NumeroCuenta { get; set; }
+    [Description("Fecha en que se registró la operación")]
+    public DateTime FechaRegistro { get; set; } 
 }

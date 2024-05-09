@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Core.Contracts.Enums;
+using Newtonsoft.Json;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Core.Contracts.Requests
 {
@@ -8,32 +11,27 @@ namespace WebApi.Core.Contracts.Requests
     public class MovimientosRequest
     {
         /// <summary>
-        /// Identificador único del movimiento.
+        /// Fecha del movimiento en formato de cadena "dd/mm/yyyy".
         /// </summary>
-        public int IdMovimiento { get; set; }
-
-        /// <summary>
-        /// Fecha del movimiento.
-        /// </summary>
+        [JsonProperty("fecha")]
         [Description("Fecha del movimiento")]
-        public DateTime Fecha { get; set; }
+        [Required(ErrorMessage = "La fecha es obligatoria.")]
+        public required string Fecha { get; set; }
+
 
         /// <summary>
         /// Tipo de movimiento.
         /// </summary>
         [Description("Tipo de movimiento")]
-        public string TipoMovimiento { get; set; }
+        public TipoMovimiento TipoMovimiento { get; set; }
 
         /// <summary>
         /// Valor del movimiento.
         /// </summary>
         [Description("Valor del movimiento")]
-        public decimal Valor { get; set; }
-
-        /// <summary>
-        /// Saldo resultante después del movimiento.
-        /// </summary>
-        [Description("Saldo resultante después del movimiento")]
-        public decimal Saldo { get; set; }
+        public int Valor { get; set; }
+                
+        [Description("Numero de Cuenta asociada al movimiento")]
+        public int NumeroCuenta { get; set; }
     }
 }

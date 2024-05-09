@@ -13,6 +13,9 @@
         SIN_USUARIO,
         USUARIO_NO_ACTIVO,
         CUENTA_DUPLICADA,
-        CLIENTE_NO_EXISTE
+        CLIENTE_NO_EXISTE,
+        MOVIMIENTO_NO_EXISTE,
+        CUENTA_NO_EXISTE,
+        SALDO_EXCEDIDO
     }
 }

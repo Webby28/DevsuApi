@@ -16,5 +16,6 @@ public class MovimientosConfiguration : IEntityTypeConfiguration<MovimientosEnti
         builder.Property(cc => cc.Valor).HasColumnName("VALOR").IsUnicode(false);
         builder.Property(cc => cc.Saldo).HasColumnName("SALDO").IsUnicode(false);
         builder.Property(cc => cc.NumeroCuenta).HasColumnName("NUMERO_CUENTA").IsUnicode(false);
+        builder.Property(cc => cc.FechaRegistro).HasColumnName("FECHA_REGISTRO").IsUnicode(false);
     }
 }

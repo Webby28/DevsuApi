@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Helpers;
@@ -37,43 +38,76 @@ public class MovimientosRepository : IMovimientosRepository
         await dbContext.SaveChangesAsync();
         return movimientos;
     }
-    public async Task<CuentaEntity> ActualizarCuenta(PersonaUpdateDTO personaDto, CodigoPersonaRequest codigoPersona)
+    public async Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int numeroCuenta)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<MovimientosEntity> ActualizarMovimiento(ClienteUpdateDTO clienteDto)
+    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientosRequest movimientoUpdate, int idMovimiento)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> EliminarCuenta(int codigoPersona)
+    public async Task<bool> EliminarCuenta(int numeroCuenta)
     {
-        throw new NotImplementedException();
+        var dbContext = _appDb.OracleDbContext;
+        var cuenta = await dbContext.Cuenta.FindAsync(numeroCuenta);
+        if (cuenta == null)
+        {
+            return false;
+        }
+        dbContext.Cuenta.Remove(cuenta);
+        await dbContext.SaveChangesAsync();
+        return true;
     }
 
-    public async Task<bool> EliminarMovimiento(int codigoPersona)
+    public async Task<bool> EliminarMovimiento(int idMovimiento)
     {
-        throw new NotImplementedException();
+        var dbContext = _appDb.OracleDbContext;
+        var movimiento = await dbContext.Movimientos.FindAsync(idMovimiento);
+        if (movimiento == null)
+        {
+            return false;
+        }
+        dbContext.Movimientos.Remove(movimiento);
+        await dbContext.SaveChangesAsync();
+        return true;
     }
 
-    public async Task<bool> ExisteCuenta(int codigoPersona)
-    {
-        throw new NotImplementedException();
+    public async Task<bool> ExisteCuenta(int numeroCuenta)    {
+        var existeCuenta = await _appDb.OracleDbContext.Cuenta
+            .Where(p => p.NumeroCuenta == numeroCuenta)
+            .FirstOrDefaultAsync();
+
+        return existeCuenta != null;
     }
 
-    public async Task<bool> ExisteMovimiento(int codigoCliente)
+    public async Task<bool> ExisteMovimiento(int idMovimiento)
     {
-        throw new NotImplementedException();
+        var existeMovimiento = await _appDb.OracleDbContext.Movimientos
+            .Where(p => p.IdMovimiento == idMovimiento)
+            .FirstOrDefaultAsync();
+
+        return existeMovimiento != null;
     }
-    public async Task<CuentaEntity> ObtenerCuenta(int idPersona)
+    public async Task<CuentaEntity> ObtenerCuenta(int numeroCuenta)
     {
-        throw new NotImplementedException();
+        var result = await _appDb.OracleDbContext
+       .Cuenta
+       .Where(p => p.NumeroCuenta == numeroCuenta)
+       .FirstOrDefaultAsync();
+
+        return result;
     }
 
-    public async Task<MovimientosEntity> ObtenerMovimiento(int PersonaId)
+    public async Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento)
     {
-        throw new NotImplementedException();
+        var result = await _appDb.OracleDbContext
+      .Movimientos
+      .Where(p => p.IdMovimiento == idMovimiento)
+      .FirstOrDefaultAsync();
+
+        return result;
     }
 
     public async Task<bool> TieneCuenta(int codigoCliente, string tipoCuenta)
@@ -83,4 +117,45 @@ public class MovimientosRepository : IMovimientosRepository
 
         return tieneCuenta;
     }
+
+    public async Task<int> SaldoActual(int numeroCuenta)
+    {
+        var ultimoSaldo = await _appDb.OracleDbContext.Movimientos
+         .Where(m => m.NumeroCuenta == numeroCuenta)
+         .OrderByDescending(m => m.FechaRegistro)
+    .Select(m => new { m.Saldo, m.NumeroCuenta })
+         .FirstOrDefaultAsync();
+
+
+        if (ultimoSaldo != null)
+        {
+            return ultimoSaldo.Saldo;
+        }
+        else
+        {
+            var primerMovimiento = await _appDb.OracleDbContext.Cuenta
+            .Where(p => p.NumeroCuenta == numeroCuenta)
+            .FirstOrDefaultAsync();
+            if(primerMovimiento != null)
+            {
+                return primerMovimiento.SaldoInicial;
+            }
+            else
+            {
+                return 0;
+            }
+        }       
+    }
+
+    public async Task ActualizarSaldoCuenta(int numeroCuenta, int saldoRestante)
+    {
+        var cuenta = await _appDb.OracleDbContext.Cuenta
+        .FirstOrDefaultAsync(p => p.NumeroCuenta == numeroCuenta);
+
+        if (cuenta != null)
+        {
+            cuenta.SaldoInicial = saldoRestante;
+            await _appDb.OracleDbContext.SaveChangesAsync();
+        }
+    }  
 }

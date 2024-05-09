@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Contracts.Enums;
 using Microsoft.Extensions.Logging;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
@@ -51,36 +52,75 @@ public class MovimientosService : IMovimientosService
         }
     }
 
-    public Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest cliente)
+    public async Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest movimientos)
     {
-        throw new NotImplementedException();
+        int saldoRestante = 0;
+        int saldoActual = 0;
+        var existeCuenta = await _movimientosRepository.ExisteCuenta(movimientos.NumeroCuenta);
+        if (existeCuenta)
+        {
+            saldoActual = await _movimientosRepository.SaldoActual(movimientos.NumeroCuenta);
+            if(saldoActual < 0)
+            {
+                _logger.LogInformation("La operación excedió el saldo disponible. {@movimientos}", movimientos);
+                throw new ReglaNegociosException("Saldo no disponible.", ErrorType.SALDO_EXCEDIDO);
+            }
+            switch (movimientos.TipoMovimiento)
+            {
+                case TipoMovimiento.DEPOSITO:
+                    saldoRestante = saldoActual + movimientos.Valor;
+                    break;
+                case TipoMovimiento.RETIRO:
+                    saldoRestante = saldoActual - movimientos.Valor;
+                    break;
+            }
+            if(saldoRestante < 0)
+            {
+                _logger.LogInformation("La operación excedió el saldo disponible. {@movimientos}", movimientos);
+                throw new ReglaNegociosException("Saldo no disponible.", ErrorType.SALDO_EXCEDIDO);
+            }
+            else
+            {
+                _logger.LogInformation("Se actualiza el saldo disponible en la cuenta. {@movimientos}", movimientos);
+                var request = _mapper.Map<MovimientosEntity>(movimientos);
+                request.Saldo = saldoRestante;
+                request.FechaRegistro = DateTime.Now;
+                return await _movimientosRepository.InsertarMovimiento(request);
+            }
+        }
+        else
+        {
+            throw new ReglaNegociosException("No existe la cuenta ingresada. Intente con nuevamente.", ErrorType.CUENTA_NO_EXISTE);
+        }        
     }
-    public Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, CodigoPersonaRequest codigoPersona)
+    public async Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int codigoPersona)
     {
         throw new NotImplementedException();
     }
 
-    public Task<MovimientosEntity> ActualizarMovimiento(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
+    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientosRequest movimientoUpdate, int codigoMovimiento)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> EliminarCuenta(int codigoPersona)
+    public async Task<bool> EliminarCuenta(int codigoPersona)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> EliminarMovimiento(int codigoCliente)
+    public async Task<bool> EliminarMovimiento(int codigoCliente)
     {
         throw new NotImplementedException();
     }
-    public Task<CuentaEntity> ObtenerCuenta(int codigoCuenta)
+    public async Task<CuentaEntity> ObtenerCuenta(int codigoCuenta)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation("Inicia operacion para consultar existencia de cuenta en tabla Cuenta {@codigoCuenta}", codigoCuenta);
+        return await _movimientosRepository.ObtenerCuenta(codigoCuenta);
     }
 
-    public Task<MovimientosEntity> ObtenerMovimientos(int codigoMovimiento)
+    public async Task<MovimientosEntity> ObtenerMovimientos(int codigoMovimiento)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation("Inicia operacion para consultar existencia de cuenta en tabla Cuenta {@codigoCuenta}", codigoMovimiento);
+        return await _movimientosRepository.ObtenerMovimiento(codigoMovimiento);
     }
 }

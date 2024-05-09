@@ -22,7 +22,7 @@ namespace WebApi.Core.Contracts.Requests
         /// Saldo inicial de la cuenta.
         /// </summary>
         [Description("Saldo inicial de la cuenta")]
-        public decimal SaldoInicial { get; set; }
+        public int SaldoInicial { get; set; }
 
         /// <summary>
         /// Estado de la cuenta.
