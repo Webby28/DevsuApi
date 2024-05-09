@@ -7,8 +7,8 @@ using Microsoft.IdentityModel.Logging;
 using Serilog;
 using System;
 using System.Net;
-using WebApi.Infrastructure.Infrastructure;
 using WebApi.Dependencies;
+using WebApi.Infrastructure.Infrastructure;
 
 namespace WebApi
 {
@@ -41,8 +41,7 @@ namespace WebApi
                 // Configuración de MVC y formateadores XML
                 builder.Services.AddControllers()
                     .AddXmlSerializerFormatters()  // Añadir formateadores de XML al MVC Builder
-                    .AddXmlDataContractSerializerFormatters(); 
-
+                    .AddXmlDataContractSerializerFormatters();
 
                 builder.Services.AddMvc()
                     .AddXmlSerializerFormatters()

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Core.Contracts.Entities;
+
 public class ClienteEntity
 {
     [Required]
@@ -14,9 +15,9 @@ public class ClienteEntity
 
     [Required]
     [Description("Contraseña del cliente")]
-    public required string Contraseña { get; set; }
+    public string Contraseña { get; set; }
 
     [Required]
     [Description("Estado del cliente")]
-    public required string Estado { get; set; }
+    public string Estado { get; set; }
 }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace WebApi.Infrastructure.Database.Helpers
-{  
+{
     public class PasswordHasher
     {
         public string HashPassword(string password)
@@ -26,5 +25,4 @@ namespace WebApi.Infrastructure.Database.Helpers
             return hashedInput.Equals(hashedPassword);
         }
     }
-
 }

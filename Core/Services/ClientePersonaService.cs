@@ -6,7 +6,6 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Interfaces;
 
-
 namespace WebApi.Core.Services;
 
 public class ClientePersonaService : IClientePersonaService
@@ -52,7 +51,6 @@ public class ClientePersonaService : IClientePersonaService
 
     public async Task<PersonaEntity> InsertarPersona(PersonaRequest persona)
     {
-
         var existeIdentificacion = await _clientePersonaRepository.ExisteIdentificacion(persona.Identificacion);
         if (existeIdentificacion)
         {
@@ -69,7 +67,7 @@ public class ClientePersonaService : IClientePersonaService
         else
         {
             _logger.LogInformation("Solicitud inválida. {@request}", request);
-            return  new PersonaEntity();
+            return new PersonaEntity();
         }
     }
 
@@ -78,6 +76,7 @@ public class ClientePersonaService : IClientePersonaService
         _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla PERSONA {@codigoCliente}", codigoPersona);
         return await _clientePersonaRepository.ObtenerPersona(codigoPersona);
     }
+
     public async Task<ClienteEntity> ObtenerCliente(int codigoCliente)
     {
         _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla CLIENTE {@codigoCliente}", codigoCliente);
@@ -90,21 +89,19 @@ public class ClientePersonaService : IClientePersonaService
         var updatePersona = _mapper.Map<PersonaUpdateDTO>(personaUpdate);
         if (existePersona)
         {
-            
             return await _clientePersonaRepository.ActualizarPersona(updatePersona, codigoPersona);
-
         }
         else
         {
             throw new ReglaNegociosException("Persona no existe", ErrorType.PERSONA_NO_EXISTE);
-
-        }       
+        }
     }
 
     public async Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
     {
         var existeCuenta = await _clientePersonaRepository.TieneUsuario(PersonaId);
-        if(clienteUpdate.Estado != "A") {
+        if (clienteUpdate.Estado != "A")
+        {
             throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.USUARIO_NO_ACTIVO);
         }
         else
@@ -117,7 +114,6 @@ public class ClientePersonaService : IClientePersonaService
                 {
                     updateCliente.PersonaId = PersonaId;
                     return await _clientePersonaRepository.ActualizarCliente(updateCliente);
-
                 }
                 else
                 {
@@ -129,8 +125,6 @@ public class ClientePersonaService : IClientePersonaService
                 throw new ReglaNegociosException("Persona no tiene una cuenta", ErrorType.PERSONA_NO_EXISTE);
             }
         }
-        
-
     }
 
     public async Task<bool> EliminarPersona(int codigoPersona)
@@ -157,5 +151,5 @@ public class ClientePersonaService : IClientePersonaService
         {
             throw new ReglaNegociosException("No existe cliente a eliminar", ErrorType.PERSONA_NO_EXISTE);
         }
-    }  
+    }
 }

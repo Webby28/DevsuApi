@@ -16,13 +16,13 @@ namespace WebApi.Core.Contracts.Requests
         /// Nombre de la persona.
         /// </summary>
         [Description("Nombre de la persona")]
-        public required string Nombre { get; set; }
+        public string Nombre { get; set; }
 
         /// <summary>
         /// Género de la persona.
         /// </summary>
         [Description("Género de la persona")]
-        public required string Genero { get; set; }
+        public string Genero { get; set; }
 
         /// <summary>
         /// Edad de la persona.
@@ -34,7 +34,7 @@ namespace WebApi.Core.Contracts.Requests
         /// Identificación de la persona.
         /// </summary>
         [Description("Identificación de la persona")]
-        public required string Identificacion { get; set; }
+        public string Identificacion { get; set; }
 
         /// <summary>
         /// Dirección de la persona.

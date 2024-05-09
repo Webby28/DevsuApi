@@ -17,7 +17,7 @@ public class MovimientosEntity
 
     [Required]
     [Description("Tipo de movimiento")]
-    public required TipoMovimiento TipoMovimiento { get; set; }
+    public TipoMovimiento TipoMovimiento { get; set; }
 
     [Required]
     [Description("Valor del movimiento")]
@@ -26,9 +26,11 @@ public class MovimientosEntity
     [Required]
     [Description("Saldo resultante después del movimiento")]
     public int Saldo { get; set; }
+
     [Required]
     [Description("Numero de cuenta asociada al movimiento")]
     public int NumeroCuenta { get; set; }
+
     [Description("Fecha en que se registró la operación")]
-    public DateTime FechaRegistro { get; set; } 
+    public DateTime FechaRegistro { get; set; }
 }

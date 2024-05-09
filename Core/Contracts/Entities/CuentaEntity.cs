@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,7 +12,7 @@ public class CuentaEntity
 
     [Required]
     [Description("Tipo de cuenta")]
-    public required string TipoCuenta { get; set; }
+    public string TipoCuenta { get; set; }
 
     [Required]
     [Description("Saldo inicial de la cuenta")]
@@ -21,7 +20,8 @@ public class CuentaEntity
 
     [Required]
     [Description("Estado de la cuenta")]
-    public required string Estado { get; set; }
+    public string Estado { get; set; }
+
     [Required]
     [Description("Id del cliente asociado a la cuenta")]
     public int IdCliente { get; set; }

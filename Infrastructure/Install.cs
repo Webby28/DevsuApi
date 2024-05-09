@@ -29,7 +29,6 @@ public static class Install
 
         services.AddSingleton<IConnectionStringFactory, ConnectionStringFactory>();
 
-
         services.AddTransient<IClientePersonaRepository, ClientePersonaRepository>();
         services.AddTransient<IMovimientosRepository, MovimientosRepository>();
 

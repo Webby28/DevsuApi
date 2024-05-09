@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Core.Contracts.Enums
 {
@@ -11,6 +6,7 @@ namespace Core.Contracts.Enums
     {
         [Display(Name = "Depósito")]
         DEPOSITO = 0,
+
         [Display(Name = "Retiro")]
         RETIRO = 1
     }

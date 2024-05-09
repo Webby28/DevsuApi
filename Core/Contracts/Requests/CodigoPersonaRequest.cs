@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace WebApi.Core.Contracts.Requests
+﻿namespace WebApi.Core.Contracts.Requests
 {
     /// <summary>
     /// Clase para obtener los datos de la persona en base a su id
@@ -10,6 +8,6 @@ namespace WebApi.Core.Contracts.Requests
         /// <summary>
         /// Identificador de la persona.
         /// </summary>
-        public int PersonaId { get; set; }       
+        public int PersonaId { get; set; }
     }
 }

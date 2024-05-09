@@ -13,7 +13,6 @@ namespace WebApi.Models.Validators
                .NotEmpty().WithMessage("La fecha es obligatoria.")
                .Matches(@"^\d{2}/\d{2}/\d{4}$").WithMessage("El formato de fecha debe ser dd/mm/yyyy.");
 
-
             RuleFor(x => x.TipoMovimiento)
             .NotEmpty().WithMessage("El tipo de movimiento es obligatorio.")
             .Must(x => Enum.IsDefined(typeof(TipoMovimiento), x))
@@ -24,7 +23,6 @@ namespace WebApi.Models.Validators
             RuleFor(x => x.Valor)
                 .NotEmpty().WithMessage("El valor del movimiento es obligatorio.")
                 .NotEqual(0).WithMessage("El valor del movimiento no puede ser cero.");
-            
         }
     }
 }

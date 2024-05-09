@@ -1,13 +1,9 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSwag.Annotations;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
@@ -212,6 +208,7 @@ public class ClientePersonaController : BaseApiController
             });
         }
     }
+
     [HttpPut("persona/{id}")]
     [OpenApiOperation("ActualizarPersona", description: "Actualiza los datos de una persona")]
     [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaUpdateDTO), Description = "Operación exitosa. Devuelve una los datos actualizados de la persona.")]
@@ -396,6 +393,7 @@ public class ClientePersonaController : BaseApiController
             });
         }
     }
+
     //[HttpPost("clientes")]
     //[OpenApiOperation("InsertarClienteNoVisible", description: "Oculta las cuentas de los clientes proporcionados, insertándolos en la tabla ver_marcas_cuenta.")]
     //[EndpointDescription("Oculta las cuentas de los clientes proporcionados, insertándolos en la tabla ver_marcas_cuenta.")]

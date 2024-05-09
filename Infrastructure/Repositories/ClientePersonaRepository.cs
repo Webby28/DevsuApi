@@ -4,7 +4,6 @@ using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
-using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
 using WebApi.Infrastructure.Database.Helpers;
@@ -20,7 +19,8 @@ public class ClientePersonaRepository : IClientePersonaRepository
     {
         _appDb = appDb;
         _mapper = mapper;
-    } 
+    }
+
     public async Task<ClienteEntity> InsertarCliente(ClienteEntity cliente)
     {
         var dbContext = _appDb.OracleDbContext;
@@ -48,7 +48,6 @@ public class ClientePersonaRepository : IClientePersonaRepository
         return result;
     }
 
-
     public async Task<PersonaEntity> ObtenerPersona(CodigoPersonaRequest persona)
     {
         var result = await _appDb.OracleDbContext
@@ -62,6 +61,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         }
         return result;
     }
+
     public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, CodigoPersonaRequest codigoPersona)
     {
         var datosPersona = await ObtenerPersona(codigoPersona);
@@ -99,6 +99,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
 
         throw new ReglaNegociosException("No se han encontrado cambios.", ErrorType.SIN_CAMBIOS);
     }
+
     public async Task<ClienteEntity> ActualizarCliente(ClienteUpdateDTO clienteDto)
     {
         var datosCliente = await ObtenerCliente(clienteDto.PersonaId);
@@ -139,42 +140,47 @@ public class ClientePersonaRepository : IClientePersonaRepository
         throw new ReglaNegociosException("No se han encontrado cambios.", ErrorType.SIN_CAMBIOS);
     }
 
-
     public async Task<bool> ExisteCliente(int codigoCliente)
     {
         var existeCliente = await _appDb.OracleDbContext.Cliente.Where(p => p.IdCliente == codigoCliente).FirstOrDefaultAsync();
         return existeCliente != null;
     }
+
     public async Task<bool> TieneUsuario(int codigoPersona)
     {
         var tieneCuenta = await _appDb.OracleDbContext.Cliente.Where(p => p.PersonaId == codigoPersona).FirstOrDefaultAsync();
         return tieneCuenta != null;
     }
+
     public async Task<bool> ValidarPassword(ClientePassword parametros)
     {
         var datosCliente = await _appDb.OracleDbContext.Cliente.Where(p => p.PersonaId == parametros.Id).FirstOrDefaultAsync();
         var passCorrecto = false;
-        if(datosCliente != null)
+        if (datosCliente != null)
         {
             passCorrecto = VerifyPassword(parametros.ContraseñaAnterior, datosCliente.Contraseña);
         }
         return passCorrecto;
     }
+
     public async Task<bool> ExistePersona(int codigoPersona)
     {
         var existePersona = await _appDb.OracleDbContext.Persona.Where(p => p.IdPersona == codigoPersona).FirstOrDefaultAsync();
         return existePersona != null;
     }
+
     public async Task<bool> ExisteIdentificacion(string identificacion)
     {
-        var existePersona = await _appDb.OracleDbContext.Persona.Where(p => p.Identificacion== identificacion).FirstOrDefaultAsync();
+        var existePersona = await _appDb.OracleDbContext.Persona.Where(p => p.Identificacion == identificacion).FirstOrDefaultAsync();
         return existePersona != null;
     }
+
     private string EncryptPass(string contraseña)
     {
         PasswordHasher passwordHasher = new PasswordHasher();
         return passwordHasher.HashPassword(contraseña);
     }
+
     private bool VerifyPassword(string password, string encryptedPassword)
     {
         PasswordHasher passwordHasher = new PasswordHasher();
@@ -187,13 +193,12 @@ public class ClientePersonaRepository : IClientePersonaRepository
         var persona = await dbContext.Persona.FindAsync(codigoPersona);
         if (persona == null)
         {
-            return false; 
+            return false;
         }
         dbContext.Persona.Remove(persona);
         await dbContext.SaveChangesAsync();
-        return true; 
+        return true;
     }
-
 
     public async Task<bool> EliminarCliente(int codigoPersona)
     {

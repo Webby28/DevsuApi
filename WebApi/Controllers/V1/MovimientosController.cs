@@ -79,6 +79,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpPost("movimientos")]
         [OpenApiOperation("InsertarMovimientos", description: "Inserta los datos de los movimientos realizados por una cuenta.")]
         [SwaggerResponse(StatusCodes.Status201Created, typeof(PersonaResponse), Description = "Operación exitosa. Devuelve el movimiento realizado por la cuenta.")]
@@ -122,6 +123,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpGet("cuenta/{id}")]
         [OpenApiOperation("ObtenerCuenta", description: "Obtiene los datos de una cuenta.")]
         [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaResponse), Description = "Operación exitosa. Devuelve la cuenta de un cliente.")]
@@ -166,6 +168,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpGet("movimientos/{id}")]
         [OpenApiOperation("ObtenerMovimientos", description: "Obtiene el movimiento de una cuenta.")]
         [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaResponse), Description = "Operación exitosa. Devuelve el movimiento de una cuenta.")]
@@ -210,6 +213,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpPut("cuenta/{id}")]
         [OpenApiOperation("ActualizarCuenta", description: "Inserta los datos de la persona en la tabla Cuenta.")]
         [SwaggerResponse(StatusCodes.Status201Created, typeof(PersonaResponse), Description = "Operación exitosa. Se han actualizado los datos con éxito.")]
@@ -253,6 +257,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpPut("movimientos/{id}")]
         [OpenApiOperation("ActualizarMovimientos", description: "Endpoint para actualizar los datos de los movimientos.")]
         [SwaggerResponse(StatusCodes.Status201Created, typeof(PersonaResponse), Description = "Operación exitosa. Se han actualizado los datos con éxito.")]
@@ -296,6 +301,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpDelete("cuenta/{id}")]
         [OpenApiOperation("EliminarCuenta", description: "Endpoint que elimina la cuenta del cliente.")]
         [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaResponse), Description = "Operación exitosa. Se ha eliminado el registro con éxito.")]
@@ -339,6 +345,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpDelete("movimientos/{id}")]
         [OpenApiOperation("EliminarMovimientos", description: "Endpont que elimina un movimiento.")]
         [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaResponse), Description = "Operación exitosa. Se ha eliminado el registro con éxito.")]
@@ -382,5 +389,5 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
-    }   
+    }
 }

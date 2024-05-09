@@ -1,15 +1,9 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using WebApi.Core.Contracts.Entities;
-using WebApi.Core.Contracts.Enums;
-using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
-using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
-using WebApi.Infrastructure.Database.Helpers;
 
 namespace WebApi.Infrastructure.Repositories;
 
@@ -23,6 +17,7 @@ public class MovimientosRepository : IMovimientosRepository
         _appDb = appDb;
         _mapper = mapper;
     }
+
     public async Task<CuentaEntity> InsertarCuenta(CuentaEntity cuenta)
     {
         var dbContext = _appDb.OracleDbContext;
@@ -38,6 +33,7 @@ public class MovimientosRepository : IMovimientosRepository
         await dbContext.SaveChangesAsync();
         return movimientos;
     }
+
     public async Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int numeroCuenta)
     {
         throw new NotImplementedException();
@@ -74,7 +70,8 @@ public class MovimientosRepository : IMovimientosRepository
         return true;
     }
 
-    public async Task<bool> ExisteCuenta(int numeroCuenta)    {
+    public async Task<bool> ExisteCuenta(int numeroCuenta)
+    {
         var existeCuenta = await _appDb.OracleDbContext.Cuenta
             .Where(p => p.NumeroCuenta == numeroCuenta)
             .FirstOrDefaultAsync();
@@ -90,6 +87,7 @@ public class MovimientosRepository : IMovimientosRepository
 
         return existeMovimiento != null;
     }
+
     public async Task<CuentaEntity> ObtenerCuenta(int numeroCuenta)
     {
         var result = await _appDb.OracleDbContext
@@ -126,7 +124,6 @@ public class MovimientosRepository : IMovimientosRepository
     .Select(m => new { m.Saldo, m.NumeroCuenta })
          .FirstOrDefaultAsync();
 
-
         if (ultimoSaldo != null)
         {
             return ultimoSaldo.Saldo;
@@ -136,7 +133,7 @@ public class MovimientosRepository : IMovimientosRepository
             var primerMovimiento = await _appDb.OracleDbContext.Cuenta
             .Where(p => p.NumeroCuenta == numeroCuenta)
             .FirstOrDefaultAsync();
-            if(primerMovimiento != null)
+            if (primerMovimiento != null)
             {
                 return primerMovimiento.SaldoInicial;
             }
@@ -144,7 +141,7 @@ public class MovimientosRepository : IMovimientosRepository
             {
                 return 0;
             }
-        }       
+        }
     }
 
     public async Task ActualizarSaldoCuenta(int numeroCuenta, int saldoRestante)
@@ -157,5 +154,5 @@ public class MovimientosRepository : IMovimientosRepository
             cuenta.SaldoInicial = saldoRestante;
             await _appDb.OracleDbContext.SaveChangesAsync();
         }
-    }  
+    }
 }
