@@ -1,0 +1,887 @@
+{
+  "x-generator": "NSwag v14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "api-devsu",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/api/persona": {
+      "post": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "InsertarPersona",
+        "description": "Inserta los datos de la persona en la tabla Persona.",
+        "operationId": "ClientePersona_InsertarPersona",
+        "parameters": [
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "persona",
+          "description": "Datos de la persona a insertar en tabla Persona",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonaRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Operación exitosa. Devuelve una lista de las personas que fueron insertadas en la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/cliente": {
+      "post": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "InsertarCliente",
+        "description": "Crea un usuario para una persona.",
+        "operationId": "ClientePersona_InsertarCliente",
+        "parameters": [
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "parametros",
+          "description": "Datos a insertar para creación de cuenta",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Operación exitosa. Devuelve los datos insertados para creación de cuenta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/persona/{id}": {
+      "get": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "ObtenerPersona",
+        "description": "Obtiene los datos de la persona en base a su id.",
+        "operationId": "ClientePersona_ObtenerPersona",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la persona",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve una lista de las personas que fueron insertadas en la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado coicidencias.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "ActualizarPersona",
+        "description": "Actualiza los datos de una persona",
+        "operationId": "ClientePersona_ActualizarPersona",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la persona a actualizar en tabla persona",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "persona",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonaRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve una los datos actualizados de la persona.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaUpdateDTO"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado datos para actualizar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaUpdateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "EliminarPersona",
+        "description": "Elimina registro de la tabla Persona en base al id persona.",
+        "operationId": "ClientePersona_EliminarPersona",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id del cliente",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve los datos de la persona eliminada de la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se han encontrado coincidencias para eliminar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/cliente/{id}": {
+      "get": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "ObtenerCliente",
+        "description": "Obtiene los datos de la cuenta de la persona en base a su id persona.",
+        "operationId": "ClientePersona_ObtenerCliente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la persona",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve la cuenta de la persona.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado coicidencias.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "ActualizarCliente",
+        "description": "Actualiza los datos del cliente.",
+        "operationId": "ClientePersona_ActualizarCliente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la persona que desea actualizar sus datos",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "passwordAnterior",
+            "in": "header",
+            "description": "Contraseña Anterior del cliente, necesario para actualizar datos del cliente",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "cliente",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteUpdateRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve los datos actualizados del cliente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteUpdateDTO"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado datos para actualizar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteUpdateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "summary": "EliminarCliente",
+        "description": "Elimina registro de la tabla Cliente en base al id persona.",
+        "operationId": "ClientePersona_EliminarCliente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id de la persona",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Devuelve los datos del cliente eliminado en la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se han encontrado coincidencias para eliminar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PersonaResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "numeroCuenta": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Clase predeterminada que retornara el error y el mensaje de error en caso de producirse excepciones",
+        "additionalProperties": false,
+        "properties": {
+          "errorType": {
+            "description": "Tipo de Error",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorType"
+              }
+            ]
+          },
+          "errorDescription": {
+            "type": "string",
+            "description": "Mensaje de Error"
+          }
+        }
+      },
+      "ErrorType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "SIN_CAMBIOS",
+          "validacion_parametro_entrada",
+          "error_interno_servidor",
+          "datos_duplicados",
+          "datos_no_encontrados",
+          "ERROR_INTERNO",
+          "codigo_persona_no_existe",
+          "contraseña_incorrecta",
+          "persona_sin_cuenta",
+          "cuenta_no_activa"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "PersonaRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "description": "Nombre de la persona"
+          },
+          "genero": {
+            "type": "string",
+            "description": "Género de la persona"
+          },
+          "edad": {
+            "type": "integer",
+            "description": "Edad de la persona",
+            "format": "int32"
+          },
+          "identificacion": {
+            "type": "string",
+            "description": "Identificación de la persona"
+          },
+          "direccion": {
+            "type": "string",
+            "description": "Dirección de la persona",
+            "nullable": true
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de la persona",
+            "nullable": true
+          }
+        }
+      },
+      "ClienteResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "codigoCliente": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ClienteRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "personaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contraseña": {
+            "type": "string",
+            "description": "Contraseña del cliente"
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado del cliente"
+          }
+        }
+      },
+      "PersonaUpdateDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "genero": {
+            "type": "string"
+          },
+          "edad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identificacion": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "telefono": {
+            "type": "string"
+          }
+        }
+      },
+      "ClienteUpdateDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idCliente": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contraseña": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string"
+          }
+        }
+      },
+      "ClienteUpdateRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "contraseña": {
+            "type": "string",
+            "description": "Contraseña nueva del cliente"
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado del cliente"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "ClientePersonaController",
+      "description": "Controlador de Endpoints para Cliente y Persona."
+    }
+  ]
+}
