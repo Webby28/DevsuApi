@@ -1,5 +1,4 @@
-﻿using Core.Contracts.Enums;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,7 +21,7 @@ namespace WebApi.Core.Contracts.Requests
         /// Tipo de movimiento.
         /// </summary>
         [Description("Tipo de movimiento")]
-        public TipoMovimiento TipoMovimiento { get; set; }
+        public char TipoMovimiento { get; set; }
 
         /// <summary>
         /// Valor del movimiento.

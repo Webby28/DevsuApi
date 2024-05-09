@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Requests;

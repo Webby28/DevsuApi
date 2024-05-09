@@ -1,5 +1,4 @@
-﻿using Core.Contracts.Enums;
-using FluentValidation;
+﻿using FluentValidation;
 using System;
 using WebApi.Core.Contracts.Requests;
 
@@ -15,10 +14,9 @@ namespace WebApi.Models.Validators
 
             RuleFor(x => x.TipoMovimiento)
             .NotEmpty().WithMessage("El tipo de movimiento es obligatorio.")
-            .Must(x => Enum.IsDefined(typeof(TipoMovimiento), x))
-            .WithMessage("El tipo de movimiento no es válido. 0 - Deposito | 1 - Retiro")
-            .When(x => x.TipoMovimiento != TipoMovimiento.DEPOSITO && x.TipoMovimiento != TipoMovimiento.RETIRO)
-            .WithMessage("El tipo de movimiento no es válido. 0 - Deposito | 1 - Retiro");
+            .Must(x => x == 0 || x == 1)
+            .WithMessage("El tipo de movimiento no es válido. 0 - Depósito | 1 - Retiro");
+
 
             RuleFor(x => x.Valor)
                 .NotEmpty().WithMessage("El valor del movimiento es obligatorio.")

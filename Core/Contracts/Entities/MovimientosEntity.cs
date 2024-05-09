@@ -1,5 +1,4 @@
-﻿using Core.Contracts.Enums;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,7 +16,7 @@ public class MovimientosEntity
 
     [Required]
     [Description("Tipo de movimiento")]
-    public TipoMovimiento TipoMovimiento { get; set; }
+    public char TipoMovimiento { get; set; }
 
     [Required]
     [Description("Valor del movimiento")]

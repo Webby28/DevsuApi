@@ -931,14 +931,14 @@
           "MovimientosController"
         ],
         "summary": "ActualizarCuenta",
-        "description": "Inserta los datos de la persona en la tabla Cuenta.",
+        "description": "Actualiza los datos de la cuenta.",
         "operationId": "Movimientos_ActualizarCuenta",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Id de la cuenta a actualizar",
+            "description": "Numero de la cuenta a actualizar",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -962,7 +962,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CuentaRequest"
+                "$ref": "#/components/schemas/CuentaUpdateDTO"
               }
             }
           },
@@ -1199,7 +1199,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MovimientosRequest"
+                "$ref": "#/components/schemas/MovimientoUpdateDTO"
               }
             }
           },
@@ -1322,6 +1322,92 @@
           }
         }
       }
+    },
+    "/v1/api/reportes": {
+      "get": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "GenerarReporte",
+        "description": "Obtiene un reporte de los movimientos de una persona en un rango de fecha.",
+        "operationId": "Movimientos_GenerarReporte",
+        "parameters": [
+          {
+            "name": "rangoFechas",
+            "in": "query",
+            "description": "Id del movimiento",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "codigoCliente",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Genera un pdf con los movimientos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado el movimiento."
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1372,7 +1458,8 @@
           "CLIENTE_NO_EXISTE",
           "MOVIMIENTO_NO_EXISTE",
           "CUENTA_NO_EXISTE",
-          "SALDO_EXCEDIDO"
+          "SALDO_EXCEDIDO",
+          "CUENTA_CON_MOVIMIENTOS"
         ],
         "enum": [
           0,
@@ -1389,7 +1476,8 @@
           11,
           12,
           13,
-          14
+          14,
+          15
         ]
       },
       "PersonaRequest": {
@@ -1564,12 +1652,8 @@
             "minLength": 1
           },
           "tipoMovimiento": {
-            "description": "Tipo de movimiento",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TipoMovimiento"
-              }
-            ]
+            "type": "string",
+            "description": "Tipo de movimiento"
           },
           "valor": {
             "type": "integer",
@@ -1583,17 +1667,30 @@
           }
         }
       },
-      "TipoMovimiento": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "DEPOSITO",
-          "RETIRO"
-        ],
-        "enum": [
-          0,
-          1
-        ]
+      "CuentaUpdateDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tipoCuenta": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string"
+          }
+        }
+      },
+      "MovimientoUpdateDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tipoMovimiento": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       }
     }
   },

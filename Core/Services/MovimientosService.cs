@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Core.Contracts.Enums;
 using Microsoft.Extensions.Logging;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
@@ -67,11 +66,11 @@ public class MovimientosService : IMovimientosService
             }
             switch (movimientos.TipoMovimiento)
             {
-                case TipoMovimiento.DEPOSITO:
+                case '0':
                     saldoRestante = saldoActual + movimientos.Valor;
                     break;
 
-                case TipoMovimiento.RETIRO:
+                case '1':
                     saldoRestante = saldoActual - movimientos.Valor;
                     break;
             }
@@ -95,24 +94,67 @@ public class MovimientosService : IMovimientosService
         }
     }
 
-    public async Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int codigoPersona)
+    public async Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta)
     {
-        throw new NotImplementedException();
+        var existeCuenta = await _movimientosRepository.ExisteCuenta(numeroCuenta);
+        if (existeCuenta)
+        {
+            var updateCuenta = _mapper.Map<CuentaUpdateDTO>(cuentaUpdate);
+            return await _movimientosRepository.ActualizarCuenta(updateCuenta, numeroCuenta);
+        }
+        else
+        {
+            throw new ReglaNegociosException("Persona no existe", ErrorType.PERSONA_NO_EXISTE);
+        }
     }
 
-    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientosRequest movimientoUpdate, int codigoMovimiento)
+    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int codigoMovimiento)
     {
-        throw new NotImplementedException();
+        var existeMovimiento = await _movimientosRepository.ExisteMovimiento(codigoMovimiento);
+        if (existeMovimiento)
+        {
+            var updateCuenta = _mapper.Map<MovimientoUpdateDTO>(movimientoUpdate);
+            return await _movimientosRepository.ActualizarMovimiento(updateCuenta, codigoMovimiento);
+        }
+        else
+        {
+            throw new ReglaNegociosException("Persona no existe", ErrorType.PERSONA_NO_EXISTE);
+        }
     }
 
-    public async Task<bool> EliminarCuenta(int codigoPersona)
+    public async Task<bool> EliminarCuenta(int numeroCuenta)
     {
-        throw new NotImplementedException();
+        var existeCuenta = await _movimientosRepository.ExisteCuenta(numeroCuenta);
+        if (existeCuenta)
+        {
+            var conMovimiento = await _movimientosRepository.CuentaConMovimiento(numeroCuenta);
+            if (!conMovimiento)
+            {
+              return await _movimientosRepository.EliminarCuenta(numeroCuenta);
+
+            }
+            else
+            {
+                throw new ReglaNegociosException("Cuenta con movimientos.", ErrorType.CUENTA_CON_MOVIMIENTOS);
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public async Task<bool> EliminarMovimiento(int codigoCliente)
+    public async Task<bool> EliminarMovimiento(int idMovimiento)
     {
-        throw new NotImplementedException();
+        var existeMovimiento = await _movimientosRepository.ExisteMovimiento(idMovimiento);
+        if (existeMovimiento)
+        {
+            return await _movimientosRepository.EliminarMovimiento(idMovimiento);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public async Task<CuentaEntity> ObtenerCuenta(int codigoCuenta)
@@ -125,5 +167,10 @@ public class MovimientosService : IMovimientosService
     {
         _logger.LogInformation("Inicia operacion para consultar existencia de cuenta en tabla Cuenta {@codigoCuenta}", codigoMovimiento);
         return await _movimientosRepository.ObtenerMovimiento(codigoMovimiento);
+    }
+
+    public async Task<byte[]> GenerarReporte(int rangoFechas, int codigoCliente)
+    {
+        throw new NotImplementedException();
     }
 }

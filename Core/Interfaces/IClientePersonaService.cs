@@ -5,7 +5,7 @@ namespace WebApi.Core.Interfaces;
 
 public interface IClientePersonaService
 {
-    Task<PersonaEntity> InsertarPersona(PersonaRequest cuenta);
+    Task<PersonaEntity> InsertarPersona(PersonaRequest persona);
 
     Task<ClienteEntity> InsertarCliente(ClienteRequest cliente);
 

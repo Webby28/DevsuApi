@@ -13,11 +13,12 @@ public interface IMovimientosService
 
     Task<MovimientosEntity> ObtenerMovimientos(int codigoMovimiento);
 
-    Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int codigoPersona);
+    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int codigoPersona);
 
-    Task<MovimientosEntity> ActualizarMovimiento(MovimientosRequest movimientoUpdate, int codigoMovimiento);
+    Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int codigoMovimiento);
 
     Task<bool> EliminarCuenta(int codigoPersona);
 
     Task<bool> EliminarMovimiento(int codigoCliente);
+    Task <byte[]> GenerarReporte(int rangoFechas, int codigoCliente);
 }

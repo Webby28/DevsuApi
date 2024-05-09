@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Core.Contracts.Entities;
+using WebApi.Core.Contracts.Enums;
+using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
@@ -34,14 +36,57 @@ public class MovimientosRepository : IMovimientosRepository
         return movimientos;
     }
 
-    public async Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int numeroCuenta)
+    public async Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta)
     {
-        throw new NotImplementedException();
+        var dbContext = _appDb.OracleDbContext;
+
+        var cuentaExistente = await dbContext.Cuenta.FirstOrDefaultAsync(c => c.NumeroCuenta == numeroCuenta);
+
+        if (cuentaExistente != null)
+        {
+            cuentaExistente.TipoCuenta = cuentaUpdate.TipoCuenta;
+            cuentaExistente.Estado = cuentaUpdate.Estado;
+
+            await dbContext.SaveChangesAsync();
+
+            return cuentaExistente;
+        }
+        else
+        {
+            throw new ReglaNegociosException("La cuenta no existe.", ErrorType.CUENTA_NO_EXISTE);
+        }
     }
 
-    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientosRequest movimientoUpdate, int idMovimiento)
+    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int idMovimiento)
     {
-        throw new NotImplementedException();
+        var dbContext = _appDb.OracleDbContext;
+
+        var movimientoExistente = await dbContext.Movimientos.FirstOrDefaultAsync(c => c.IdMovimiento == idMovimiento);
+        var saldoNuevo = 0;
+        var saldoActual = movimientoExistente.Saldo;
+        if (movimientoExistente != null)
+        {
+            movimientoExistente.TipoMovimiento = movimientoUpdate.TipoMovimiento;
+            movimientoExistente.Valor= movimientoUpdate.Valor;
+            switch (movimientoUpdate.TipoMovimiento)
+            {
+                case '0':
+                    saldoNuevo = saldoActual + movimientoUpdate.Valor;
+                    break;
+
+                case '1':
+                    saldoNuevo = saldoActual - movimientoUpdate.Valor;
+                    break;
+            }
+            movimientoExistente.Saldo = saldoNuevo;
+            await dbContext.SaveChangesAsync();
+
+            return movimientoExistente;
+        }
+        else
+        {
+            throw new ReglaNegociosException("La cuenta no existe.", ErrorType.CUENTA_NO_EXISTE);
+        }
     }
 
     public async Task<bool> EliminarCuenta(int numeroCuenta)
@@ -154,5 +199,19 @@ public class MovimientosRepository : IMovimientosRepository
             cuenta.SaldoInicial = saldoRestante;
             await _appDb.OracleDbContext.SaveChangesAsync();
         }
+    }
+
+    public async Task<int> ActualizarSaldo(int idMovimiento)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> CuentaConMovimiento(int numeroCuenta)
+    {
+        var conMovimiento = await _appDb.OracleDbContext.Movimientos
+           .Where(p => p.NumeroCuenta == numeroCuenta)
+           .FirstOrDefaultAsync();
+
+        return conMovimiento != null;
     }
 }

@@ -215,12 +215,12 @@ namespace WebApi.Controllers.V1
         }
 
         [HttpPut("cuenta/{id}")]
-        [OpenApiOperation("ActualizarCuenta", description: "Inserta los datos de la persona en la tabla Cuenta.")]
+        [OpenApiOperation("ActualizarCuenta", description: "Actualiza los datos de la cuenta.")]
         [SwaggerResponse(StatusCodes.Status201Created, typeof(PersonaResponse), Description = "Operación exitosa. Se han actualizado los datos con éxito.")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> ActualizarCuenta([Description("Id de la cuenta a actualizar")][FromRoute] int id, [Description("Datos a actualizar en tabla Cuenta")][FromBody] CuentaRequest cuenta)
+        public async Task<IActionResult> ActualizarCuenta([Description("Numero de la cuenta a actualizar")][FromRoute] int id, [Description("Datos a actualizar en tabla Cuenta")][FromBody] CuentaUpdateDTO cuenta)
         {
             try
             {
@@ -264,7 +264,7 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> ActualizarMovimientos([Description("Id del movimiento a actualizar")][FromRoute] int id, [Description("Datos a insertar en tabla Cuenta")][FromBody] MovimientosRequest movimientos)
+        public async Task<IActionResult> ActualizarMovimientos([Description("Id del movimiento a actualizar")][FromRoute] int id, [Description("Datos a insertar en tabla Cuenta")][FromBody] MovimientoUpdateDTO movimientos)
         {
             try
             {
@@ -274,7 +274,7 @@ namespace WebApi.Controllers.V1
                 if (result.IdMovimiento != 0)
                 {
                     _logger.LogInformation("Se han actualizado los datos con éxito {@movimientos}", movimientos);
-                    return StatusCode(StatusCodes.Status201Created, result);
+                    return StatusCode(StatusCodes.Status200OK, result);
                 }
                 else
                 {
@@ -389,5 +389,51 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
+        [HttpGet("reportes")]
+        [OpenApiOperation("GenerarReporte", description: "Obtiene un reporte de los movimientos de una persona en un rango de fecha.")]
+        [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaResponse), Description = "Operación exitosa. Genera un pdf con los movimientos.")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado el movimiento.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
+        public async Task<IActionResult> GenerarReporte([Description("Id del movimiento")][FromQuery] int rangoFechas, [FromQuery] int codigoCliente)
+        {
+            try
+            {
+                _logger.LogInformation("Inicio solicitud de GenerarReporte {@RangoFechas}", rangoFechas);
+                var result = await _movimientosService.GenerarReporte(rangoFechas, codigoCliente);
+
+                if (result != null)
+                {
+                    _logger.LogInformation("Se lista el movimiento con éxito {@id}", codigoCliente);
+                    return StatusCode(StatusCodes.Status200OK, result);
+                }
+                else
+                {
+                    _logger.LogInformation("No se ha encontrado el movimiento {@id}", codigoCliente);
+                    return StatusCode(StatusCodes.Status204NoContent, "No se ha encontrado el movimiento.");
+                }
+            }
+            catch (ReglaNegociosException ex)
+            {
+                _logger.LogError(ex, "Ha ocurrido un error  al mostrar el movimiento {@id}", codigoCliente);
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+                {
+                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorDescription = ex.Message,
+                });
+            }
+            catch (System.Exception e)
+            {
+                _logger.LogError(e, "Respuesta del servidor obre la obtención de la información del movimiento {@id}", codigoCliente);
+                return StatusCode(500, new ErrorResponse
+                {
+                    ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
+                    ErrorDescription = "Ha ocurrido un error  al mostrar el movimientos. Intente nuevamente mas tarde",
+                });
+            }
+        }
+
     }
 }

@@ -13,9 +13,9 @@ public interface IMovimientosRepository
 
     Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento);
 
-    Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, int numeroCuenta);
+    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
 
-    Task<MovimientosEntity> ActualizarMovimiento(MovimientosRequest movimientoUpdate, int idMovimiento);
+    Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int idMovimiento);
 
     Task<bool> ExisteCuenta(int numeroCuenta);
 
@@ -25,7 +25,9 @@ public interface IMovimientosRepository
 
     Task<int> SaldoActual(int numeroCuenta);
 
-    Task<bool> EliminarCuenta(int codigoPersona);
+    Task<bool> EliminarCuenta(int numeroCuenta);
 
-    Task<bool> EliminarMovimiento(int codigoPersona);
+    Task<bool> EliminarMovimiento(int idMovimiento);
+    Task<int> ActualizarSaldo(int idMovimiento);
+    Task<bool> CuentaConMovimiento(int numeroCuenta);
 }

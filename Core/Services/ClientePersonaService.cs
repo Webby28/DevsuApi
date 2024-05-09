@@ -27,24 +27,24 @@ public class ClientePersonaService : IClientePersonaService
         var tieneCuenta = await _clientePersonaRepository.TieneUsuario(cliente.PersonaId);
         if (tieneCuenta)
         {
-            _logger.LogInformation("El persona ya tiene cuenta {@request}", cliente.PersonaId);
+            _logger.LogInformation("El persona ya tiene cuenta {@Cliente}", cliente);
             throw new ReglaNegociosException("La persona ingresada ya tiene una cuenta registrada.", ErrorType.DATOS_DUPLICADOS);
         }
         var request = _mapper.Map<ClienteEntity>(cliente);
         var existePersona = await _clientePersonaRepository.ExistePersona(cliente.PersonaId);
         if (!existePersona)
         {
-            _logger.LogInformation("El persona ingresada no existe. {@request}", cliente.PersonaId);
+            _logger.LogInformation("El persona ingresada no existe. {@Request}", cliente.PersonaId);
             throw new ReglaNegociosException("La persona ingresada no existe.", ErrorType.PERSONA_NO_EXISTE);
         }
         if (request.PersonaId != 0)
         {
-            _logger.LogInformation("Iniciando inserción de datos en tabla CLIENTE {@request}", request);
+            _logger.LogInformation("Iniciando inserción de datos en tabla CLIENTE {@Request}", request);
             return await _clientePersonaRepository.InsertarCliente(request);
         }
         else
         {
-            _logger.LogInformation("Ingrese el id la persona {@request}", request);
+            _logger.LogInformation("Ingrese el id la persona {@Request}", request);
             throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.validacion_parametro_entrada);
         }
     }
@@ -54,37 +54,42 @@ public class ClientePersonaService : IClientePersonaService
         var existeIdentificacion = await _clientePersonaRepository.ExisteIdentificacion(persona.Identificacion);
         if (existeIdentificacion)
         {
-            _logger.LogInformation("Identificacion duplicada {@request}", persona.Identificacion);
+            _logger.LogInformation("Identificacion duplicada {@Persona}", persona.Identificacion);
             throw new ReglaNegociosException("El numero de identificacion ya ha sido registrado con anterioridad", ErrorType.DATOS_DUPLICADOS);
         }
         var request = _mapper.Map<PersonaEntity>(persona);
 
         if (request.Nombre != null)
         {
-            _logger.LogInformation("Iniciando inserción de datos en tabla PERSONA {@request}", request);
+            _logger.LogInformation("Iniciando inserción de datos en tabla PERSONA {@Request}", request);
             return await _clientePersonaRepository.InsertarPersona(request);
         }
         else
         {
-            _logger.LogInformation("Solicitud inválida. {@request}", request);
+            _logger.LogInformation("Solicitud inválida. {@Request}", request);
             return new PersonaEntity();
         }
     }
 
     public async Task<PersonaEntity> ObtenerPersona(CodigoPersonaRequest codigoPersona)
     {
-        _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla PERSONA {@codigoCliente}", codigoPersona);
+        _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla PERSONA {@CodigoPersona}", codigoPersona);
         return await _clientePersonaRepository.ObtenerPersona(codigoPersona);
     }
 
     public async Task<ClienteEntity> ObtenerCliente(int codigoCliente)
     {
-        _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla CLIENTE {@codigoCliente}", codigoCliente);
+        if(codigoCliente < 1)
+        {
+            throw new ReglaNegociosException("El codigo ingresado en la solucitud no puede ser menor a 1.", ErrorType.validacion_parametro_entrada);
+        }
+        _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla CLIENTE {@CodigoPersona}", codigoCliente);
         return await _clientePersonaRepository.ObtenerCliente(codigoCliente);
     }
 
     public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, CodigoPersonaRequest codigoPersona)
     {
+        _logger.LogInformation("Iniciando actualizacion de Persona {@PersonaUpdate}", personaUpdate);
         var existePersona = await _clientePersonaRepository.ExistePersona(codigoPersona.PersonaId);
         var updatePersona = _mapper.Map<PersonaUpdateDTO>(personaUpdate);
         if (existePersona)
@@ -136,7 +141,7 @@ public class ClientePersonaService : IClientePersonaService
         }
         else
         {
-            throw new ReglaNegociosException("No existe persona a eliminar", ErrorType.PERSONA_NO_EXISTE);
+            return false;
         }
     }
 
@@ -149,7 +154,7 @@ public class ClientePersonaService : IClientePersonaService
         }
         else
         {
-            throw new ReglaNegociosException("No existe cliente a eliminar", ErrorType.PERSONA_NO_EXISTE);
+            return false;
         }
     }
 }
