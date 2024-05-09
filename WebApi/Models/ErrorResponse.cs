@@ -1,6 +1,6 @@
 ﻿using WebApi.Core.Contracts.Enums;
 
-namespace WebApi.WebApi.Models
+namespace WebApi.Models
 {
     /// <summary>
     /// Clase predeterminada que retornara el error y el mensaje de error en caso de producirse excepciones

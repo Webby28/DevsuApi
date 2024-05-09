@@ -10,7 +10,7 @@ using System.Net;
 using WebApi.Infrastructure.Infrastructure;
 using WebApi.Dependencies;
 
-namespace WebApi.WebApi
+namespace WebApi
 {
     public class Program
     {
@@ -23,7 +23,6 @@ namespace WebApi.WebApi
                 // Serilog
                 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
 
-                // Agregar si necesitamos logs internos de Serilog, caso contrario omitir
                 Serilog.Debugging.SelfLog.Enable(Console.Error);
 
                 Log.Information("Iniciando {ApplicationName}", builder.Configuration["Serilog:Properties:ApplicationName"]);
@@ -42,9 +41,8 @@ namespace WebApi.WebApi
                 // Configuración de MVC y formateadores XML
                 builder.Services.AddControllers()
                     .AddXmlSerializerFormatters()  // Añadir formateadores de XML al MVC Builder
-                    .AddXmlDataContractSerializerFormatters();  // Si es necesario, añadir también este formateador
+                    .AddXmlDataContractSerializerFormatters(); 
 
-                // Si estás utilizando AddMvc, la configuración sería similar:
 
                 builder.Services.AddMvc()
                     .AddXmlSerializerFormatters()

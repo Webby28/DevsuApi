@@ -694,6 +694,83 @@
           }
         }
       }
+    },
+    "/v1/api/cuenta": {
+      "post": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "InsertarCuenta",
+        "description": "Inserta los datos de la persona en la tabla Cuenta.",
+        "operationId": "Movimientos_InsertarMovimiento",
+        "parameters": [
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "cuenta",
+          "description": "Datos a insertar en tabla Cuenta",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CuentaRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Operación exitosa. Devuelve la cuenta que fue insertada en la base de datos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -732,14 +809,16 @@
         "x-enumNames": [
           "SIN_CAMBIOS",
           "validacion_parametro_entrada",
-          "error_interno_servidor",
-          "datos_duplicados",
-          "datos_no_encontrados",
+          "ERROR_INTERNO_EN_SERVIDOR",
+          "DATOS_DUPLICADOS",
+          "DATOS_NO_ENCONTRADOS",
           "ERROR_INTERNO",
-          "codigo_persona_no_existe",
-          "contraseña_incorrecta",
-          "persona_sin_cuenta",
-          "cuenta_no_activa"
+          "PERSONA_NO_EXISTE",
+          "CONTRASEÑA_INCORRECTA",
+          "SIN_USUARIO",
+          "USUARIO_NO_ACTIVO",
+          "CUENTA_DUPLICADA",
+          "CLIENTE_NO_EXISTE"
         ],
         "enum": [
           0,
@@ -751,7 +830,9 @@
           6,
           7,
           8,
-          9
+          9,
+          10,
+          11
         ]
       },
       "PersonaRequest": {
@@ -875,6 +956,34 @@
             "description": "Estado del cliente"
           }
         }
+      },
+      "CuentaRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "numeroCuenta": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoCuenta": {
+            "type": "string",
+            "description": "Tipo de cuenta"
+          },
+          "saldoInicial": {
+            "type": "number",
+            "description": "Saldo inicial de la cuenta",
+            "format": "decimal"
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado de la cuenta"
+          },
+          "idCliente": {
+            "type": "integer",
+            "description": "Cliente asociado a la cuenta",
+            "format": "int32"
+          }
+        }
       }
     }
   },
@@ -882,6 +991,10 @@
     {
       "name": "ClientePersonaController",
       "description": "Controlador de Endpoints para Cliente y Persona."
+    },
+    {
+      "name": "MovimientosController",
+      "description": "Controlador de Endpoints para Movimientos y Cuentas."
     }
   ]
 }

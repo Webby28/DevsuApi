@@ -25,18 +25,18 @@ public class ClientePersonaService : IClientePersonaService
 
     public async Task<ClienteEntity> InsertarCliente(ClienteRequest cliente)
     {
-        var tieneCuenta = await _clientePersonaRepository.TieneCuenta(cliente.PersonaId);
+        var tieneCuenta = await _clientePersonaRepository.TieneUsuario(cliente.PersonaId);
         if (tieneCuenta)
         {
             _logger.LogInformation("El persona ya tiene cuenta {@request}", cliente.PersonaId);
-            throw new ReglaNegociosException("La persona ingresada ya tiene una cuenta registrada.", ErrorType.datos_duplicados);
+            throw new ReglaNegociosException("La persona ingresada ya tiene una cuenta registrada.", ErrorType.DATOS_DUPLICADOS);
         }
         var request = _mapper.Map<ClienteEntity>(cliente);
         var existePersona = await _clientePersonaRepository.ExistePersona(cliente.PersonaId);
         if (!existePersona)
         {
             _logger.LogInformation("El persona ingresada no existe. {@request}", cliente.PersonaId);
-            throw new ReglaNegociosException("La persona ingresada no existe.", ErrorType.codigo_persona_no_existe);
+            throw new ReglaNegociosException("La persona ingresada no existe.", ErrorType.PERSONA_NO_EXISTE);
         }
         if (request.PersonaId != 0)
         {
@@ -57,7 +57,7 @@ public class ClientePersonaService : IClientePersonaService
         if (existeIdentificacion)
         {
             _logger.LogInformation("Identificacion duplicada {@request}", persona.Identificacion);
-            throw new ReglaNegociosException("El numero de identificacion ya ha sido registrado con anterioridad", ErrorType.datos_duplicados);
+            throw new ReglaNegociosException("El numero de identificacion ya ha sido registrado con anterioridad", ErrorType.DATOS_DUPLICADOS);
         }
         var request = _mapper.Map<PersonaEntity>(persona);
 
@@ -96,16 +96,16 @@ public class ClientePersonaService : IClientePersonaService
         }
         else
         {
-            throw new ReglaNegociosException("Persona no existe", ErrorType.codigo_persona_no_existe);
+            throw new ReglaNegociosException("Persona no existe", ErrorType.PERSONA_NO_EXISTE);
 
         }       
     }
 
     public async Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
     {
-        var existeCuenta = await _clientePersonaRepository.TieneCuenta(PersonaId);
+        var existeCuenta = await _clientePersonaRepository.TieneUsuario(PersonaId);
         if(clienteUpdate.Estado != "A") {
-            throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.cuenta_no_activa);
+            throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.USUARIO_NO_ACTIVO);
         }
         else
         {
@@ -121,12 +121,12 @@ public class ClientePersonaService : IClientePersonaService
                 }
                 else
                 {
-                    throw new ReglaNegociosException("La contraseña anterior ingresada es incorrecta.", ErrorType.contraseña_incorrecta);
+                    throw new ReglaNegociosException("La contraseña anterior ingresada es incorrecta.", ErrorType.CONTRASEÑA_INCORRECTA);
                 }
             }
             else
             {
-                throw new ReglaNegociosException("Persona no tiene una cuenta", ErrorType.codigo_persona_no_existe);
+                throw new ReglaNegociosException("Persona no tiene una cuenta", ErrorType.PERSONA_NO_EXISTE);
             }
         }
         
@@ -142,20 +142,20 @@ public class ClientePersonaService : IClientePersonaService
         }
         else
         {
-            throw new ReglaNegociosException("No existe persona a eliminar", ErrorType.codigo_persona_no_existe);
+            throw new ReglaNegociosException("No existe persona a eliminar", ErrorType.PERSONA_NO_EXISTE);
         }
     }
 
     public async Task<bool> EliminarCliente(int codigoCliente)
     {
-        var existePersona = await _clientePersonaRepository.TieneCuenta(codigoCliente);
+        var existePersona = await _clientePersonaRepository.TieneUsuario(codigoCliente);
         if (existePersona)
         {
             return await _clientePersonaRepository.EliminarCliente(codigoCliente);
         }
         else
         {
-            throw new ReglaNegociosException("No existe cliente a eliminar", ErrorType.codigo_persona_no_existe);
+            throw new ReglaNegociosException("No existe cliente a eliminar", ErrorType.PERSONA_NO_EXISTE);
         }
     }  
 }

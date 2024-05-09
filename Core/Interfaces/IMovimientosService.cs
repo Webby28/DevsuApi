@@ -5,12 +5,12 @@ namespace WebApi.Core.Interfaces;
 
 public interface IMovimientosService
 {
-    Task<PersonaEntity> InsertarCuenta(PersonaRequest cuenta);
-    Task<ClienteEntity> InsertarMovimiento(ClienteRequest cliente);
-    Task<PersonaEntity> ObtenerCuenta(CodigoPersonaRequest codigoPersona);
-    Task<ClienteEntity> ObtenerMovimiento(int codigoCliente);
-    Task<PersonaUpdateDTO> ActualizarCuenta(PersonaRequest personaUpdate, CodigoPersonaRequest codigoPersona);
-    Task<ClienteEntity> ActualizarMovimiento(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior);
+    Task<CuentaEntity> InsertarCuenta(CuentaRequest cuenta);
+    Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest cliente);
+    Task<CuentaEntity> ObtenerCuenta(int codigoCuenta);
+    Task<MovimientosEntity> ObtenerMovimientos(int codigoMovimiento);
+    Task<CuentaEntity> ActualizarCuenta(CuentaRequest cuentaUpdate, CodigoPersonaRequest codigoPersona);
+    Task<MovimientosEntity> ActualizarMovimiento(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior);
     Task<bool> EliminarCuenta(int codigoPersona);
     Task<bool> EliminarMovimiento(int codigoCliente);
 }

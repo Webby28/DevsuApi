@@ -15,7 +15,7 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
-using WebApi.WebApi.Models;
+using WebApi.Models;
 
 namespace WebApi.Controllers.V1;
 
@@ -73,7 +73,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la inserción de los datos de las personas {@persona}", persona);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al insertar los datos de las personas. Intente nuevamente mas tarde",
             });
         }
@@ -117,7 +117,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la inserción de los datos para creación de cuenta {@parametros}", parametros);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al crear su cuenta. Intente nuevamente mas tarde",
             });
         }
@@ -162,7 +162,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la obtención de los datos de las personas {@id}", id);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al obtener los datos de la persona. Intente nuevamente mas tarde",
             });
         }
@@ -207,7 +207,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la inserción de los datos de las personas {@id}", id);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al insertar los datos de las personas. Intente nuevamente mas tarde",
             });
         }
@@ -251,7 +251,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la actualización de los datos de la persona {@id}", id);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al actualizar los datos de las personas. Intente nuevamente mas tarde",
             });
         }
@@ -301,7 +301,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la actualización de los datos del cliente {@cliente}", cliente);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al actualizar los datos del cliente. Intente nuevamente mas tarde",
             });
         }
@@ -346,7 +346,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la inserción de los datos de las personas {@id}", id);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al insertar los datos de las personas. Intente nuevamente mas tarde",
             });
         }
@@ -391,7 +391,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(e, "Respuesta del servidor sobre la inserción de los datos de las personas {@id}", id);
             return StatusCode(500, new ErrorResponse
             {
-                ErrorType = ErrorType.error_interno_servidor,
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al insertar los datos de las personas. Intente nuevamente mas tarde",
             });
         }

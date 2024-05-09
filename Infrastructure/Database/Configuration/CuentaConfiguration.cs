@@ -14,5 +14,6 @@ public class CuentaConfiguration : IEntityTypeConfiguration<CuentaEntity>
         builder.Property(cc => cc.TipoCuenta).HasColumnName("TIPO_CUENTA").IsUnicode(false);
         builder.Property(cc => cc.SaldoInicial).HasColumnName("SALDO_INICIAL").IsUnicode(false);
         builder.Property(cc => cc.Estado).HasColumnName("ESTADO").IsUnicode(false);
+        builder.Property(cc => cc.IdCliente).HasColumnName("ID_CLIENTE").IsUnicode(false);
     }
 }

@@ -14,7 +14,7 @@ public interface IClientePersonaRepository
     Task<bool> ExistePersona(int codigoPersona);
     Task<bool> ExisteCliente(int codigoCliente);
     Task<bool> ExisteIdentificacion(string identificacion);
-    Task<bool> TieneCuenta(int codigoPersona);
+    Task<bool> TieneUsuario(int codigoPersona);
     Task<bool> ValidarPassword(ClientePassword parametros);
     Task<bool> EliminarPersona(int codigoPersona);
     Task<bool> EliminarCliente(int codigoPersona);

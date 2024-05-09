@@ -9,6 +9,7 @@ public static class Install
     public static IServiceCollection AgregarCore(this IServiceCollection services)
     {
         services.AddTransient<IClientePersonaService, ClientePersonaService>();
+        services.AddTransient<IMovimientosService, MovimientosService>();
         return services;
     }
 }

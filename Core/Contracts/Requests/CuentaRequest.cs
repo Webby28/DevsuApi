@@ -29,5 +29,10 @@ namespace WebApi.Core.Contracts.Requests
         /// </summary>
         [Description("Estado de la cuenta")]
         public string Estado { get; set; }
+        /// <summary>
+        /// Cliente asociado a la cuenta.
+        /// </summary>
+        [Description("Cliente asociado a la cuenta")]
+        public int IdCliente { get; set; }
     }
 }

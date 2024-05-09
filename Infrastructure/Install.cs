@@ -1,10 +1,10 @@
-﻿using Continental.API.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
 using WebApi.Infrastructure.Database.Helpers;
+using WebApi.Infrastructure.Repositories;
 
 namespace WebApi.Infrastructure.Infrastructure;
 
@@ -31,6 +31,7 @@ public static class Install
 
 
         services.AddTransient<IClientePersonaRepository, ClientePersonaRepository>();
+        services.AddTransient<IMovimientosRepository, MovimientosRepository>();
 
         services.AddHttpClient("ApiDevsu", options =>
         {

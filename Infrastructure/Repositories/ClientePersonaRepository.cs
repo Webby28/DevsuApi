@@ -9,7 +9,7 @@ using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
 using WebApi.Infrastructure.Database.Helpers;
 
-namespace Continental.API.Infrastructure.Repositories;
+namespace WebApi.Infrastructure.Repositories;
 
 public class ClientePersonaRepository : IClientePersonaRepository
 {
@@ -67,7 +67,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         var datosPersona = await ObtenerPersona(codigoPersona);
         if (datosPersona == null)
         {
-            throw new ReglaNegociosException("No se encontró la persona.", ErrorType.codigo_persona_no_existe);
+            throw new ReglaNegociosException("No se encontró la persona.", ErrorType.PERSONA_NO_EXISTE);
         }
 
         var tipoDatosPersona = datosPersona.GetType();
@@ -104,7 +104,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         var datosCliente = await ObtenerCliente(clienteDto.PersonaId);
         if (datosCliente == null)
         {
-            throw new ReglaNegociosException("La persona ingresada no cuenta con una cuenta.", ErrorType.persona_sin_cuenta);
+            throw new ReglaNegociosException("La persona ingresada no cuenta con una cuenta.", ErrorType.SIN_USUARIO);
         }
 
         clienteDto.Contraseña = EncryptPass(clienteDto.Contraseña);
@@ -145,7 +145,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         var existeCliente = await _appDb.OracleDbContext.Cliente.Where(p => p.IdCliente == codigoCliente).FirstOrDefaultAsync();
         return existeCliente != null;
     }
-    public async Task<bool> TieneCuenta(int codigoPersona)
+    public async Task<bool> TieneUsuario(int codigoPersona)
     {
         var tieneCuenta = await _appDb.OracleDbContext.Cliente.Where(p => p.PersonaId == codigoPersona).FirstOrDefaultAsync();
         return tieneCuenta != null;

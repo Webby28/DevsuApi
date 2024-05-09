@@ -4,13 +4,15 @@
     {
         SIN_CAMBIOS,
         validacion_parametro_entrada,
-        error_interno_servidor,
-        datos_duplicados,
-        datos_no_encontrados,
+        ERROR_INTERNO_EN_SERVIDOR,
+        DATOS_DUPLICADOS,
+        DATOS_NO_ENCONTRADOS,
         ERROR_INTERNO,
-        codigo_persona_no_existe,
-        contraseña_incorrecta,
-        persona_sin_cuenta,
-        cuenta_no_activa
+        PERSONA_NO_EXISTE,
+        CONTRASEÑA_INCORRECTA,
+        SIN_USUARIO,
+        USUARIO_NO_ACTIVO,
+        CUENTA_DUPLICADA,
+        CLIENTE_NO_EXISTE
     }
 }

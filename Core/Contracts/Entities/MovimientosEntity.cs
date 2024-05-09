@@ -25,4 +25,7 @@ public class MovimientosEntity
     [Required]
     [Description("Saldo resultante después del movimiento")]
     public decimal Saldo { get; set; }
+    [Required]
+    [Description("Numero de cuenta asociada al movimiento")]
+    public int NumeroCuenta { get; set; }
 }
