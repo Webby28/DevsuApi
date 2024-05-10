@@ -20,5 +20,5 @@ public interface IMovimientosService
     Task<bool> EliminarCuenta(int codigoPersona);
 
     Task<bool> EliminarMovimiento(int codigoCliente);
-    Task <byte[]> GenerarReporte(int rangoFechas, int codigoCliente);
+    Task <byte[]> GenerarReporte(string rangoFechas, int codigoCliente);
 }

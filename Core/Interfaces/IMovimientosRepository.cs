@@ -12,6 +12,8 @@ public interface IMovimientosRepository
     Task<MovimientosEntity> InsertarMovimiento(MovimientosEntity movimientos);
 
     Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento);
+    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateOnly desde, DateOnly hasta);
+
 
     Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
 

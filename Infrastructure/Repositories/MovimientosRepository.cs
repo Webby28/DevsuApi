@@ -152,6 +152,16 @@ public class MovimientosRepository : IMovimientosRepository
 
         return result;
     }
+    public async Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateOnly desde, DateOnly hasta)
+    {
+        var result = await _appDb.OracleDbContext
+      .Movimientos
+      .Where(p => p.IdMovimiento == idMovimiento
+      && p.Fecha>=desde && p.Fecha <= hasta )
+      .ToListAsync();
+
+        return result;
+    }
 
     public async Task<bool> TieneCuenta(int codigoCliente, string tipoCuenta)
     {

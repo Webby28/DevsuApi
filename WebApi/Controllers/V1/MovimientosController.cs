@@ -397,7 +397,7 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> GenerarReporte([Description("Id del movimiento")][FromQuery] int rangoFechas, [FromQuery] int codigoCliente)
+        public async Task<IActionResult> GenerarReporte([Description("Id del movimiento")][FromQuery] string rangoFechas, [FromQuery] int codigoCliente)
         {
             try
             {

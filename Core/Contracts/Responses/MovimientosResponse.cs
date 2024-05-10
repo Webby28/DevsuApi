@@ -5,6 +5,9 @@
     /// </summary>
     public class MovimientosResponse
     {
-        public string[] CodigoCliente { get; set; }
+        public int IdMovimiento { get; set; }
+        public int Saldo { get; set; }
+        public DateTime FechaDesde { get; set; }
+        public DateTime FechaHasta { get; set; }
     }
 }

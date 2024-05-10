@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using System.Text;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Helpers;
@@ -169,8 +170,94 @@ public class MovimientosService : IMovimientosService
         return await _movimientosRepository.ObtenerMovimiento(codigoMovimiento);
     }
 
-    public async Task<byte[]> GenerarReporte(int rangoFechas, int codigoCliente)
+    public async Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var partesRango = rangoFechas.Split('/');
+            if (partesRango.Length != 2)
+            {
+                throw new ArgumentException("El formato del rango de fechas es incorrecto.");
+            }
+
+            // Parsear las partes del rango en objetos DateOnly
+            DateOnly desde = DateOnly.Parse(partesRango[0]);
+            DateOnly hasta = DateOnly.Parse(partesRango[1]);
+            // Obtener los datos necesarios para el reporte desde _movimientosService
+            var reportData = await _movimientosRepository.ObtenerMovimientoPorFecha(codigoCliente, desde, hasta);
+
+            // Generar el HTML del reporte utilizando los datos obtenidos
+            string htmlReport = GenerarHTMLReporte(reportData);
+
+            // Generar el PDF del reporte a partir del HTML utilizando la clase PdfGenerator
+            var pdfGenerator = new PdfGenerator();
+            byte[] pdfBytes = pdfGenerator.GeneratePdf(htmlReport);
+
+            return pdfBytes;
+        }
+        catch (ReglaNegociosException ex)
+        {
+            // Manejo de excepciones
+            throw new ReglaNegociosException("Error al generar el reporte.", ex);
+        }
+        catch (System.Exception e)
+        {
+            // Manejo de excepciones
+            throw new Exception("Error interno al generar el reporte.", e);
+        }
+    }
+
+    private string GenerarHTMLReporte(IEnumerable<MovimientosEntity> reportData)
+    {
+        // Comienza la construcción del HTML
+        var htmlBuilder = new StringBuilder();
+        htmlBuilder.AppendLine("<!DOCTYPE html>");
+        htmlBuilder.AppendLine("<html>");
+        htmlBuilder.AppendLine("<head>");
+        htmlBuilder.AppendLine("<title>Reporte de Movimientos</title>");
+        htmlBuilder.AppendLine("</head>");
+        htmlBuilder.AppendLine("<body>");
+        htmlBuilder.AppendLine("<h1>Reporte de Movimientos</h1>");
+
+        // Verifica si hay datos en el reportData
+        if (reportData != null && reportData.Any())
+        {
+            // Agrega la tabla con los encabezados
+            htmlBuilder.AppendLine("<table>");
+            htmlBuilder.AppendLine("<thead>");
+            htmlBuilder.AppendLine("<tr>");
+            htmlBuilder.AppendLine("<th>ID Movimiento</th>");
+            htmlBuilder.AppendLine("<th>Fecha</th>");
+            htmlBuilder.AppendLine("<th>Detalle</th>");
+            htmlBuilder.AppendLine("</tr>");
+            htmlBuilder.AppendLine("</thead>");
+            htmlBuilder.AppendLine("<tbody>");
+
+            // Agrega las filas con los datos de los movimientos
+            foreach (var movimiento in reportData)
+            {
+                htmlBuilder.AppendLine("<tr>");
+                htmlBuilder.AppendLine($"<td>{movimiento.IdMovimiento}</td>");
+                htmlBuilder.AppendLine($"<td>{movimiento.Fecha}</td>");
+                htmlBuilder.AppendLine($"<td>{movimiento.Valor}</td>");
+                htmlBuilder.AppendLine($"<td>{movimiento.Saldo}</td>");
+                htmlBuilder.AppendLine($"<td>{movimiento.NumeroCuenta}</td>");
+                htmlBuilder.AppendLine("</tr>");
+            }
+
+            htmlBuilder.AppendLine("</tbody>");
+            htmlBuilder.AppendLine("</table>");
+        }
+        else
+        {
+            // Si no hay datos, muestra un mensaje indicando que no se encontraron movimientos
+            htmlBuilder.AppendLine("<p>No se encontraron movimientos para mostrar.</p>");
+        }
+
+        // Finaliza la construcción del HTML
+        htmlBuilder.AppendLine("</body>");
+        htmlBuilder.AppendLine("</html>");
+
+        return htmlBuilder.ToString();
     }
 }
