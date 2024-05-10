@@ -12,7 +12,7 @@ public class MovimientosEntity
 
     [Required]
     [Description("Fecha del movimiento")]
-    public DateOnly Fecha { get; set; }
+    public DateTime Fecha { get; set; }
 
     [Required]
     [Description("Tipo de movimiento")]

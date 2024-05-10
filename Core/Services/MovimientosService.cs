@@ -172,18 +172,26 @@ public class MovimientosService : IMovimientosService
 
     public async Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente)
     {
-        try
+        
+        var existeCliente = await _clientePersonaRepository.ExisteCliente(codigoCliente);
+        if(!existeCliente)
         {
-            var partesRango = rangoFechas.Split('/');
+            throw new ReglaNegociosException("El código de cliente no existe.", ErrorType.CLIENTE_NO_EXISTE);
+        }
+        else {
+            var tieneMovimiento = await _movimientosRepository.TieneMovimiento(codigoCliente);
+            if(!tieneMovimiento)
+            {
+                throw new ReglaNegociosException("El cliente no tiene movientos.", ErrorType.SIN_MOVIMIENTOS);
+            }
+
+            var partesRango = rangoFechas.Split('|');
             if (partesRango.Length != 2)
             {
                 throw new ArgumentException("El formato del rango de fechas es incorrecto.");
             }
-
-            // Parsear las partes del rango en objetos DateOnly
-            DateOnly desde = DateOnly.Parse(partesRango[0]);
-            DateOnly hasta = DateOnly.Parse(partesRango[1]);
-            // Obtener los datos necesarios para el reporte desde _movimientosService
+            DateTime desde = DateTime.Parse(partesRango[0]);
+            DateTime hasta = DateTime.Parse(partesRango[1]);
             var reportData = await _movimientosRepository.ObtenerMovimientoPorFecha(codigoCliente, desde, hasta);
 
             // Generar el HTML del reporte utilizando los datos obtenidos
@@ -194,17 +202,8 @@ public class MovimientosService : IMovimientosService
             byte[] pdfBytes = pdfGenerator.GeneratePdf(htmlReport);
 
             return pdfBytes;
-        }
-        catch (ReglaNegociosException ex)
-        {
-            // Manejo de excepciones
-            throw new ReglaNegociosException("Error al generar el reporte.", ex);
-        }
-        catch (System.Exception e)
-        {
-            // Manejo de excepciones
-            throw new Exception("Error interno al generar el reporte.", e);
-        }
+        }            
+        
     }
 
     private string GenerarHTMLReporte(IEnumerable<MovimientosEntity> reportData)

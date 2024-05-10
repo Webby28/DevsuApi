@@ -12,7 +12,7 @@ public interface IMovimientosRepository
     Task<MovimientosEntity> InsertarMovimiento(MovimientosEntity movimientos);
 
     Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento);
-    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateOnly desde, DateOnly hasta);
+    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateTime desde, DateTime hasta);
 
 
     Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
@@ -32,4 +32,5 @@ public interface IMovimientosRepository
     Task<bool> EliminarMovimiento(int idMovimiento);
     Task<int> ActualizarSaldo(int idMovimiento);
     Task<bool> CuentaConMovimiento(int numeroCuenta);
+    Task <bool> TieneMovimiento(int codigoCliente);
 }

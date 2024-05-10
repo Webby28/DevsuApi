@@ -152,13 +152,13 @@ public class MovimientosRepository : IMovimientosRepository
 
         return result;
     }
-    public async Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateOnly desde, DateOnly hasta)
+    public async Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int codCliente, DateTime desde, DateTime hasta)
     {
-        var result = await _appDb.OracleDbContext
-      .Movimientos
-      .Where(p => p.IdMovimiento == idMovimiento
-      && p.Fecha>=desde && p.Fecha <= hasta )
-      .ToListAsync();
+
+        var result  = await (from movimiento in _appDb.OracleDbContext.Movimientos
+                                     join cuenta in _appDb.OracleDbContext.Cuenta on movimiento.NumeroCuenta equals cuenta.NumeroCuenta
+                                     where cuenta.IdCliente == codCliente
+                                     select movimiento).ToListAsync();
 
         return result;
     }
@@ -176,7 +176,7 @@ public class MovimientosRepository : IMovimientosRepository
         var ultimoSaldo = await _appDb.OracleDbContext.Movimientos
          .Where(m => m.NumeroCuenta == numeroCuenta)
          .OrderByDescending(m => m.FechaRegistro)
-    .Select(m => new { m.Saldo, m.NumeroCuenta })
+         .Select(m => new { m.Saldo, m.NumeroCuenta })
          .FirstOrDefaultAsync();
 
         if (ultimoSaldo != null)
@@ -223,5 +223,15 @@ public class MovimientosRepository : IMovimientosRepository
            .FirstOrDefaultAsync();
 
         return conMovimiento != null;
+    }
+
+    public async Task<bool> TieneMovimiento(int codigoCliente)
+    {
+        var tieneMovimiento = await (from movimiento in _appDb.OracleDbContext.Movimientos
+                                   join cuenta in _appDb.OracleDbContext.Cuenta on movimiento.NumeroCuenta  equals cuenta.NumeroCuenta
+                                   where cuenta.IdCliente == codigoCliente
+                                   select movimiento)
+                             .FirstOrDefaultAsync();
+        return tieneMovimiento != null;
     }
 }

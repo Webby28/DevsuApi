@@ -401,13 +401,13 @@ namespace WebApi.Controllers.V1
         {
             try
             {
-                _logger.LogInformation("Inicio solicitud de GenerarReporte {@RangoFechas}", rangoFechas);
+                _logger.LogInformation("Inicio solicitud de GenerarReporte {@RangoFechas} {@CodigoCliente}", rangoFechas, codigoCliente);
                 var result = await _movimientosService.GenerarReporte(rangoFechas, codigoCliente);
 
                 if (result != null)
                 {
                     _logger.LogInformation("Se lista el movimiento con éxito {@id}", codigoCliente);
-                    return StatusCode(StatusCodes.Status200OK, result);
+                    return File(result, "application/pdf", $"reporte_movimientos{codigoCliente}.pdf");
                 }
                 else
                 {

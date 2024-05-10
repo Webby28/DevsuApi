@@ -1337,8 +1337,7 @@
             "in": "query",
             "description": "Id del movimiento",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             },
             "x-position": 1
           },
@@ -1459,7 +1458,8 @@
           "MOVIMIENTO_NO_EXISTE",
           "CUENTA_NO_EXISTE",
           "SALDO_EXCEDIDO",
-          "CUENTA_CON_MOVIMIENTOS"
+          "CUENTA_CON_MOVIMIENTOS",
+          "SIN_MOVIMIENTOS"
         ],
         "enum": [
           0,
@@ -1477,7 +1477,8 @@
           12,
           13,
           14,
-          15
+          15,
+          16
         ]
       },
       "PersonaRequest": {
