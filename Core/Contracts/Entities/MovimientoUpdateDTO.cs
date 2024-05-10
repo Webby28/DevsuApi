@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Core.Contracts.Entities;
 
-public class MovimientoUpdateDTO
+public class MovimientoUpdateDto
 {
     /// <summary>
     /// TipoMovimiento de movimiento

@@ -5,7 +5,7 @@ namespace WebApi.Core.Interfaces;
 
 public interface IClientePersonaRepository
 {
-    Task<PersonaEntity> InsertarPersona(PersonaEntity personas);
+    Task<PersonaEntity> InsertarPersona(PersonaEntity persona);
 
     Task<PersonaEntity> ObtenerPersona(int codigoPersona);
 
@@ -15,7 +15,7 @@ public interface IClientePersonaRepository
 
     Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, int codigoPersona);
 
-    Task<ClienteEntity> ActualizarCliente(ClienteUpdateDTO clienteDto);
+    Task<ClienteEntity> ActualizarCliente(ClienteUpdateDto clienteDto);
 
     Task<bool> ExistePersona(int codigoPersona);
 

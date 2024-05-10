@@ -11,12 +11,10 @@ namespace WebApi.Infrastructure.Repositories;
 public class MovimientosRepository : IMovimientosRepository
 {
     private readonly IAppDb _appDb;
-    private readonly IMapper _mapper;
 
-    public MovimientosRepository(IAppDb appDb, IMapper mapper)
+    public MovimientosRepository(IAppDb appDb)
     {
         _appDb = appDb;
-        _mapper = mapper;
     }
 
     public async Task<CuentaEntity> InsertarCuenta(CuentaEntity cuenta)
@@ -56,14 +54,14 @@ public class MovimientosRepository : IMovimientosRepository
         }
     }
 
-    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int idMovimiento)
+    public async Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int idMovimiento)
     {
         var dbContext = _appDb.OracleDbContext;
 
         var movimientoExistente = await dbContext.Movimientos.FirstOrDefaultAsync(c => c.IdMovimiento == idMovimiento);
         var saldoNuevo = 0;
         var saldoActual = movimientoExistente.Saldo;
-        if (movimientoExistente != null)
+        if (movimientoExistente.IdMovimiento != 0)
         {
             movimientoExistente.TipoMovimiento = movimientoUpdate.TipoMovimiento;
             movimientoExistente.Valor = movimientoUpdate.Valor;

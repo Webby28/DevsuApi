@@ -259,7 +259,7 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> ActualizarMovimientos([Description("Id del movimiento a actualizar")][FromRoute] int id, [Description("Datos nuevos para actualizar")][FromBody] MovimientoUpdateDTO movimientos)
+        public async Task<IActionResult> ActualizarMovimientos([Description("Id del movimiento a actualizar")][FromRoute] int id, [Description("Datos nuevos para actualizar")][FromBody] MovimientoUpdateDto movimientos)
         {
             try
             {

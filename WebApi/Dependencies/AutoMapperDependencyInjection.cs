@@ -35,12 +35,12 @@ public class MappingProfile : Profile
         CreateMap<PersonaUpdateDTO, PersonaRequest>().ReverseMap();
         CreateMap<PersonaUpdateDTO, PersonaEntity>()
             .ForMember(dest => dest.IdPersona, opt => opt.Ignore()).ReverseMap(); // Ignora el mapeo del campo IdPersona
-        CreateMap<ClienteUpdateDTO, ClienteRequest>()
+        CreateMap<ClienteUpdateDto, ClienteRequest>()
             .ReverseMap(); ;
-        CreateMap<ClienteUpdateDTO, ClienteEntity>()
+        CreateMap<ClienteUpdateDto, ClienteEntity>()
             .ForMember(dest => dest.IdCliente, opt => opt.Ignore())
             .ReverseMap(); // Ignora el mapeo del campo IdPersona
-        CreateMap<ClienteUpdateDTO, ClienteUpdateRequest>()
+        CreateMap<ClienteUpdateDto, ClienteUpdateRequest>()
             .ReverseMap();
         CreateMap<ClienteEntity, ClienteUpdateRequest>()
            .ReverseMap();

@@ -256,8 +256,8 @@ public class ClientePersonaController : BaseApiController
 
     [HttpPut("cliente/{id}")]
     [OpenApiOperation("ActualizarCliente", description: "Endpoint que actualiza los datos de un cliente.")]
-    [SwaggerResponse(StatusCodes.Status200OK, typeof(ClienteUpdateDTO), Description = "Operación exitosa. Devuelve un modelo con los datos nuevos del cliente.")]
-    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(ClienteUpdateDTO), Description = "No se ha encontrado datos para actualizar.")]
+    [SwaggerResponse(StatusCodes.Status200OK, typeof(ClienteUpdateDto), Description = "Operación exitosa. Devuelve un modelo con los datos nuevos del cliente.")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(ClienteUpdateDto), Description = "No se ha encontrado datos para actualizar.")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]

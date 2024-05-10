@@ -7,19 +7,19 @@ public interface IMovimientosService
 {
     Task<CuentaEntity> InsertarCuenta(CuentaRequest cuenta);
 
-    Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest cliente);
+    Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest movimiento);
 
     Task<CuentaEntity> ObtenerCuenta(int codigoCuenta);
 
     Task<MovimientosEntity> ObtenerMovimientos(int codigoMovimiento);
 
-    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int codigoPersona);
+    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
 
-    Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int codigoMovimiento);
+    Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int codigoMovimiento);
 
-    Task<bool> EliminarCuenta(int codigoPersona);
+    Task<bool> EliminarCuenta(int numeroCuenta);
 
-    Task<bool> EliminarMovimiento(int codigoCliente);
+    Task<bool> EliminarMovimiento(int codigoMovimiento);
 
     Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente);
 }

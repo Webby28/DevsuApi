@@ -12,17 +12,17 @@ public interface IMovimientosRepository
 
     Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento);
 
-    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateTime desde, DateTime hasta);
+    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int codCliente, DateTime desde, DateTime hasta);
 
     Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
 
-    Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDTO movimientoUpdate, int idMovimiento);
+    Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int idMovimiento);
 
     Task<bool> ExisteCuenta(int numeroCuenta);
 
     Task<bool> ExisteMovimiento(int idMovimiento);
 
-    Task<bool> TieneCuenta(int codigoPersona, string tipoCuenta);
+    Task<bool> TieneCuenta(int codigoCliente, string tipoCuenta);
 
     Task<int> SaldoActual(int numeroCuenta);
 

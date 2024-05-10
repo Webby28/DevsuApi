@@ -114,7 +114,7 @@ public class ClientePersonaService : IClientePersonaService
             if (existeCuenta)
             {
                 var contraseñaCorrecta = await _clientePersonaRepository.ValidarPassword(new ClientePassword() { Id = PersonaId, ContraseñaAnterior = passwordAnterior });
-                var updateCliente = _mapper.Map<ClienteUpdateDTO>(clienteUpdate);
+                var updateCliente = _mapper.Map<ClienteUpdateDto>(clienteUpdate);
                 if (contraseñaCorrecta)
                 {
                     updateCliente.PersonaId = PersonaId;

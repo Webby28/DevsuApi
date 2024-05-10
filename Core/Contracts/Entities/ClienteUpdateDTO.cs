@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Core.Contracts.Entities;
 
-public class ClienteUpdateDTO
+public class ClienteUpdateDto
 {
     /// <summary>
     /// Id del cliente

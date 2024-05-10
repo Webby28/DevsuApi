@@ -100,7 +100,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         throw new ReglaNegociosException("No se han encontrado cambios.", ErrorType.SIN_CAMBIOS);
     }
 
-    public async Task<ClienteEntity> ActualizarCliente(ClienteUpdateDTO clienteDto)
+    public async Task<ClienteEntity> ActualizarCliente(ClienteUpdateDto clienteDto)
     {
         var datosCliente = await ObtenerCliente(clienteDto.PersonaId);
         if (datosCliente == null)
