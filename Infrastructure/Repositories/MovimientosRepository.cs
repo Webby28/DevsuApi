@@ -168,10 +168,10 @@ public class MovimientosRepository : IMovimientosRepository
 
     public async Task<bool> TieneCuenta(int codigoCliente, string tipoCuenta)
     {
+        
         var tieneCuenta = await _appDb.OracleDbContext.Cuenta
-            .AnyAsync(p => p.IdCliente == codigoCliente && p.TipoCuenta == tipoCuenta);
-
-        return tieneCuenta;
+        .FirstOrDefaultAsync(p => p.IdCliente == codigoCliente && p.TipoCuenta == tipoCuenta);
+        return tieneCuenta != null;
     }
 
     public async Task<int> SaldoActual(int numeroCuenta)

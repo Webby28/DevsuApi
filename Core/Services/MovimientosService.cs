@@ -29,30 +29,32 @@ public class MovimientosService : IMovimientosService
 
     public async Task<CuentaEntity> InsertarCuenta(CuentaRequest cuenta)
     {
+        var existeCuenta = await _movimientosRepository.ExisteCuenta(cuenta.NumeroCuenta);
+        if (existeCuenta)
+        {
+            _logger.LogInformation("El número de cuenta proporcionado ya ha sido ingresado. {@Cuenta.NumeroCuenta}", cuenta.NumeroCuenta);
+            throw new ReglaNegociosException("El número de cuenta proporcionado ya ha sido ingresado. Intente nuevamente.", ErrorType.CUENTA_DUPLICADA);
+        }
+
         var existeCliente = await _clientePersonaRepository.ExisteCliente(cuenta.IdCliente);
         if (!existeCliente)
         {
             _logger.LogInformation("El cliente ingresado no existe {@Cuenta.IdCliente}", cuenta.IdCliente);
             throw new ReglaNegociosException("El cliente ingresado no existe.", ErrorType.CLIENTE_NO_EXISTE);
         }
-        var request = _mapper.Map<CuentaEntity>(cuenta);
+
         var tieneCuenta = await _movimientosRepository.TieneCuenta(cuenta.IdCliente, cuenta.TipoCuenta);
         if (tieneCuenta)
         {
             _logger.LogInformation("Esta persona ya tiene una cuenta del mismo tipo. {@Cuenta}", cuenta);
             throw new ReglaNegociosException("Esta persona ya tiene una cuenta del mismo tipo. Intente con otro tipo de cuenta", ErrorType.CUENTA_DUPLICADA);
         }
-        if (request != null)
-        {
-            _logger.LogInformation("Iniciando inserción de datos en tabla CLIENTE {@Request}", request);
-            return await _movimientosRepository.InsertarCuenta(request);
-        }
-        else
-        {
-            _logger.LogInformation("Ingrese el id la persona {@Request}", request);
-            throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
-        }
+
+        var request = _mapper.Map<CuentaEntity>(cuenta);
+        _logger.LogInformation("Iniciando inserción de datos en tabla cliente {@Request}", request);
+        return await _movimientosRepository.InsertarCuenta(request);
     }
+
 
     public async Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest movimiento)
     {
