@@ -79,7 +79,7 @@ public class ClientePersonaService : IClientePersonaService
 
     public async Task<ClienteEntity> ObtenerCliente(int codigoCliente)
     {
-        if(codigoCliente < 1)
+        if (codigoCliente < 1)
         {
             throw new ReglaNegociosException("El codigo ingresado en la solucitud no puede ser menor a 1.", ErrorType.validacion_parametro_entrada);
         }

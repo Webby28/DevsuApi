@@ -19,7 +19,6 @@ namespace WebApi.Test
         private Mock<IMapper> _mapperMock;
         private PersonaRequestValidator _personaRequestValidator;
 
-
         [SetUp]
         public void SetUp()
         {
@@ -41,7 +40,6 @@ namespace WebApi.Test
 
             //Assert
             Assert.That((int)ex.CodigoError, Is.EqualTo(codigoError));
-
         }
 
         [Test]
@@ -83,6 +81,7 @@ namespace WebApi.Test
             // Assert
             result.ShouldHaveValidationErrorFor(p => p.Edad).WithErrorMessage("La edad debe ser mayor que cero.");
         }
+
         [Test]
         public void PersonaRequestValidator_ValidarDireccion_Vacio_DeberiaFallar()
         {

@@ -2,8 +2,6 @@
 
 public class MovimientoUpdateDTO
 {
-
-
     /// <summary>
     /// TipoMovimiento de movimiento
     /// </summary>
@@ -13,5 +11,4 @@ public class MovimientoUpdateDTO
     /// Nuevo valor a actualizar
     /// </summary>
     public int Valor { get; set; }
-  
 }

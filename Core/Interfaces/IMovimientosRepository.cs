@@ -1,5 +1,4 @@
 ﻿using WebApi.Core.Contracts.Entities;
-using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Core.Interfaces;
 
@@ -12,8 +11,8 @@ public interface IMovimientosRepository
     Task<MovimientosEntity> InsertarMovimiento(MovimientosEntity movimientos);
 
     Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento);
-    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateTime desde, DateTime hasta);
 
+    Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int idMovimiento, DateTime desde, DateTime hasta);
 
     Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
 
@@ -30,7 +29,10 @@ public interface IMovimientosRepository
     Task<bool> EliminarCuenta(int numeroCuenta);
 
     Task<bool> EliminarMovimiento(int idMovimiento);
+
     Task<int> ActualizarSaldo(int idMovimiento);
+
     Task<bool> CuentaConMovimiento(int numeroCuenta);
-    Task <bool> TieneMovimiento(int codigoCliente);
+
+    Task<bool> TieneMovimiento(int codigoCliente);
 }

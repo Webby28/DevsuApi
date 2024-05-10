@@ -1,13 +1,9 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSwag.Annotations;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
@@ -15,7 +11,6 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
-using WebApi.Core.Services;
 using WebApi.Models;
 
 namespace WebApi.Controllers.V1
@@ -434,6 +429,5 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
-
     }
 }

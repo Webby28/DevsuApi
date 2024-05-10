@@ -5,7 +5,7 @@ public class PdfGenerator
     public byte[] GeneratePdf(string htmlContent)
     {
         // Create a new PDF document
-        PdfDocument document = new PdfDocument();        
+        PdfDocument document = new PdfDocument();
 
         // Create a new page
         PdfPage page = document.AddPage();

@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Helpers;
-using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
 
@@ -67,7 +66,7 @@ public class MovimientosRepository : IMovimientosRepository
         if (movimientoExistente != null)
         {
             movimientoExistente.TipoMovimiento = movimientoUpdate.TipoMovimiento;
-            movimientoExistente.Valor= movimientoUpdate.Valor;
+            movimientoExistente.Valor = movimientoUpdate.Valor;
             switch (movimientoUpdate.TipoMovimiento)
             {
                 case '0':
@@ -152,13 +151,13 @@ public class MovimientosRepository : IMovimientosRepository
 
         return result;
     }
+
     public async Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int codCliente, DateTime desde, DateTime hasta)
     {
-
-        var result  = await (from movimiento in _appDb.OracleDbContext.Movimientos
-                                     join cuenta in _appDb.OracleDbContext.Cuenta on movimiento.NumeroCuenta equals cuenta.NumeroCuenta
-                                     where cuenta.IdCliente == codCliente
-                                     select movimiento).ToListAsync();
+        var result = await (from movimiento in _appDb.OracleDbContext.Movimientos
+                            join cuenta in _appDb.OracleDbContext.Cuenta on movimiento.NumeroCuenta equals cuenta.NumeroCuenta
+                            where cuenta.IdCliente == codCliente
+                            select movimiento).ToListAsync();
 
         return result;
     }
@@ -228,9 +227,9 @@ public class MovimientosRepository : IMovimientosRepository
     public async Task<bool> TieneMovimiento(int codigoCliente)
     {
         var tieneMovimiento = await (from movimiento in _appDb.OracleDbContext.Movimientos
-                                   join cuenta in _appDb.OracleDbContext.Cuenta on movimiento.NumeroCuenta  equals cuenta.NumeroCuenta
-                                   where cuenta.IdCliente == codigoCliente
-                                   select movimiento)
+                                     join cuenta in _appDb.OracleDbContext.Cuenta on movimiento.NumeroCuenta equals cuenta.NumeroCuenta
+                                     where cuenta.IdCliente == codigoCliente
+                                     select movimiento)
                              .FirstOrDefaultAsync();
         return tieneMovimiento != null;
     }

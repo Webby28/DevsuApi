@@ -131,8 +131,7 @@ public class MovimientosService : IMovimientosService
             var conMovimiento = await _movimientosRepository.CuentaConMovimiento(numeroCuenta);
             if (!conMovimiento)
             {
-              return await _movimientosRepository.EliminarCuenta(numeroCuenta);
-
+                return await _movimientosRepository.EliminarCuenta(numeroCuenta);
             }
             else
             {
@@ -172,15 +171,15 @@ public class MovimientosService : IMovimientosService
 
     public async Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente)
     {
-        
         var existeCliente = await _clientePersonaRepository.ExisteCliente(codigoCliente);
-        if(!existeCliente)
+        if (!existeCliente)
         {
             throw new ReglaNegociosException("El código de cliente no existe.", ErrorType.CLIENTE_NO_EXISTE);
         }
-        else {
+        else
+        {
             var tieneMovimiento = await _movimientosRepository.TieneMovimiento(codigoCliente);
-            if(!tieneMovimiento)
+            if (!tieneMovimiento)
             {
                 throw new ReglaNegociosException("El cliente no tiene movientos.", ErrorType.SIN_MOVIMIENTOS);
             }
@@ -202,8 +201,7 @@ public class MovimientosService : IMovimientosService
             byte[] pdfBytes = pdfGenerator.GeneratePdf(htmlReport);
 
             return pdfBytes;
-        }            
-        
+        }
     }
 
     private string GenerarHTMLReporte(IEnumerable<MovimientosEntity> reportData)
