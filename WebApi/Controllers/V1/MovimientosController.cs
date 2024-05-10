@@ -479,5 +479,48 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+        [HttpPatch("movimientos/{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, typeof(int), Description = "Operación exitosa. Se actualizó el estado de la cuenta.")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado la cuenta.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
+        public async Task<ActionResult> ActualizarMovimientosPatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
+        {
+
+            try
+            {
+                _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);
+                var result = await _movimientosService.ActualizarEstado(requestModifica.Estado, id, Tabla.MOVIMIENTO);
+                if (result != 204)
+                {
+                    _logger.LogInformation("Se actualizó el estado de la cuenta con éxito {@Id}, {@RequestModifica}", id, requestModifica);
+                    return StatusCode(StatusCodes.Status200OK, "Se actualizó el estado de la cuenta con éxito");
+                }
+                else
+                {
+                    _logger.LogInformation("No se ha encontrado la cuenta {@Id}, {@RequestModifica}", id, requestModifica);
+                    return StatusCode(StatusCodes.Status204NoContent, "No se ha encontrado la cuenta.");
+                }
+            }
+            catch (ReglaNegociosException ex)
+            {
+                _logger.LogError(ex, "Ha ocurrido un error  al actualizar el estado {@RequestModifica}, {@Id}", requestModifica, id);
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+                {
+                    ErrorType = ex.CodigoError,
+                    ErrorDescription = ex.Message,
+                });
+            }
+            catch (System.Exception e)
+            {
+                _logger.LogError(e, "Ocurrio un error al momento de gestionar el estado {@RequestModifica}, cliente {@Id}", requestModifica, id);
+                return StatusCode(500, new ErrorResponse
+                {
+                    ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
+                    ErrorDescription = "Ocurrio un error al momento de modificar el estado."
+                });
+            }
+        }
     }
 }
