@@ -3,7 +3,7 @@
     public enum ErrorType
     {
         SIN_CAMBIOS,
-        validacion_parametro_entrada,
+        VALIDACION_PARAMETROS_ENTRADA,
         ERROR_INTERNO_EN_SERVIDOR,
         DATOS_DUPLICADOS,
         DATOS_NO_ENCONTRADOS,

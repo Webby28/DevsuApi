@@ -60,7 +60,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al crear la cuenta {@cuenta}", cuenta);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -104,7 +104,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al registrar el movimiento {@movimiento}", movimiento);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -149,7 +149,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al crear la cuenta {@id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -194,7 +194,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al mostrar el movimiento {@id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -238,7 +238,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al actualizar la cuenta {@cuenta}", cuenta);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -282,7 +282,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al actualizar el movimiento {@movimientos}", movimientos);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -326,7 +326,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al eliminar la cuenta {@id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -370,7 +370,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error al eliminar el movimiento {@id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -415,7 +415,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al mostrar el movimiento {@id}", codigoCliente);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.validacion_parametro_entrada,
+                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
                     ErrorDescription = ex.Message,
                 });
             }

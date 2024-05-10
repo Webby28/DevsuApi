@@ -48,11 +48,11 @@ public class ClientePersonaRepository : IClientePersonaRepository
         return result;
     }
 
-    public async Task<PersonaEntity> ObtenerPersona(CodigoPersonaRequest persona)
+    public async Task<PersonaEntity> ObtenerPersona(int codigoPersona)
     {
         var result = await _appDb.OracleDbContext
             .Persona
-            .Where(p => p.IdPersona == persona.PersonaId)
+            .Where(p => p.IdPersona == codigoPersona)
             .FirstOrDefaultAsync();
 
         if (result == null)
@@ -62,7 +62,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         return result;
     }
 
-    public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, CodigoPersonaRequest codigoPersona)
+    public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, int codigoPersona)
     {
         var datosPersona = await ObtenerPersona(codigoPersona);
         if (datosPersona == null)

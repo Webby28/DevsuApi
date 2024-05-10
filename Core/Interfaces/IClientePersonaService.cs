@@ -9,11 +9,11 @@ public interface IClientePersonaService
 
     Task<ClienteEntity> InsertarCliente(ClienteRequest cliente);
 
-    Task<PersonaEntity> ObtenerPersona(CodigoPersonaRequest codigoPersona);
+    Task<PersonaEntity> ObtenerPersona(int codigoPersona);
 
     Task<ClienteEntity> ObtenerCliente(int codigoCliente);
 
-    Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, CodigoPersonaRequest codigoPersona);
+    Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, int codigoPersona);
 
     Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior);
 

@@ -48,7 +48,7 @@ public class MovimientosService : IMovimientosService
         else
         {
             _logger.LogInformation("Ingrese el id la persona {@request}", request);
-            throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.validacion_parametro_entrada);
+            throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }
     }
 

@@ -7,13 +7,13 @@ public interface IClientePersonaRepository
 {
     Task<PersonaEntity> InsertarPersona(PersonaEntity personas);
 
-    Task<PersonaEntity> ObtenerPersona(CodigoPersonaRequest idPersona);
+    Task<PersonaEntity> ObtenerPersona(int codigoPersona);
 
     Task<ClienteEntity> InsertarCliente(ClienteEntity cliente);
 
     Task<ClienteEntity> ObtenerCliente(int PersonaId);
 
-    Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, CodigoPersonaRequest codigoPersona);
+    Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, int codigoPersona);
 
     Task<ClienteEntity> ActualizarCliente(ClienteUpdateDTO clienteDto);
 

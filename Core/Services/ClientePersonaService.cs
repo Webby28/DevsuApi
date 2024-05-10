@@ -45,7 +45,7 @@ public class ClientePersonaService : IClientePersonaService
         else
         {
             _logger.LogInformation("Ingrese el id la persona {@Request}", request);
-            throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.validacion_parametro_entrada);
+            throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }
     }
 
@@ -71,7 +71,7 @@ public class ClientePersonaService : IClientePersonaService
         }
     }
 
-    public async Task<PersonaEntity> ObtenerPersona(CodigoPersonaRequest codigoPersona)
+    public async Task<PersonaEntity> ObtenerPersona(int codigoPersona)
     {
         _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla PERSONA {@CodigoPersona}", codigoPersona);
         return await _clientePersonaRepository.ObtenerPersona(codigoPersona);
@@ -81,16 +81,16 @@ public class ClientePersonaService : IClientePersonaService
     {
         if (codigoCliente < 1)
         {
-            throw new ReglaNegociosException("El codigo ingresado en la solucitud no puede ser menor a 1.", ErrorType.validacion_parametro_entrada);
+            throw new ReglaNegociosException("El codigo ingresado en la solucitud no puede ser menor a 1.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }
         _logger.LogInformation("Inicia operacion para consultar existencia de persona en tabla CLIENTE {@CodigoPersona}", codigoCliente);
         return await _clientePersonaRepository.ObtenerCliente(codigoCliente);
     }
 
-    public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, CodigoPersonaRequest codigoPersona)
+    public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, int codigoPersona)
     {
         _logger.LogInformation("Iniciando actualizacion de Persona {@PersonaUpdate}", personaUpdate);
-        var existePersona = await _clientePersonaRepository.ExistePersona(codigoPersona.PersonaId);
+        var existePersona = await _clientePersonaRepository.ExistePersona(codigoPersona);
         var updatePersona = _mapper.Map<PersonaUpdateDTO>(personaUpdate);
         if (existePersona)
         {
