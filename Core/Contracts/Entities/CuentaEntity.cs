@@ -19,8 +19,8 @@ public class CuentaEntity
     public int SaldoInicial { get; set; }
 
     [Required]
-    [Description("Estado de la cuenta")]
-    public string Estado { get; set; }
+    [Description("Estado de la cuenta. A (Activo) I (Inactivo)")]
+    public char Estado { get; set; } = 'A';
 
     [Required]
     [Description("Id del cliente asociado a la cuenta")]

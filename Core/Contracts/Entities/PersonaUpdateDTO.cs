@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Core.Contracts.Entities;
 
-public class PersonaUpdateDTO
+public class PersonaUpdateDto
 {
     public string Nombre { get; set; }
     public string Genero { get; set; }
@@ -8,4 +8,5 @@ public class PersonaUpdateDTO
     public string Identificacion { get; set; }
     public string Direccion { get; set; }
     public string Telefono { get; set; }
+    public char Estado { get; set; }
 }

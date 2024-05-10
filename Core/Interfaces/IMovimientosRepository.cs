@@ -1,4 +1,6 @@
 ﻿using WebApi.Core.Contracts.Entities;
+using WebApi.Core.Contracts.Enums;
+using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Core.Interfaces;
 
@@ -14,7 +16,7 @@ public interface IMovimientosRepository
 
     Task<IEnumerable<MovimientosEntity>> ObtenerMovimientoPorFecha(int codCliente, DateTime desde, DateTime hasta);
 
-    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
+    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDto cuentaUpdate, int numeroCuenta);
 
     Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int idMovimiento);
 
@@ -35,4 +37,5 @@ public interface IMovimientosRepository
     Task<bool> CuentaConMovimiento(int numeroCuenta);
 
     Task<bool> TieneMovimiento(int codigoCliente);
+    Task<int> ActualizarEstado(char estado, int id, Tabla tabla);
 }

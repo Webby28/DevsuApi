@@ -62,7 +62,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         return result;
     }
 
-    public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaUpdateDTO personaDto, int codigoPersona)
+    public async Task<PersonaUpdateDto> ActualizarPersona(PersonaUpdateDto personaDto, int codigoPersona)
     {
         var datosPersona = await ObtenerPersona(codigoPersona);
         if (datosPersona == null)
@@ -94,7 +94,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         {
             _appDb.OracleDbContext.Persona.Update(datosPersona).State = EntityState.Modified;
             await _appDb.OracleDbContext.SaveChangesAsync();
-            return _mapper.Map<PersonaUpdateDTO>(datosPersona);
+            return _mapper.Map<PersonaUpdateDto>(datosPersona);
         }
 
         throw new ReglaNegociosException("No se han encontrado cambios.", ErrorType.SIN_CAMBIOS);
@@ -211,5 +211,31 @@ public class ClientePersonaRepository : IClientePersonaRepository
         dbContext.Cliente.Remove(cliente);
         await dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    {
+        switch (tabla)
+        {
+            case Tabla.PERSONA:
+                var persona = await ObtenerPersona(id);
+                if (persona == null)
+                    return 204; // Otra acción dependiendo de tus requisitos
+                persona.Estado = estado;
+                _appDb.OracleDbContext.Persona.Update(persona).State = EntityState.Modified;
+                break;
+
+            case Tabla.CUENTA:
+                var cliente = await ObtenerCliente(id);
+                if (cliente == null)
+                    return 204; // Otra acción dependiendo de tus requisitos
+                cliente.Estado = estado;
+                _appDb.OracleDbContext.Cliente.Update(cliente).State = EntityState.Modified;
+                break;
+            default:
+                throw new ReglaNegociosException("Operación seleccionada no corresponde a PersonaCliente.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+        }
+
+        return await _appDb.OracleDbContext.SaveChangesAsync();
     }
 }

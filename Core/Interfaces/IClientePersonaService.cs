@@ -1,4 +1,5 @@
 ﻿using WebApi.Core.Contracts.Entities;
+using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Core.Interfaces;
@@ -13,11 +14,12 @@ public interface IClientePersonaService
 
     Task<ClienteEntity> ObtenerCliente(int codigoCliente);
 
-    Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, int codigoPersona);
+    Task<PersonaUpdateDto> ActualizarPersona(PersonaRequest personaUpdate, int codigoPersona);
 
     Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior);
 
     Task<bool> EliminarPersona(int codigoPersona);
 
     Task<bool> EliminarCliente(int codigoCliente);
+    Task<int> ActualizarEstado(char estado, int id, Tabla pERSONA);
 }

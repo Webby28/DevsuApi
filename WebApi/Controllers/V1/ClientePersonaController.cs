@@ -11,6 +11,7 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
+using WebApi.Core.Services;
 using WebApi.Models;
 
 namespace WebApi.Controllers.V1;
@@ -60,7 +61,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al insertar los datos de la persona {@Persona}", persona);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -104,7 +105,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al crear el usuario {@Parametros}", parametros);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -149,7 +150,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al obtener los datos de la persona {@Id}", id);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -194,7 +195,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al obtener los datos del cliente {@Id}", id);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -211,8 +212,8 @@ public class ClientePersonaController : BaseApiController
 
     [HttpPut("persona/{id}")]
     [OpenApiOperation("ActualizarPersona", description: "Endpoint que actualiza los datos de una persona")]
-    [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaUpdateDTO), Description = "Operación exitosa. Devuelve un modelo con los datos nuevos de la persona.")]
-    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(PersonaUpdateDTO), Description = "No se ha encontrado datos para actualizar.")]
+    [SwaggerResponse(StatusCodes.Status200OK, typeof(PersonaUpdateDto), Description = "Operación exitosa. Devuelve un modelo con los datos nuevos de la persona.")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(PersonaUpdateDto), Description = "No se ha encontrado datos para actualizar.")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
@@ -239,7 +240,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al actualizar los datos de la persona {@Id} {@Persona}", id, persona);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -273,7 +274,7 @@ public class ClientePersonaController : BaseApiController
             }
             var result = await _clientePersonaService.ActualizarCliente(id, cliente, passwordAnterior);
 
-            if (result.Estado != null)
+            if (result != null)
             {
                 _logger.LogInformation("Se muestran los datos actualizados del cliente {@Cliente}", cliente);
                 return StatusCode(StatusCodes.Status200OK, result);
@@ -289,7 +290,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al actualizar los datos del cliente {@Cliente}", cliente);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -321,7 +322,7 @@ public class ClientePersonaController : BaseApiController
             if (result)
             {
                 _logger.LogInformation("Se ha eliminado el registro de la persona {@Id}", id);
-                return StatusCode(StatusCodes.Status200OK, result);
+                return StatusCode(StatusCodes.Status200OK, "Se ha eliminado el registro con éxito.");
             }
             else
             {
@@ -334,7 +335,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al eliminar el registro de la persona {@Id}", id);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -379,7 +380,7 @@ public class ClientePersonaController : BaseApiController
             _logger.LogError(ex, "Ha ocurrido un error  al eliminar los datos {@Id}", id);
             return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
             {
-                ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                ErrorType = ex.CodigoError,
                 ErrorDescription = ex.Message,
             });
         }
@@ -390,6 +391,49 @@ public class ClientePersonaController : BaseApiController
             {
                 ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                 ErrorDescription = "Ha ocurrido un error  al eliminar el registro. Intente nuevamente mas tarde",
+            });
+        }
+    }
+    [HttpPatch("persona/{id}")]
+    [SwaggerResponse(StatusCodes.Status200OK, typeof(int), Description = "Operación exitosa. Se actualizó el estado de la cuenta.")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado la cuenta.")]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
+    public async Task<ActionResult> ActualizarPersonaPatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
+    {
+
+        try
+        {
+            _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);
+            var result = await _clientePersonaService.ActualizarEstado(requestModifica.Estado, id, Tabla.PERSONA);
+            if (result != 204)
+            {
+                _logger.LogInformation("Se actualizó el estado de la persona con éxito {@Id}, {@RequestModifica}", id, requestModifica);
+                return StatusCode(StatusCodes.Status200OK, "Se actualizó el estado de la persona con éxito");
+            }
+            else
+            {
+                _logger.LogInformation("No se ha encontrado la persona {@Id}, {@RequestModifica}", id, requestModifica);
+                return StatusCode(StatusCodes.Status204NoContent, "No se ha encontrado la persona.");
+            }
+        }
+        catch (ReglaNegociosException ex)
+        {
+            _logger.LogError(ex, "Ha ocurrido un error  al actualizar el estado {@RequestModifica}, {@Id}", requestModifica, id);
+            return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+            {
+                ErrorType = ex.CodigoError,
+                ErrorDescription = ex.Message,
+            });
+        }
+        catch (System.Exception e)
+        {
+            _logger.LogError(e, "Ocurrio un error al momento de gestionar el estado {@RequestModifica}, cliente {@Id}", requestModifica, id);
+            return StatusCode(500, new ErrorResponse
+            {
+                ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
+                ErrorDescription = "Ocurrio un error al momento de modificar el estado."
             });
         }
     }

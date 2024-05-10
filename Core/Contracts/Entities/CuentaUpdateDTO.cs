@@ -1,8 +1,8 @@
 ﻿namespace WebApi.Core.Contracts.Entities;
 
-public class CuentaUpdateDTO
+public class CuentaUpdateDto
 {
     public string TipoCuenta { get; set; } = "Ahorro";
 
-    public string Estado { get; set; } = "Activo";
+    public char Estado { get; set; } = 'A';
 }

@@ -18,6 +18,7 @@
         CUENTA_NO_EXISTE,
         SALDO_EXCEDIDO,
         CUENTA_CON_MOVIMIENTOS,
-        SIN_MOVIMIENTOS
+        SIN_MOVIMIENTOS,
+        TIENE_USUARIO
     }
 }

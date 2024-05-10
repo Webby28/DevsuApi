@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Contracts.Helpers;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using WebApi.Core.Contracts.Entities;
@@ -56,11 +57,10 @@ public class MovimientosService : IMovimientosService
     public async Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest movimiento)
     {
         int saldoRestante = 0;
-        int saldoActual = 0;
         var existeCuenta = await _movimientosRepository.ExisteCuenta(movimiento.NumeroCuenta);
         if (existeCuenta)
         {
-            saldoActual = await _movimientosRepository.SaldoActual(movimiento.NumeroCuenta);
+            int saldoActual = await _movimientosRepository.SaldoActual(movimiento.NumeroCuenta);
             if (saldoActual < 0)
             {
                 _logger.LogInformation("La operación excedió el saldo disponible. {@Movimientos}", movimiento);
@@ -96,13 +96,13 @@ public class MovimientosService : IMovimientosService
         }
     }
 
-    public async Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta)
+    public async Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDto cuentaUpdate, int numeroCuenta)
     {
         _logger.LogInformation("Se verifica si existe cuenta. {@NumeroCuenta}", numeroCuenta);
         var existeCuenta = await _movimientosRepository.ExisteCuenta(numeroCuenta);
         if (existeCuenta)
         {
-            var updateCuenta = _mapper.Map<CuentaUpdateDTO>(cuentaUpdate);
+            var updateCuenta = _mapper.Map<CuentaUpdateDto>(cuentaUpdate);
             _logger.LogInformation("Se procede a actualizar el registro. {@NumeroCuenta} {CuentaUpdate}", numeroCuenta, cuentaUpdate);
             return await _movimientosRepository.ActualizarCuenta(updateCuenta, numeroCuenta);
         }
@@ -222,7 +222,7 @@ public class MovimientosService : IMovimientosService
         htmlBuilder.AppendLine("<h1>Reporte de Movimientos</h1>");
 
         // Verifica si hay datos en el reportData
-        if (reportData != null && reportData.Any())
+        if (reportData?.Any() == true)
         {
             // Agrega la tabla con los encabezados
             htmlBuilder.AppendLine("<table>");
@@ -261,5 +261,26 @@ public class MovimientosService : IMovimientosService
         htmlBuilder.AppendLine("</html>");
 
         return htmlBuilder.ToString();
+    }
+    /// <summary>
+    /// Método que permite la actulizacion del estado de un subservicio favorito luego de que haya sido pagado.
+    /// </summary>
+    /// <param name="estado">Corresponde al identificador del subServicio.</param>
+    /// <param name="id">Corresponde a los datos para el pago del subServicio.</param>
+    /// <param name="codigoCliente">Corresponde al identificador del cliente.</param>
+    /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
+    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    {
+        if(tabla.Equals(Tabla.CUENTA) || tabla.Equals(Tabla.MOVIMIENTO))
+        {
+            var des = await _movimientosRepository.ActualizarEstado(estado, id, tabla);
+            return des;
+        }
+        else
+        {
+            throw new ReglaNegociosException("Operación seleccionada no corresponde a movimientos.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+        }
+
+
     }
 }

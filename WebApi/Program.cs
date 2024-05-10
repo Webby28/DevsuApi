@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Logging;
 using Serilog;
 using System;
 using System.Net;
+using System.Text.Json.Serialization;
 using WebApi.Dependencies;
 using WebApi.Infrastructure.Infrastructure;
 

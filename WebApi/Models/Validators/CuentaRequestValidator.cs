@@ -14,8 +14,9 @@ namespace WebApi.Models.Validators
                 .NotEmpty().WithMessage("El saldo inicial es obligatorio.")
                 .GreaterThan(0).WithMessage("El saldo inicial debe ser mayor que cero.");
 
-            RuleFor(x => x.Estado)
-                .NotEmpty().WithMessage("El estado es obligatorio.");
+            RuleFor(p => p.Estado)
+                .NotNull().WithMessage("El campo Estado no debe ser nulo, favor verifique.")
+                .Must(estado => estado == 'A' || estado == 'I').WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo).");
         }
     }
 }

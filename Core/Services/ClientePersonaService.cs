@@ -24,29 +24,32 @@ public class ClientePersonaService : IClientePersonaService
 
     public async Task<ClienteEntity> InsertarCliente(ClienteRequest cliente)
     {
-        var tieneCuenta = await _clientePersonaRepository.TieneUsuario(cliente.PersonaId);
-        if (tieneCuenta)
-        {
-            _logger.LogInformation("El persona ya tiene cuenta {@Cliente}", cliente);
-            throw new ReglaNegociosException("La persona ingresada ya tiene una cuenta registrada.", ErrorType.DATOS_DUPLICADOS);
-        }
-        var request = _mapper.Map<ClienteEntity>(cliente);
         var existePersona = await _clientePersonaRepository.ExistePersona(cliente.PersonaId);
         if (!existePersona)
         {
             _logger.LogInformation("El persona ingresada no existe. {@Request}", cliente.PersonaId);
             throw new ReglaNegociosException("La persona ingresada no existe.", ErrorType.PERSONA_NO_EXISTE);
         }
-        if (request.PersonaId != 0)
-        {
-            _logger.LogInformation("Iniciando inserción de datos en tabla CLIENTE {@Request}", request);
-            return await _clientePersonaRepository.InsertarCliente(request);
-        }
         else
         {
-            _logger.LogInformation("Ingrese el id la persona {@Request}", request);
-            throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
-        }
+            var tieneCuenta = await _clientePersonaRepository.TieneUsuario(cliente.PersonaId);
+            if (tieneCuenta)
+            {
+                _logger.LogInformation("El persona ya tiene cuenta {@Cliente}", cliente);
+                throw new ReglaNegociosException("La persona ingresada ya tiene una cuenta registrada.", ErrorType.DATOS_DUPLICADOS);
+            }
+            var request = _mapper.Map<ClienteEntity>(cliente);
+            if (request.PersonaId != 0)
+            {
+                _logger.LogInformation("Iniciando inserción de datos en tabla CLIENTE {@Request}", request);
+                return await _clientePersonaRepository.InsertarCliente(request);
+            }
+            else
+            {
+                _logger.LogInformation("Ingrese el id la persona {@Request}", request);
+                throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+            }
+        }        
     }
 
     public async Task<PersonaEntity> InsertarPersona(PersonaRequest persona)
@@ -87,11 +90,11 @@ public class ClientePersonaService : IClientePersonaService
         return await _clientePersonaRepository.ObtenerCliente(codigoCliente);
     }
 
-    public async Task<PersonaUpdateDTO> ActualizarPersona(PersonaRequest personaUpdate, int codigoPersona)
+    public async Task<PersonaUpdateDto> ActualizarPersona(PersonaRequest personaUpdate, int codigoPersona)
     {
         _logger.LogInformation("Iniciando actualizacion de Persona {@PersonaUpdate}", personaUpdate);
         var existePersona = await _clientePersonaRepository.ExistePersona(codigoPersona);
-        var updatePersona = _mapper.Map<PersonaUpdateDTO>(personaUpdate);
+        var updatePersona = _mapper.Map<PersonaUpdateDto>(personaUpdate);
         if (existePersona)
         {
             return await _clientePersonaRepository.ActualizarPersona(updatePersona, codigoPersona);
@@ -105,7 +108,7 @@ public class ClientePersonaService : IClientePersonaService
     public async Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
     {
         var existeCuenta = await _clientePersonaRepository.TieneUsuario(PersonaId);
-        if (clienteUpdate.Estado != "A")
+        if (clienteUpdate.Estado != 'A')
         {
             throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.USUARIO_NO_ACTIVO);
         }
@@ -137,7 +140,16 @@ public class ClientePersonaService : IClientePersonaService
         var existePersona = await _clientePersonaRepository.ExistePersona(codigoPersona);
         if (existePersona)
         {
-            return await _clientePersonaRepository.EliminarPersona(codigoPersona);
+            var tieneUsuario = await _clientePersonaRepository.TieneUsuario(codigoPersona);
+            if (!tieneUsuario)
+            {
+                return await _clientePersonaRepository.EliminarPersona(codigoPersona);
+            }
+            else
+            {
+                throw new ReglaNegociosException("La persona que intenta eliminar es cliente", ErrorType.TIENE_USUARIO);
+
+            }
         }
         else
         {
@@ -156,5 +168,20 @@ public class ClientePersonaService : IClientePersonaService
         {
             return false;
         }
+    }
+
+    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    {
+        if (tabla.Equals(Tabla.CLIENTE) || tabla.Equals(Tabla.PERSONA))
+        {
+            var des = await _clientePersonaRepository.ActualizarEstado(estado, id, tabla);
+            return des;
+        }
+        else
+        {
+            throw new ReglaNegociosException("Operación seleccionada no corresponde a PersonaCliente.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+        }
+
+
     }
 }

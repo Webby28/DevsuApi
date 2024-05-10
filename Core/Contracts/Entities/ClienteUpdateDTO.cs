@@ -1,4 +1,5 @@
-﻿namespace WebApi.Core.Contracts.Entities;
+﻿
+namespace WebApi.Core.Contracts.Entities;
 
 public class ClienteUpdateDto
 {
@@ -20,5 +21,5 @@ public class ClienteUpdateDto
     /// <summary>
     /// Estado del cliente
     /// </summary>
-    public string Estado { get; set; }
+    public char Estado { get; set; }
 }

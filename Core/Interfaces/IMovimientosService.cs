@@ -1,4 +1,6 @@
-﻿using WebApi.Core.Contracts.Entities;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using WebApi.Core.Contracts.Entities;
+using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Core.Interfaces;
@@ -13,7 +15,7 @@ public interface IMovimientosService
 
     Task<MovimientosEntity> ObtenerMovimientos(int codigoMovimiento);
 
-    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta);
+    Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDto cuentaUpdate, int numeroCuenta);
 
     Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int codigoMovimiento);
 
@@ -22,4 +24,5 @@ public interface IMovimientosService
     Task<bool> EliminarMovimiento(int codigoMovimiento);
 
     Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente);
+    Task<int> ActualizarEstado(char estado, int id, Tabla tabla);
 }

@@ -32,4 +32,6 @@ public class MovimientosEntity
 
     [Description("Fecha en que se registró la operación")]
     public DateTime FechaRegistro { get; set; }
+    [Description("Estado del movimiento. P (Pendiente) C (Completado)")]
+    public char Estado { get; set; } = 'P';
 }

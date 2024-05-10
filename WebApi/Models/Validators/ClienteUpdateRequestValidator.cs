@@ -10,8 +10,9 @@ namespace WebApi.Models.Validators
             RuleFor(x => x.Contraseña)
                 .NotEmpty().WithMessage("La contraseña es obligatoria.");
 
-            RuleFor(x => x.Estado)
-                .NotEmpty().WithMessage("El estado es obligatorio.");
+            RuleFor(p => p.Estado)
+                .NotNull().WithMessage("El campo Estado no debe ser nulo, favor verifique.")
+                .Must(estado => estado == 'A' || estado == 'I').WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo).");
         }
     }
 }

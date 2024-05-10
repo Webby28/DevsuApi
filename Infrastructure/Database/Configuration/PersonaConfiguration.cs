@@ -17,5 +17,6 @@ public class PersonaConfiguration : IEntityTypeConfiguration<PersonaEntity>
         builder.Property(cc => cc.Identificacion).HasColumnName("IDENTIFICACION").IsUnicode(false);
         builder.Property(cc => cc.Direccion).HasColumnName("DIRECCION").IsUnicode(false);
         builder.Property(cc => cc.Telefono).HasColumnName("TELEFONO").IsUnicode(false);
+        builder.Property(cc => cc.Estado).HasColumnName("ESTADO").IsUnicode(false);
     }
 }

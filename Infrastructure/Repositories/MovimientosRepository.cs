@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Web.Http.ModelBinding;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Helpers;
+using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
 
@@ -11,10 +15,12 @@ namespace WebApi.Infrastructure.Repositories;
 public class MovimientosRepository : IMovimientosRepository
 {
     private readonly IAppDb _appDb;
+    private readonly IMapper _mapper;
 
-    public MovimientosRepository(IAppDb appDb)
+    public MovimientosRepository(IAppDb appDb, IMapper mapper)
     {
         _appDb = appDb;
+        _mapper = mapper;
     }
 
     public async Task<CuentaEntity> InsertarCuenta(CuentaEntity cuenta)
@@ -33,7 +39,7 @@ public class MovimientosRepository : IMovimientosRepository
         return movimientos;
     }
 
-    public async Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDTO cuentaUpdate, int numeroCuenta)
+    public async Task<CuentaEntity> ActualizarCuenta(CuentaUpdateDto cuentaUpdate, int numeroCuenta)
     {
         var dbContext = _appDb.OracleDbContext;
 
@@ -231,4 +237,36 @@ public class MovimientosRepository : IMovimientosRepository
                              .FirstOrDefaultAsync();
         return tieneMovimiento != null;
     }
+    /// <summary>
+    /// Método que permite la actulizacion del estado de una tabla.
+    /// </summary>
+    /// <param name="estado">Corresponde al nuevo estado.</param>
+    /// <param name="id">Corresponde al id principal de la tabla.</param>
+    /// <param name="tabla">Se especifica la tabla donde se actualizará el estado.</param>
+    /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
+    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    {
+        switch (tabla)
+        {
+            case Tabla.MOVIMIENTO:
+                var movimiento = await ObtenerMovimiento(id);
+                if (movimiento == null)
+                    return 204; // Otra acción dependiendo de tus requisitos
+                movimiento.Estado = estado;
+                _appDb.OracleDbContext.Movimientos.Update(movimiento).State = EntityState.Modified;
+                break;
+
+            case Tabla.CUENTA:
+                var cuenta = await ObtenerCuenta(id);
+                if (cuenta == null)
+                    return 204; // Otra acción dependiendo de tus requisitos
+                cuenta.Estado = estado;
+                _appDb.OracleDbContext.Cuenta.Update(cuenta).State = EntityState.Modified;
+                break;
+            default:
+                throw new ReglaNegociosException("Operación seleccionada no corresponde a movimientos.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+        }
+
+        return await _appDb.OracleDbContext.SaveChangesAsync();
+    }   
 }

@@ -17,6 +17,6 @@ namespace WebApi.Core.Contracts.Requests
         /// Estado del cliente.
         /// </summary>
         [Description("Estado del cliente")]
-        public string Estado { get; set; }
+        public char Estado { get; set; }
     }
 }

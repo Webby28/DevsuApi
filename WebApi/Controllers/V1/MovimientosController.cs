@@ -1,5 +1,7 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSwag.Annotations;
@@ -11,7 +13,11 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
+using WebApi.Infrastructure.Repositories;
 using WebApi.Models;
+using Microsoft.AspNetCore.JsonPatch.Adapters;
+using System.Net;
+using System;
 
 namespace WebApi.Controllers.V1
 {
@@ -28,7 +34,7 @@ namespace WebApi.Controllers.V1
         IMovimientosService movimientosService)
         {
             _logger = logger;
-            _movimientosService = movimientosService;
+            _movimientosService = movimientosService;            
         }
 
         [HttpPost("cuenta")]
@@ -44,7 +50,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogInformation("Inicio solicitud de InsertarCuenta {@Cuenta}", cuenta);
                 var result = await _movimientosService.InsertarCuenta(cuenta);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result != null)
                 {
                     _logger.LogInformation("La cuenta se ha creado con éxito {@Cuenta}", cuenta);
                     return StatusCode(StatusCodes.Status201Created, result);
@@ -60,7 +66,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al crear la cuenta {@Cuenta}", cuenta);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -104,7 +110,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al registrar el movimiento {@Movimiento}", movimiento);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -133,7 +139,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogInformation("Inicio solicitud de ObtenerCuenta {@Id}", id);
                 var result = await _movimientosService.ObtenerCuenta(id);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result != null)
                 {
                     _logger.LogInformation("Se lista la cuenta con éxito {@Id}", id);
                     return StatusCode(StatusCodes.Status200OK, result);
@@ -149,7 +155,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al obtener los datos la cuenta {@Id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -194,7 +200,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al mostrar el movimiento {@Id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -215,14 +221,14 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
-        public async Task<IActionResult> ActualizarCuenta([Description("Numero de la cuenta a actualizar")][FromRoute] int id, [Description("Datos nuevos para actualizar")][FromBody] CuentaUpdateDTO cuenta)
+        public async Task<IActionResult> ActualizarCuenta([Description("Numero de la cuenta a actualizar")][FromRoute] int id, [Description("Datos nuevos para actualizar")][FromBody] CuentaUpdateDto cuenta)
         {
             try
             {
                 _logger.LogInformation("Inicio solicitud de ActualizarCuenta {Id} {@Cuenta}", id, cuenta);
                 var result = await _movimientosService.ActualizarCuenta(cuenta, id);
 
-                if (!string.IsNullOrWhiteSpace(result.Estado))
+                if (result != null)
                 {
                     _logger.LogInformation("Se han actualizado los datos con éxito {@Result}", result);
                     return StatusCode(StatusCodes.Status201Created, result);
@@ -238,7 +244,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al actualizar la cuenta {@Cuenta}", cuenta);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -282,7 +288,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al actualizar el movimiento {@Movimientos}", movimientos);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -326,7 +332,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al eliminar la cuenta {@Id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -370,7 +376,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error al eliminar el movimiento {@Id}", id);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -415,7 +421,7 @@ namespace WebApi.Controllers.V1
                 _logger.LogError(ex, "Ha ocurrido un error  al generar el reporte {@CodigoCliente}", codigoCliente);
                 return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
                 {
-                    ErrorType = ErrorType.VALIDACION_PARAMETROS_ENTRADA,
+                    ErrorType = ex.CodigoError,
                     ErrorDescription = ex.Message,
                 });
             }
@@ -426,6 +432,50 @@ namespace WebApi.Controllers.V1
                 {
                     ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
                     ErrorDescription = "Ha ocurrido un error  al generar el reporte. Intente nuevamente mas tarde",
+                });
+            }
+        }
+
+        [HttpPatch("cuenta/{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, typeof(int), Description = "Operación exitosa. Se actualizó el estado de la cuenta.")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado la cuenta.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
+        public async Task<ActionResult> ActualizarCuentaPatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
+        {
+            
+            try
+            {
+                _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);
+                var result = await _movimientosService.ActualizarEstado(requestModifica.Estado, id, Tabla.CUENTA);
+                if (result != 204)
+                {
+                    _logger.LogInformation("Se actualizó el estado de la cuenta con éxito {@Id}, {@RequestModifica}", id, requestModifica);
+                    return StatusCode(StatusCodes.Status200OK, "Se actualizó el estado de la cuenta con éxito");
+                }
+                else
+                {
+                    _logger.LogInformation("No se ha encontrado la cuenta {@Id}, {@RequestModifica}", id, requestModifica);
+                    return StatusCode(StatusCodes.Status204NoContent, "No se ha encontrado la cuenta.");
+                }
+            }
+            catch (ReglaNegociosException ex)
+            {
+                _logger.LogError(ex, "Ha ocurrido un error  al actualizar el estado {@RequestModifica}, {@Id}", requestModifica, id);
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+                {
+                    ErrorType = ex.CodigoError,
+                    ErrorDescription = ex.Message,
+                });
+            }
+            catch (System.Exception e)
+            {
+                _logger.LogError(e, "Ocurrio un error al momento de gestionar el estado {@RequestModifica}, cliente {@Id}", requestModifica, id);
+                return StatusCode(500, new ErrorResponse
+                {
+                    ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
+                    ErrorDescription = "Ocurrio un error al momento de modificar el estado."
                 });
             }
         }

@@ -47,5 +47,7 @@ namespace WebApi.Core.Contracts.Requests
         /// </summary>
         [Description("Teléfono de la persona")]
         public string? Telefono { get; set; }
+        [Description("Estado de la persona")]
+        public char Estado { get; set; } ='A';
     }
 }

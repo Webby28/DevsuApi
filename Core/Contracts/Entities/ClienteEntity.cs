@@ -19,5 +19,5 @@ public class ClienteEntity
 
     [Required]
     [Description("Estado del cliente")]
-    public string Estado { get; set; }
+    public char Estado { get; set; } = 'A';
 }

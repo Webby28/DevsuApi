@@ -12,7 +12,7 @@
           "ClientePersonaController"
         ],
         "summary": "InsertarPersona",
-        "description": "Inserta los datos de la persona en la tabla Persona.",
+        "description": "Endpoint que inserta datos en la tabla persona",
         "operationId": "ClientePersona_InsertarPersona",
         "parameters": [
           {
@@ -28,7 +28,7 @@
         ],
         "requestBody": {
           "x-name": "persona",
-          "description": "Datos de la persona a insertar en tabla Persona",
+          "description": "Datos que se insertarán en la tabla persona",
           "content": {
             "application/json": {
               "schema": {
@@ -41,11 +41,11 @@
         },
         "responses": {
           "201": {
-            "description": "Operación exitosa. Devuelve una lista de las personas que fueron insertadas en la base de datos.",
+            "description": "Operación exitosa. Devuelve los datos de la persona que fue registrada en la base de datos.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaResponse"
+                  "$ref": "#/components/schemas/PersonaEntity"
                 }
               }
             }
@@ -89,7 +89,7 @@
           "ClientePersonaController"
         ],
         "summary": "InsertarCliente",
-        "description": "Crea un usuario para una persona.",
+        "description": "Endpoint que crea un usuario para una persona.",
         "operationId": "ClientePersona_InsertarCliente",
         "parameters": [
           {
@@ -105,7 +105,7 @@
         ],
         "requestBody": {
           "x-name": "parametros",
-          "description": "Datos a insertar para creación de cuenta",
+          "description": "Datos que se insertarán en tabla cliente",
           "content": {
             "application/json": {
               "schema": {
@@ -118,11 +118,11 @@
         },
         "responses": {
           "201": {
-            "description": "Operación exitosa. Devuelve los datos insertados para creación de cuenta.",
+            "description": "Operación exitosa. Devuelve los datos del cliente que fue registrado en la base de datos.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
+                  "$ref": "#/components/schemas/ClienteEntity"
                 }
               }
             }
@@ -166,7 +166,7 @@
           "ClientePersonaController"
         ],
         "summary": "ObtenerPersona",
-        "description": "Obtiene los datos de la persona en base a su id.",
+        "description": "Endpoint que obtiene los datos de la persona en base a su id.",
         "operationId": "ClientePersona_ObtenerPersona",
         "parameters": [
           {
@@ -193,7 +193,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operación exitosa. Devuelve una lista de las personas que fueron insertadas en la base de datos.",
+            "description": "Operación exitosa. Devuelve una los datos de la persona.",
             "content": {
               "application/json": {
                 "schema": {
@@ -249,14 +249,14 @@
           "ClientePersonaController"
         ],
         "summary": "ActualizarPersona",
-        "description": "Actualiza los datos de una persona",
+        "description": "Endpoint que actualiza los datos de una persona",
         "operationId": "ClientePersona_ActualizarPersona",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Id de la persona a actualizar en tabla persona",
+            "description": "Id persona a actualizar",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -288,11 +288,11 @@
         },
         "responses": {
           "200": {
-            "description": "Operación exitosa. Devuelve una los datos actualizados de la persona.",
+            "description": "Operación exitosa. Devuelve un modelo con los datos nuevos de la persona.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaUpdateDTO"
+                  "$ref": "#/components/schemas/PersonaUpdateDto"
                 }
               }
             }
@@ -302,7 +302,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaUpdateDTO"
+                  "$ref": "#/components/schemas/PersonaUpdateDto"
                 }
               }
             }
@@ -344,14 +344,14 @@
           "ClientePersonaController"
         ],
         "summary": "EliminarPersona",
-        "description": "Elimina registro de la tabla Persona en base al id persona.",
+        "description": "Endpoint que elimina registro de la tabla persona.",
         "operationId": "ClientePersona_EliminarPersona",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Id del cliente",
+            "description": "Id de la persona a eliminar",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -371,24 +371,96 @@
         ],
         "responses": {
           "200": {
-            "description": "Operación exitosa. Devuelve los datos de la persona eliminada de la base de datos.",
+            "description": "Operación exitosa. Devuelve true si se ha eliminado."
+          },
+          "204": {
+            "description": "No se han encontrado coincidencias para eliminar."
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ClientePersonaController"
+        ],
+        "operationId": "ClientePersona_ActualizarPersonaPatch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "requestModifica",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModificarEstadoRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Se actualizó el estado de la cuenta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
           },
           "204": {
-            "description": "No se han encontrado coincidencias para eliminar.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
-                }
-              }
-            }
+            "description": "No se ha encontrado la cuenta."
           },
           "400": {
             "description": "La solicitud es incorrecta.",
@@ -429,14 +501,14 @@
           "ClientePersonaController"
         ],
         "summary": "ObtenerCliente",
-        "description": "Obtiene los datos de la cuenta de la persona en base a su id persona.",
+        "description": "Endpoint que obtiene los datos del cliente.",
         "operationId": "ClientePersona_ObtenerCliente",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Id de la persona",
+            "description": "Id persona asociada al cliente",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -456,7 +528,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operación exitosa. Devuelve la cuenta de la persona.",
+            "description": "Operación exitosa. Devuelve el cliente.",
             "content": {
               "application/json": {
                 "schema": {
@@ -512,14 +584,14 @@
           "ClientePersonaController"
         ],
         "summary": "ActualizarCliente",
-        "description": "Actualiza los datos del cliente.",
+        "description": "Endpoint que actualiza los datos de un cliente.",
         "operationId": "ClientePersona_ActualizarCliente",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Id de la persona que desea actualizar sus datos",
+            "description": "Id persona asociada al cliente",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -548,6 +620,7 @@
         ],
         "requestBody": {
           "x-name": "cliente",
+          "description": "Datos del cliente a actualizar",
           "content": {
             "application/json": {
               "schema": {
@@ -560,11 +633,11 @@
         },
         "responses": {
           "200": {
-            "description": "Operación exitosa. Devuelve los datos actualizados del cliente.",
+            "description": "Operación exitosa. Devuelve un modelo con los datos nuevos del cliente.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClienteUpdateDTO"
+                  "$ref": "#/components/schemas/ClienteUpdateDto"
                 }
               }
             }
@@ -574,7 +647,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClienteUpdateDTO"
+                  "$ref": "#/components/schemas/ClienteUpdateDto"
                 }
               }
             }
@@ -616,14 +689,14 @@
           "ClientePersonaController"
         ],
         "summary": "EliminarCliente",
-        "description": "Elimina registro de la tabla Cliente en base al id persona.",
+        "description": "Endpoint que elimina registro de la tabla cliente.",
         "operationId": "ClientePersona_EliminarCliente",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Id de la persona",
+            "description": "Id de la persona asociada al cliente",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -643,24 +716,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Operación exitosa. Devuelve los datos del cliente eliminado en la base de datos.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
-                }
-              }
-            }
+            "description": "Operación exitosa. Devuelve true si se ha eliminado."
           },
           "204": {
-            "description": "No se han encontrado coincidencias para eliminar.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
-                }
-              }
-            }
+            "description": "No se han encontrado coincidencias para eliminar."
           },
           "400": {
             "description": "La solicitud es incorrecta.",
@@ -701,7 +760,7 @@
           "MovimientosController"
         ],
         "summary": "InsertarCuenta",
-        "description": "Crea una cuenta para un cliente.",
+        "description": "Endpoint que crea una cuenta para un cliente.",
         "operationId": "Movimientos_InsertarCuenta",
         "parameters": [
           {
@@ -717,7 +776,7 @@
         ],
         "requestBody": {
           "x-name": "cuenta",
-          "description": "Datos a insertar en tabla Cuenta",
+          "description": "Datos a insertar en tabla cuenta",
           "content": {
             "application/json": {
               "schema": {
@@ -734,7 +793,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CuentaResponse"
+                  "$ref": "#/components/schemas/CuentaEntity"
                 }
               }
             }
@@ -778,7 +837,7 @@
           "MovimientosController"
         ],
         "summary": "InsertarMovimientos",
-        "description": "Inserta los datos de los movimientos realizados por una cuenta.",
+        "description": "Endpoint que inserta los datos de los movimientos realizados por una cuenta.",
         "operationId": "Movimientos_InsertarMovimientos",
         "parameters": [
           {
@@ -794,7 +853,7 @@
         ],
         "requestBody": {
           "x-name": "movimiento",
-          "description": "Datos a insertar en tabla Cuenta",
+          "description": "Datos a insertar en tabla movimiento",
           "content": {
             "application/json": {
               "schema": {
@@ -811,7 +870,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaResponse"
+                  "$ref": "#/components/schemas/MovimientosEntity"
                 }
               }
             }
@@ -855,7 +914,7 @@
           "MovimientosController"
         ],
         "summary": "ObtenerCuenta",
-        "description": "Obtiene los datos de una cuenta.",
+        "description": "Endpoint que obtiene los datos de la cuenta de un cliente.",
         "operationId": "Movimientos_ObtenerCuenta",
         "parameters": [
           {
@@ -886,7 +945,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaResponse"
+                  "$ref": "#/components/schemas/CuentaEntity"
                 }
               }
             }
@@ -931,7 +990,7 @@
           "MovimientosController"
         ],
         "summary": "ActualizarCuenta",
-        "description": "Actualiza los datos de la cuenta.",
+        "description": "Endpoint que actualiza los datos de la cuenta.",
         "operationId": "Movimientos_ActualizarCuenta",
         "parameters": [
           {
@@ -958,11 +1017,11 @@
         ],
         "requestBody": {
           "x-name": "cuenta",
-          "description": "Datos a actualizar en tabla Cuenta",
+          "description": "Datos nuevos para actualizar",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CuentaUpdateDTO"
+                "$ref": "#/components/schemas/CuentaUpdateDto"
               }
             }
           },
@@ -970,12 +1029,12 @@
           "x-position": 2
         },
         "responses": {
-          "201": {
-            "description": "Operación exitosa. Se han actualizado los datos con éxito.",
+          "200": {
+            "description": "Operación exitosa. Devuelve los datos actualizados de la cuenta.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaResponse"
+                  "$ref": "#/components/schemas/CuentaEntity"
                 }
               }
             }
@@ -1084,6 +1143,92 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "operationId": "Movimientos_ActualizarCuentaPatch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "requestModifica",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModificarEstadoRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Se actualizó el estado de la cuenta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado la cuenta."
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/api/movimientos/{id}": {
@@ -1092,7 +1237,7 @@
           "MovimientosController"
         ],
         "summary": "ObtenerMovimientos",
-        "description": "Obtiene el movimiento de una cuenta.",
+        "description": "Endpoint que obtiene el movimiento de una cuenta.",
         "operationId": "Movimientos_ObtenerMovimientos",
         "parameters": [
           {
@@ -1123,7 +1268,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaResponse"
+                  "$ref": "#/components/schemas/MovimientosEntity"
                 }
               }
             }
@@ -1168,7 +1313,7 @@
           "MovimientosController"
         ],
         "summary": "ActualizarMovimientos",
-        "description": "Endpoint para actualizar los datos de los movimientos.",
+        "description": "Endpoint que actualiza los datos de los movimientos.",
         "operationId": "Movimientos_ActualizarMovimientos",
         "parameters": [
           {
@@ -1195,11 +1340,11 @@
         ],
         "requestBody": {
           "x-name": "movimientos",
-          "description": "Datos a insertar en tabla Cuenta",
+          "description": "Datos nuevos para actualizar",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MovimientoUpdateDTO"
+                "$ref": "#/components/schemas/MovimientoUpdateDto"
               }
             }
           },
@@ -1207,7 +1352,7 @@
           "x-position": 2
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Operación exitosa. Se han actualizado los datos con éxito.",
             "content": {
               "application/json": {
@@ -1329,13 +1474,13 @@
           "MovimientosController"
         ],
         "summary": "GenerarReporte",
-        "description": "Obtiene un reporte de los movimientos de una persona en un rango de fecha.",
+        "description": "Genera un reporte de los movimientos de una persona en un rango de fecha.",
         "operationId": "Movimientos_GenerarReporte",
         "parameters": [
           {
             "name": "rangoFechas",
             "in": "query",
-            "description": "Id del movimiento",
+            "description": "Rango de las fechas con separador | ",
             "schema": {
               "type": "string"
             },
@@ -1344,6 +1489,7 @@
           {
             "name": "codigoCliente",
             "in": "query",
+            "description": "Código del cliente asociado al movimiento",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1365,9 +1511,10 @@
           "200": {
             "description": "Operación exitosa. Genera un pdf con los movimientos.",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonaResponse"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -1411,12 +1558,54 @@
   },
   "components": {
     "schemas": {
-      "PersonaResponse": {
+      "PersonaEntity": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "idPersona",
+          "nombre",
+          "genero",
+          "edad",
+          "identificacion"
+        ],
         "properties": {
-          "numeroCuenta": {
-            "type": "string"
+          "idPersona": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre de la persona",
+            "minLength": 1
+          },
+          "genero": {
+            "type": "string",
+            "description": "Género de la persona",
+            "minLength": 1
+          },
+          "edad": {
+            "type": "integer",
+            "description": "Edad de la persona",
+            "format": "int32"
+          },
+          "identificacion": {
+            "type": "string",
+            "description": "Identificación de la persona",
+            "minLength": 1
+          },
+          "direccion": {
+            "type": "string",
+            "description": "Dirección de la persona",
+            "nullable": true
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de la persona",
+            "nullable": true
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado de la persona"
           }
         }
       },
@@ -1444,7 +1633,7 @@
         "description": "",
         "x-enumNames": [
           "SIN_CAMBIOS",
-          "validacion_parametro_entrada",
+          "VALIDACION_PARAMETROS_ENTRADA",
           "ERROR_INTERNO_EN_SERVIDOR",
           "DATOS_DUPLICADOS",
           "DATOS_NO_ENCONTRADOS",
@@ -1459,7 +1648,8 @@
           "CUENTA_NO_EXISTE",
           "SALDO_EXCEDIDO",
           "CUENTA_CON_MOVIMIENTOS",
-          "SIN_MOVIMIENTOS"
+          "SIN_MOVIMIENTOS",
+          "TIENE_USUARIO"
         ],
         "enum": [
           0,
@@ -1478,7 +1668,8 @@
           13,
           14,
           15,
-          16
+          16,
+          17
         ]
       },
       "PersonaRequest": {
@@ -1511,18 +1702,40 @@
             "type": "string",
             "description": "Teléfono de la persona",
             "nullable": true
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado de la persona"
           }
         }
       },
-      "ClienteResponse": {
+      "ClienteEntity": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "idCliente",
+          "personaId",
+          "contraseña",
+          "estado"
+        ],
         "properties": {
-          "codigoCliente": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "idCliente": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contraseña": {
+            "type": "string",
+            "description": "Contraseña del cliente",
+            "minLength": 1
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado del cliente",
+            "minLength": 1
           }
         }
       },
@@ -1544,7 +1757,28 @@
           }
         }
       },
-      "PersonaUpdateDTO": {
+      "PersonaResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "numeroCuenta": {
+            "type": "string"
+          }
+        }
+      },
+      "ClienteResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "codigoCliente": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PersonaUpdateDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1566,10 +1800,13 @@
           },
           "telefono": {
             "type": "string"
+          },
+          "estado": {
+            "type": "string"
           }
         }
       },
-      "ClienteUpdateDTO": {
+      "ClienteUpdateDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1603,12 +1840,49 @@
           }
         }
       },
-      "CuentaResponse": {
+      "ModificarEstadoRequest": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "numeroCuenta": {
+          "estado": {
             "type": "string"
+          }
+        }
+      },
+      "CuentaEntity": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "numeroCuenta",
+          "tipoCuenta",
+          "saldoInicial",
+          "estado",
+          "idCliente"
+        ],
+        "properties": {
+          "numeroCuenta": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoCuenta": {
+            "type": "string",
+            "description": "Tipo de cuenta",
+            "minLength": 1
+          },
+          "saldoInicial": {
+            "type": "integer",
+            "description": "Saldo inicial de la cuenta",
+            "format": "int32"
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado de la cuenta. A (Activo) I (Inactivo)",
+            "minLength": 1
+          },
+          "idCliente": {
+            "type": "integer",
+            "description": "Id del cliente asociado a la cuenta",
+            "format": "int32"
           }
         }
       },
@@ -1640,6 +1914,59 @@
           }
         }
       },
+      "MovimientosEntity": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "idMovimiento",
+          "fecha",
+          "tipoMovimiento",
+          "valor",
+          "saldo",
+          "numeroCuenta"
+        ],
+        "properties": {
+          "idMovimiento": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fecha": {
+            "type": "string",
+            "description": "Fecha del movimiento",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "tipoMovimiento": {
+            "type": "string",
+            "description": "Tipo de movimiento",
+            "minLength": 1
+          },
+          "valor": {
+            "type": "integer",
+            "description": "Valor del movimiento",
+            "format": "int32"
+          },
+          "saldo": {
+            "type": "integer",
+            "description": "Saldo resultante después del movimiento",
+            "format": "int32"
+          },
+          "numeroCuenta": {
+            "type": "integer",
+            "description": "Numero de cuenta asociada al movimiento",
+            "format": "int32"
+          },
+          "fechaRegistro": {
+            "type": "string",
+            "description": "Fecha en que se registró la operación",
+            "format": "date-time"
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado del movimiento. P (Pendiente) C (Completado)"
+          }
+        }
+      },
       "MovimientosRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -1668,7 +1995,7 @@
           }
         }
       },
-      "CuentaUpdateDTO": {
+      "CuentaUpdateDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1680,7 +2007,7 @@
           }
         }
       },
-      "MovimientoUpdateDTO": {
+      "MovimientoUpdateDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

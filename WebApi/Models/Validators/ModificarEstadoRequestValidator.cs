@@ -3,16 +3,21 @@ using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Models.Validators
 {
-    public class ClienteRequestRequestValidator : AbstractValidator<ClienteRequest>
+    /// <summary>
+    /// Valida los atributos de la clase ParametrosFluentValidation
+    /// </summary>
+    public class ModificarEstadoRequestValidator : AbstractValidator<ModificarEstadoRequest>
     {
-        public ClienteRequestRequestValidator()
+        /// <summary>
+        /// Método para validar los parametros para actualizacion de estado. 
+        /// </summary>
+        public ModificarEstadoRequestValidator()
         {
-            RuleFor(x => x.Contraseña)
-                .NotEmpty().WithMessage("La contraseña es obligatoria.");
-
             RuleFor(p => p.Estado)
                 .NotNull().WithMessage("El campo Estado no debe ser nulo, favor verifique.")
                 .Must(estado => estado == 'A' || estado == 'I').WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo).");
         }
+
+
     }
 }

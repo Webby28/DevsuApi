@@ -29,6 +29,9 @@ namespace WebApi.Models.Validators
             RuleFor(x => x.Telefono)
                 .NotEmpty().WithMessage("El telefono es obligatorio.")
                 .MaximumLength(20).WithMessage("El teléfono no puede tener más de 20 caracteres.");
+            RuleFor(p => p.Estado)
+                .NotNull().WithMessage("El campo Estado no debe ser nulo, favor verifique.")
+                .Must(estado => estado == 'A' || estado == 'I').WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo).");
         }
     }
 }
