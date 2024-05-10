@@ -392,5 +392,5 @@ public class ClientePersonaController : BaseApiController
                 ErrorDescription = "Ha ocurrido un error  al eliminar el registro. Intente nuevamente mas tarde",
             });
         }
-    }  
+    }
 }

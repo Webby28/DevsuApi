@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Contracts.Helpers;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using WebApi.Core.Contracts.Entities;
@@ -208,7 +209,7 @@ public class MovimientosService : IMovimientosService
         }
     }
 
-    private string GenerarHTMLReporte(IEnumerable<MovimientosEntity> reportData)
+    private static string GenerarHTMLReporte(IEnumerable<MovimientosEntity> reportData)
     {
         // Comienza la construcción del HTML
         var htmlBuilder = new StringBuilder();

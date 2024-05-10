@@ -175,13 +175,13 @@ public class ClientePersonaRepository : IClientePersonaRepository
         return existePersona != null;
     }
 
-    private string EncryptPass(string contraseña)
+    private static string EncryptPass(string contraseña)
     {
         PasswordHasher passwordHasher = new PasswordHasher();
         return passwordHasher.HashPassword(contraseña);
     }
 
-    private bool VerifyPassword(string password, string encryptedPassword)
+    private static bool VerifyPassword(string password, string encryptedPassword)
     {
         PasswordHasher passwordHasher = new PasswordHasher();
         return passwordHasher.VerifyPassword(password, encryptedPassword);
