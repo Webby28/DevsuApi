@@ -11,15 +11,17 @@ namespace WebApi.Core.Services;
 public class ClientePersonaService : IClientePersonaService
 {
     private readonly IClientePersonaRepository _clientePersonaRepository;
+    private readonly IMovimientosRepository _movimientosRepository;
     private readonly ILogger<ClientePersonaService> _logger;
     private readonly IMapper _mapper;
 
     public ClientePersonaService(IClientePersonaRepository clientePersonaRepository,
-        ILogger<ClientePersonaService> logger, IMapper mapper)
+        ILogger<ClientePersonaService> logger, IMapper mapper, IMovimientosRepository movimientosRepository)
     {
         _clientePersonaRepository = clientePersonaRepository;
         _logger = logger;
         _mapper = mapper;
+        _movimientosRepository = movimientosRepository;
     }
 
     public async Task<ClienteEntity> InsertarCliente(ClienteRequest cliente)
@@ -108,30 +110,29 @@ public class ClientePersonaService : IClientePersonaService
     public async Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
     {
         var existeCuenta = await _clientePersonaRepository.TieneUsuario(PersonaId);
-        if (clienteUpdate.Estado != "A")
+        
+        if (existeCuenta)
         {
-            throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.USUARIO_NO_ACTIVO);
-        }
-        else
-        {
-            if (existeCuenta)
+            var contraseñaCorrecta = await _clientePersonaRepository.ValidarPassword(new ClientePassword() { Id = PersonaId, ContraseñaAnterior = passwordAnterior });
+            if (contraseñaCorrecta)
             {
-                var contraseñaCorrecta = await _clientePersonaRepository.ValidarPassword(new ClientePassword() { Id = PersonaId, ContraseñaAnterior = passwordAnterior });
+                var cuenta = await _clientePersonaRepository.ObtenerCliente(PersonaId);
+                if (cuenta.Estado != 'A')
+                {
+                    throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.USUARIO_NO_ACTIVO);
+                }
                 var updateCliente = _mapper.Map<ClienteUpdateDto>(clienteUpdate);
-                if (contraseñaCorrecta)
-                {
-                    updateCliente.PersonaId = PersonaId;
-                    return await _clientePersonaRepository.ActualizarCliente(updateCliente);
-                }
-                else
-                {
-                    throw new ReglaNegociosException("La contraseña anterior ingresada es incorrecta.", ErrorType.CONTRASEÑA_INCORRECTA);
-                }
+                updateCliente.PersonaId = PersonaId;
+                return await _clientePersonaRepository.ActualizarCliente(updateCliente);
             }
             else
             {
-                throw new ReglaNegociosException("Persona no tiene una cuenta", ErrorType.PERSONA_NO_EXISTE);
+                throw new ReglaNegociosException("La contraseña anterior ingresada es incorrecta.", ErrorType.CONTRASEÑA_INCORRECTA);
             }
+        }
+        else
+        {
+            throw new ReglaNegociosException("Persona no tiene una cuenta", ErrorType.PERSONA_NO_EXISTE);
         }
     }
 
@@ -162,7 +163,11 @@ public class ClientePersonaService : IClientePersonaService
         var existePersona = await _clientePersonaRepository.TieneUsuario(codigoCliente);
         if (existePersona)
         {
-            return await _clientePersonaRepository.EliminarCliente(codigoCliente);
+            var tieneMovimiento = await _movimientosRepository.TieneMovimiento(codigoCliente);
+            if (!tieneMovimiento)
+                return await _clientePersonaRepository.EliminarCliente(codigoCliente);
+            else
+                throw new ReglaNegociosException("No se puede eliminar el cliente, tiene movimientos.", ErrorType.CUENTA_CON_MOVIMIENTOS);
         }
         else
         {

@@ -212,7 +212,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         await dbContext.SaveChangesAsync();
         return true;
     }
-
+    
     public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         switch (tabla)
@@ -220,15 +220,15 @@ public class ClientePersonaRepository : IClientePersonaRepository
             case Tabla.PERSONA:
                 var persona = await ObtenerPersona(id);
                 if (persona == null)
-                    return 204; // Otra acción dependiendo de tus requisitos
+                    return 204;
                 persona.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Persona.Update(persona).State = EntityState.Modified;
                 break;
 
-            case Tabla.CUENTA:
+            case Tabla.CLIENTE:
                 var cliente = await ObtenerCliente(id);
                 if (cliente == null)
-                    return 204; // Otra acción dependiendo de tus requisitos
+                    return 204;
                 cliente.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Cliente.Update(cliente).State = EntityState.Modified;
                 break;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Contracts.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -48,7 +49,7 @@ public class MovimientosRepository : IMovimientosRepository
         if (cuentaExistente != null)
         {
             cuentaExistente.TipoCuenta = cuentaUpdate.TipoCuenta;
-            cuentaExistente.Estado = cuentaUpdate.Estado;
+            cuentaExistente.Estado = char.Parse(cuentaUpdate.Estado);
 
             await dbContext.SaveChangesAsync();
 
@@ -59,25 +60,37 @@ public class MovimientosRepository : IMovimientosRepository
             throw new ReglaNegociosException("La cuenta no existe.", ErrorType.CUENTA_NO_EXISTE);
         }
     }
-
+    
     public async Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int idMovimiento)
     {
         var dbContext = _appDb.OracleDbContext;
 
         var movimientoExistente = await dbContext.Movimientos.FirstOrDefaultAsync(c => c.IdMovimiento == idMovimiento);
+        if(movimientoExistente.Estado == 'C')
+        {
+            throw new ReglaNegociosException("No se puede modificar el movimiento porque ya se ha compleado.", ErrorType.MOVIMIENTO_NO_MODIFICABLE);
+        }
+        var movimientosMasRecientes = await dbContext.Movimientos
+            .Where(m => m.NumeroCuenta == movimientoExistente.NumeroCuenta)
+            .OrderByDescending(m => m.FechaRegistro)
+            .FirstOrDefaultAsync();
+        if(movimientoExistente.FechaRegistro < movimientosMasRecientes.FechaRegistro)
+        {
+            throw new ReglaNegociosException("No se puede modificar el movimiento porque hay movimientos más recientes para la misma cuenta.", ErrorType.MOVIMIENTO_NO_MODIFICABLE);
+        }
         var saldoNuevo = 0;
         var saldoActual = movimientoExistente.Saldo;
         if (movimientoExistente.IdMovimiento != 0)
         {
-            movimientoExistente.TipoMovimiento = movimientoUpdate.TipoMovimiento;
+            movimientoExistente.TipoMovimiento = char.Parse(movimientoUpdate.TipoMovimiento);
             movimientoExistente.Valor = movimientoUpdate.Valor;
             switch (movimientoUpdate.TipoMovimiento)
             {
-                case '0':
+                case "0":
                     saldoNuevo = saldoActual + movimientoUpdate.Valor;
                     break;
 
-                case '1':
+                case "1":
                     saldoNuevo = saldoActual - movimientoUpdate.Valor;
                     break;
             }
@@ -88,7 +101,7 @@ public class MovimientosRepository : IMovimientosRepository
         }
         else
         {
-            throw new ReglaNegociosException("La cuenta no existe.", ErrorType.CUENTA_NO_EXISTE);
+            throw new ReglaNegociosException("El movimiento no existe.", ErrorType.MOVIMIENTO_NO_EXISTE);
         }
     }
 
@@ -145,6 +158,22 @@ public class MovimientosRepository : IMovimientosRepository
 
         return result;
     }
+    public async Task<ListaCuentas> ObtenerCuentas(int codigoCliente)
+    {
+        var cuentas = await _appDb.OracleDbContext
+               .Cuenta
+               .Where(p => p.IdCliente == codigoCliente)
+               .Select(p => p.TipoCuenta)
+               .ToListAsync();
+
+        var listaCuentas = new ListaCuentas
+        {
+            Cuentas = cuentas.ToList()
+        };
+
+        return listaCuentas;
+    }
+
 
     public async Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento)
     {
@@ -251,7 +280,11 @@ public class MovimientosRepository : IMovimientosRepository
             case Tabla.MOVIMIENTO:
                 var movimiento = await ObtenerMovimiento(id);
                 if (movimiento == null)
-                    return 204; // Otra acción dependiendo de tus requisitos
+                    return 204;
+                if (movimiento.Estado == 'C')
+                {
+                    throw new ReglaNegociosException("No se puede modificar el movimiento porque ya se ha compleado.", ErrorType.MOVIMIENTO_NO_MODIFICABLE);
+                }
                 movimiento.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Movimientos.Update(movimiento).State = EntityState.Modified;
                 break;
@@ -259,7 +292,7 @@ public class MovimientosRepository : IMovimientosRepository
             case Tabla.CUENTA:
                 var cuenta = await ObtenerCuenta(id);
                 if (cuenta == null)
-                    return 204; // Otra acción dependiendo de tus requisitos
+                    return 204; 
                 cuenta.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Cuenta.Update(cuenta).State = EntityState.Modified;
                 break;
@@ -273,14 +306,16 @@ public class MovimientosRepository : IMovimientosRepository
     public async Task<bool> TipoCuentaDuplicada(int numeroCuenta, string tipoCuenta)
     {
         var cuentaOriginal = await ObtenerCuenta(numeroCuenta);
-        if (cuentaOriginal.NumeroCuenta == numeroCuenta && cuentaOriginal.TipoCuenta != tipoCuenta)
+        var tipoCuentas = await ObtenerCuentas(cuentaOriginal.IdCliente);
+        if (tipoCuentas.Cuentas.Contains(tipoCuenta) && cuentaOriginal.TipoCuenta != tipoCuenta)
         {
-             var cuenta = await _appDb.OracleDbContext.Cuenta.FirstOrDefaultAsync(p => p.NumeroCuenta == numeroCuenta && p.TipoCuenta == tipoCuenta);
-            return true;
-
+            return true; 
         }
         return false;
+        //if (cuentaOriginal.NumeroCuenta == numeroCuenta && cuentaOriginal.TipoCuenta != tipoCuenta)
+        //{
+        //    
 
-
+        //}
     }
 }

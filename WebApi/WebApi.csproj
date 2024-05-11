@@ -66,6 +66,7 @@
 	</ItemGroup>
 	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Copyright>WilliamsBaez</Copyright>
 	</PropertyGroup>
 	<ItemGroup>
 		<Folder Include="Properties\" />

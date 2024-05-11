@@ -107,7 +107,7 @@ public class MovimientosService : IMovimientosService
             var tipoCuentaDuplicada = await _movimientosRepository.TipoCuentaDuplicada(numeroCuenta, cuentaUpdate.TipoCuenta);
             if (tipoCuentaDuplicada)
             {
-                throw new ReglaNegociosException("No puede actualizar a este tipo porque ya tiene una cuenta del mismo tipo. Intente de nuevo.", ErrorType.CUENTA_DUPLICADA);
+                throw new ReglaNegociosException("Este cliente ya tiene una cuenta del mismo tipo. Intente de nuevo.", ErrorType.CUENTA_DUPLICADA);
             }
             var updateCuenta = _mapper.Map<CuentaUpdateDto>(cuentaUpdate);
             _logger.LogInformation("Se procede a actualizar el registro. {@NumeroCuenta} {CuentaUpdate}", numeroCuenta, cuentaUpdate);
@@ -159,6 +159,11 @@ public class MovimientosService : IMovimientosService
     public async Task<bool> EliminarMovimiento(int codigoMovimiento)
     {
         var existeMovimiento = await _movimientosRepository.ExisteMovimiento(codigoMovimiento);
+        var movimiento = await _movimientosRepository.ObtenerMovimiento(codigoMovimiento);
+        if (movimiento.Estado == 'C')
+        {
+            throw new ReglaNegociosException("No se puede eliminar el movimiento porque ya se ha compleado.", ErrorType.MOVIMIENTO_NO_MODIFICABLE);
+        }
         if (existeMovimiento)
         {
             return await _movimientosRepository.EliminarMovimiento(codigoMovimiento);
@@ -218,36 +223,38 @@ public class MovimientosService : IMovimientosService
 
     private static string GenerarHTMLReporte(IEnumerable<MovimientosEntity> reportData)
     {
-        // Comienza la construcción del HTML
         var htmlBuilder = new StringBuilder();
         htmlBuilder.AppendLine("<!DOCTYPE html>");
         htmlBuilder.AppendLine("<html>");
         htmlBuilder.AppendLine("<head>");
         htmlBuilder.AppendLine("<title>Reporte de Movimientos</title>");
+        htmlBuilder.AppendLine("<style>");
+        htmlBuilder.AppendLine("table { width: 100%; border-collapse: collapse; }");
+        htmlBuilder.AppendLine("th, td { text-align: center; border: 1px solid black; padding: 8px; }");
+        htmlBuilder.AppendLine("</style>");
         htmlBuilder.AppendLine("</head>");
         htmlBuilder.AppendLine("<body>");
         htmlBuilder.AppendLine("<h1>Reporte de Movimientos</h1>");
 
-        // Verifica si hay datos en el reportData
         if (reportData?.Any() == true)
         {
-            // Agrega la tabla con los encabezados
             htmlBuilder.AppendLine("<table>");
             htmlBuilder.AppendLine("<thead>");
             htmlBuilder.AppendLine("<tr>");
             htmlBuilder.AppendLine("<th>ID Movimiento</th>");
             htmlBuilder.AppendLine("<th>Fecha</th>");
-            htmlBuilder.AppendLine("<th>Detalle</th>");
+            htmlBuilder.AppendLine("<th>Valor</th>");
+            htmlBuilder.AppendLine("<th>Saldo</th>");
+            htmlBuilder.AppendLine("<th>Numero Cuenta</th>");
             htmlBuilder.AppendLine("</tr>");
             htmlBuilder.AppendLine("</thead>");
             htmlBuilder.AppendLine("<tbody>");
 
-            // Agrega las filas con los datos de los movimientos
             foreach (var movimiento in reportData)
             {
                 htmlBuilder.AppendLine("<tr>");
                 htmlBuilder.AppendLine($"<td>{movimiento.IdMovimiento}</td>");
-                htmlBuilder.AppendLine($"<td>{movimiento.Fecha}</td>");
+                htmlBuilder.AppendLine($"<td>{movimiento.Fecha.ToShortDateString()}</td>");
                 htmlBuilder.AppendLine($"<td>{movimiento.Valor}</td>");
                 htmlBuilder.AppendLine($"<td>{movimiento.Saldo}</td>");
                 htmlBuilder.AppendLine($"<td>{movimiento.NumeroCuenta}</td>");
@@ -259,11 +266,9 @@ public class MovimientosService : IMovimientosService
         }
         else
         {
-            // Si no hay datos, muestra un mensaje indicando que no se encontraron movimientos
             htmlBuilder.AppendLine("<p>No se encontraron movimientos para mostrar.</p>");
         }
 
-        // Finaliza la construcción del HTML
         htmlBuilder.AppendLine("</body>");
         htmlBuilder.AppendLine("</html>");
 
@@ -280,6 +285,14 @@ public class MovimientosService : IMovimientosService
     {
         if(tabla.Equals(Tabla.CUENTA) || tabla.Equals(Tabla.MOVIMIENTO))
         {
+            if(tabla.Equals(Tabla.MOVIMIENTO) && (estado != "P" && estado != "C"))
+            {
+                throw new ReglaNegociosException("El campo Estado debe ser 'P' (Pendiente) o 'C' (Completado).", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+            }
+            if (tabla.Equals(Tabla.CUENTA) && (estado != "A" || estado != "I"))
+            {
+                throw new ReglaNegociosException("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo).", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
+            }
             var des = await _movimientosRepository.ActualizarEstado(estado, id, tabla);
             return des;
         }

@@ -1821,7 +1821,8 @@
           "SALDO_EXCEDIDO",
           "CUENTA_CON_MOVIMIENTOS",
           "SIN_MOVIMIENTOS",
-          "TIENE_USUARIO"
+          "TIENE_USUARIO",
+          "MOVIMIENTO_NO_MODIFICABLE"
         ],
         "enum": [
           0,
@@ -1841,7 +1842,8 @@
           14,
           15,
           16,
-          17
+          17,
+          18
         ]
       },
       "PersonaRequest": {

@@ -1,4 +1,5 @@
-﻿using WebApi.Core.Contracts.Entities;
+﻿using Core.Contracts.Models;
+using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Requests;
 
@@ -39,4 +40,5 @@ public interface IMovimientosRepository
     Task<bool> TieneMovimiento(int codigoCliente);
     Task<int> ActualizarEstado(string estado, int id, Tabla tabla);
     Task<bool> TipoCuentaDuplicada(int numeroCuenta, string tipoCuenta);
+    Task<ListaCuentas> ObtenerCuentas(int codigoCliente);
 }

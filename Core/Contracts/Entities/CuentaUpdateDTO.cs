@@ -2,7 +2,7 @@
 
 public class CuentaUpdateDto
 {
-    public string TipoCuenta { get; set; } = "Ahorro";
+    public string TipoCuenta { get; set; } = "AH";
 
-    public char Estado { get; set; } = 'A';
+    public string Estado { get; set; } = "A";
 }

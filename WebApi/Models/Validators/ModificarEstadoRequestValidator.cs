@@ -16,7 +16,7 @@ namespace WebApi.Models.Validators
             RuleFor(p => p.Estado)
                 .NotNull().WithMessage("El campo Estado no debe ser nulo, favor verifique.")
                 .Must(estado => estado.ToString().Length == 1).WithMessage("El campo Estado debe tener exactamente un carácter.")
-                .Must(estado => estado == "A" || estado == "I").WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo).");
+                .Must(estado => estado == "A" || estado == "I" || estado == "P" || estado == "C").WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo). Para movimientos debe ser 'P' (Pendiente) o 'C' (Completado)");
         }
 
 

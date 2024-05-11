@@ -366,8 +366,8 @@ public class ClientePersonaController : BaseApiController
 
             if (result)
             {
-                _logger.LogInformation("Se ha eliminado el registro de la cliente  {@Id}", id);
-                return StatusCode(StatusCodes.Status200OK, result);
+                _logger.LogInformation("Se ha eliminado el registro del cliente  {@Id}", id);
+                return StatusCode(StatusCodes.Status200OK, "Se ha eliminado el cliente.");
             }
             else
             {
