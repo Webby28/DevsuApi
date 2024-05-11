@@ -61,7 +61,7 @@ namespace WebApi.Test
         public void PersonaRequestValidator_ValidarGenero_Distinto_DeberiaFallar()
         {
             // Arrange
-            var personaRequest = new PersonaRequest { Nombre = "Test", Genero = "S",  Edad = 1, Identificacion = "123", Direccion = "Test", Telefono = "Test" };
+            var personaRequest = new PersonaRequest { Nombre = "Test", Genero = "S", Edad = 1, Identificacion = "123", Direccion = "Test", Telefono = "Test" };
 
             // Act
             var result = _personaRequestValidator.TestValidate(personaRequest);
@@ -82,6 +82,6 @@ namespace WebApi.Test
 
             // Assert
             result.ShouldHaveValidationErrorFor(p => p.Edad).WithErrorMessage("La edad debe ser mayor que cero.");
-        }       
+        }
     }
 }

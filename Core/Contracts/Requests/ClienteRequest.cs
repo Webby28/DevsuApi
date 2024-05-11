@@ -16,7 +16,7 @@ namespace WebApi.Core.Contracts.Requests
         /// Contraseña del cliente.
         /// </summary>
         [Description("Contraseña del cliente")]
-        public required string Contraseña { get; set; }
+        public string Contraseña { get; set; }
 
         /// <summary>
         /// Estado del cliente.

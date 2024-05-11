@@ -11,7 +11,6 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
-using WebApi.Core.Services;
 using WebApi.Models;
 
 namespace WebApi.Controllers.V1;
@@ -394,6 +393,7 @@ public class ClientePersonaController : BaseApiController
             });
         }
     }
+
     [HttpPatch("persona/{id}")]
     [SwaggerResponse(StatusCodes.Status200OK, typeof(int), Description = "Operación exitosa. Se actualizó el estado de la cuenta.")]
     [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado la cuenta.")]
@@ -402,7 +402,6 @@ public class ClientePersonaController : BaseApiController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
     public async Task<ActionResult> ActualizarPersonaPatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
     {
-
         try
         {
             _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);
@@ -437,6 +436,7 @@ public class ClientePersonaController : BaseApiController
             });
         }
     }
+
     [HttpPatch("cliente/{id}")]
     [SwaggerResponse(StatusCodes.Status200OK, typeof(int), Description = "Operación exitosa. Se actualizó el estado de la cuenta.")]
     [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado la cuenta.")]
@@ -445,7 +445,6 @@ public class ClientePersonaController : BaseApiController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
     public async Task<ActionResult> ActualizarClientePatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
     {
-
         try
         {
             _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using WebApi.Core.Contracts.Entities;
-using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Models.Validators
 {

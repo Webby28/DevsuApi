@@ -9,7 +9,7 @@ namespace WebApi.Models.Validators
     public class ModificarEstadoRequestValidator : AbstractValidator<ModificarEstadoRequest>
     {
         /// <summary>
-        /// Método para validar los parametros para actualizacion de estado. 
+        /// Método para validar los parametros para actualizacion de estado.
         /// </summary>
         public ModificarEstadoRequestValidator()
         {
@@ -18,7 +18,5 @@ namespace WebApi.Models.Validators
                 .Must(estado => estado.ToString().Length == 1).WithMessage("El campo Estado debe tener exactamente un carácter.")
                 .Must(estado => estado == "A" || estado == "I" || estado == "P" || estado == "C").WithMessage("El campo Estado debe ser 'A' (Activo) o 'I' (Inactivo). Para movimientos debe ser 'P' (Pendiente) o 'C' (Completado)");
         }
-
-
     }
 }

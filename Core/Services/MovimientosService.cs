@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.Contracts.Helpers;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using WebApi.Core.Contracts.Entities;
@@ -54,7 +53,6 @@ public class MovimientosService : IMovimientosService
         _logger.LogInformation("Iniciando inserción de datos en tabla cliente {@Request}", request);
         return await _movimientosRepository.InsertarCuenta(request);
     }
-
 
     public async Task<MovimientosEntity> InsertarMovimiento(MovimientosRequest movimiento)
     {
@@ -274,6 +272,7 @@ public class MovimientosService : IMovimientosService
 
         return htmlBuilder.ToString();
     }
+
     /// <summary>
     /// Método que permite la actulizacion del estado de un subservicio favorito luego de que haya sido pagado.
     /// </summary>
@@ -283,9 +282,9 @@ public class MovimientosService : IMovimientosService
     /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
     public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
-        if(tabla.Equals(Tabla.CUENTA) || tabla.Equals(Tabla.MOVIMIENTO))
+        if (tabla.Equals(Tabla.CUENTA) || tabla.Equals(Tabla.MOVIMIENTO))
         {
-            if(tabla.Equals(Tabla.MOVIMIENTO) && (estado != "P" && estado != "C"))
+            if (tabla.Equals(Tabla.MOVIMIENTO) && (estado != "P" && estado != "C"))
             {
                 throw new ReglaNegociosException("El campo Estado debe ser 'P' (Pendiente) o 'C' (Completado).", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
             }
@@ -300,7 +299,5 @@ public class MovimientosService : IMovimientosService
         {
             throw new ReglaNegociosException("Operación seleccionada no corresponde a movimientos.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }
-
-
     }
 }

@@ -212,7 +212,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         await dbContext.SaveChangesAsync();
         return true;
     }
-    
+
     public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         switch (tabla)
@@ -232,6 +232,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
                 cliente.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Cliente.Update(cliente).State = EntityState.Modified;
                 break;
+
             default:
                 throw new ReglaNegociosException("Operación seleccionada no corresponde a PersonaCliente.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }

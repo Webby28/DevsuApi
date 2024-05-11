@@ -1,5 +1,4 @@
-﻿
-namespace WebApi.Core.Contracts.Entities;
+﻿namespace WebApi.Core.Contracts.Entities;
 
 public class ClienteUpdateDto
 {

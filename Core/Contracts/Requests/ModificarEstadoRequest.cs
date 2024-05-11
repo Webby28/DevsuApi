@@ -1,13 +1,10 @@
-﻿
-
-namespace WebApi.Core.Contracts.Requests
+﻿namespace WebApi.Core.Contracts.Requests
 {
     public class ModificarEstadoRequest
     {
         /// <summary>
         /// Identificador que corresponde al estado que se actualizará en tablas
         /// </summary>
-        public required string Estado { get; set; }
+        public string Estado { get; set; }
     }
-  
 }

@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Core.Contracts.Models;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Web.Http.ModelBinding;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Helpers;
-using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Interfaces;
 using WebApi.Infrastructure.Database;
 
@@ -60,13 +56,13 @@ public class MovimientosRepository : IMovimientosRepository
             throw new ReglaNegociosException("La cuenta no existe.", ErrorType.CUENTA_NO_EXISTE);
         }
     }
-    
+
     public async Task<MovimientosEntity> ActualizarMovimiento(MovimientoUpdateDto movimientoUpdate, int idMovimiento)
     {
         var dbContext = _appDb.OracleDbContext;
 
         var movimientoExistente = await dbContext.Movimientos.FirstOrDefaultAsync(c => c.IdMovimiento == idMovimiento);
-        if(movimientoExistente.Estado == 'C')
+        if (movimientoExistente.Estado == 'C')
         {
             throw new ReglaNegociosException("No se puede modificar el movimiento porque ya se ha compleado.", ErrorType.MOVIMIENTO_NO_MODIFICABLE);
         }
@@ -74,7 +70,7 @@ public class MovimientosRepository : IMovimientosRepository
             .Where(m => m.NumeroCuenta == movimientoExistente.NumeroCuenta)
             .OrderByDescending(m => m.FechaRegistro)
             .FirstOrDefaultAsync();
-        if(movimientoExistente.FechaRegistro < movimientosMasRecientes.FechaRegistro)
+        if (movimientoExistente.FechaRegistro < movimientosMasRecientes.FechaRegistro)
         {
             throw new ReglaNegociosException("No se puede modificar el movimiento porque hay movimientos más recientes para la misma cuenta.", ErrorType.MOVIMIENTO_NO_MODIFICABLE);
         }
@@ -158,6 +154,7 @@ public class MovimientosRepository : IMovimientosRepository
 
         return result;
     }
+
     public async Task<ListaCuentas> ObtenerCuentas(int codigoCliente)
     {
         var cuentas = await _appDb.OracleDbContext
@@ -173,7 +170,6 @@ public class MovimientosRepository : IMovimientosRepository
 
         return listaCuentas;
     }
-
 
     public async Task<MovimientosEntity> ObtenerMovimiento(int idMovimiento)
     {
@@ -197,7 +193,6 @@ public class MovimientosRepository : IMovimientosRepository
 
     public async Task<bool> TieneCuenta(int codigoCliente, string tipoCuenta)
     {
-        
         var tieneCuenta = await _appDb.OracleDbContext.Cuenta
         .FirstOrDefaultAsync(p => p.IdCliente == codigoCliente && p.TipoCuenta == tipoCuenta);
         return tieneCuenta != null;
@@ -230,7 +225,7 @@ public class MovimientosRepository : IMovimientosRepository
             }
         }
     }
-
+   
     public async Task ActualizarSaldoCuenta(int numeroCuenta, int saldoRestante)
     {
         var cuenta = await _appDb.OracleDbContext.Cuenta
@@ -248,6 +243,11 @@ public class MovimientosRepository : IMovimientosRepository
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Método que verifica si una cuenta tiene movimiento.
+    /// </summary>
+    /// <param name="numeroCuenta">Corresponde al numero de cuenta.</param>
+    /// <returns>Devuelve verdadero o falso</returns>
     public async Task<bool> CuentaConMovimiento(int numeroCuenta)
     {
         var conMovimiento = await _appDb.OracleDbContext.Movimientos
@@ -257,6 +257,11 @@ public class MovimientosRepository : IMovimientosRepository
         return conMovimiento != null;
     }
 
+    /// <summary>
+    /// Método que verifica si un cliente cuenta con algun movimiento
+    /// </summary>
+    /// <param name="codigoCliente">Corresponde al codigo del cliente.</param>
+    /// <returns>Devuelve verdadero o falso</returns>
     public async Task<bool> TieneMovimiento(int codigoCliente)
     {
         var tieneMovimiento = await (from movimiento in _appDb.OracleDbContext.Movimientos
@@ -266,13 +271,14 @@ public class MovimientosRepository : IMovimientosRepository
                              .FirstOrDefaultAsync();
         return tieneMovimiento != null;
     }
+
     /// <summary>
     /// Método que permite la actulizacion del estado de una tabla.
     /// </summary>
     /// <param name="estado">Corresponde al nuevo estado.</param>
     /// <param name="id">Corresponde al id principal de la tabla.</param>
     /// <param name="tabla">Se especifica la tabla donde se actualizará el estado.</param>
-    /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
+    /// <returns>Devuelve el estado que corresponde a la respuesta de la solicitud</returns>
     public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         switch (tabla)
@@ -292,10 +298,11 @@ public class MovimientosRepository : IMovimientosRepository
             case Tabla.CUENTA:
                 var cuenta = await ObtenerCuenta(id);
                 if (cuenta == null)
-                    return 204; 
+                    return 204;
                 cuenta.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Cuenta.Update(cuenta).State = EntityState.Modified;
                 break;
+
             default:
                 throw new ReglaNegociosException("Operación seleccionada no corresponde a movimientos.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }
@@ -303,19 +310,20 @@ public class MovimientosRepository : IMovimientosRepository
         return await _appDb.OracleDbContext.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Método que verifica si la persona ya tiene una cuenta con el mismo tipo de cuenta
+    /// </summary>
+    /// <param name="numeroCuenta">Corresponde al numero de cuenta.</param>
+    /// <param name="tipoCuenta">Corresponde al tipo de cuenta.</param>
+    /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
     public async Task<bool> TipoCuentaDuplicada(int numeroCuenta, string tipoCuenta)
     {
         var cuentaOriginal = await ObtenerCuenta(numeroCuenta);
         var tipoCuentas = await ObtenerCuentas(cuentaOriginal.IdCliente);
         if (tipoCuentas.Cuentas.Contains(tipoCuenta) && cuentaOriginal.TipoCuenta != tipoCuenta)
         {
-            return true; 
+            return true;
         }
         return false;
-        //if (cuentaOriginal.NumeroCuenta == numeroCuenta && cuentaOriginal.TipoCuenta != tipoCuenta)
-        //{
-        //    
-
-        //}
     }
 }

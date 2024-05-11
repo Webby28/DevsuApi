@@ -31,5 +31,6 @@ public interface IClientePersonaRepository
     Task<bool> EliminarPersona(int codigoPersona);
 
     Task<bool> EliminarCliente(int codigoPersona);
+
     Task<int> ActualizarEstado(string estado, int id, Tabla tabla);
 }

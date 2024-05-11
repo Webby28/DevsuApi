@@ -1,16 +1,5 @@
-
-using AutoMapper;
-using FluentValidation.TestHelper;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Logging;
-using Moq;
 using System.Net;
-using WebApi.Core.Contracts.Helpers;
-using WebApi.Core.Contracts.Requests;
-using WebApi.Core.Interfaces;
-using WebApi.Core.Services;
-using WebApi.Models.Validators;
 
 namespace WebApi.Test
 {

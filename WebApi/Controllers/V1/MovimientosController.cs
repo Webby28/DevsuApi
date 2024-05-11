@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSwag.Annotations;
@@ -13,11 +11,7 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
-using WebApi.Infrastructure.Repositories;
 using WebApi.Models;
-using Microsoft.AspNetCore.JsonPatch.Adapters;
-using System.Net;
-using System;
 
 namespace WebApi.Controllers.V1
 {
@@ -34,7 +28,7 @@ namespace WebApi.Controllers.V1
         IMovimientosService movimientosService)
         {
             _logger = logger;
-            _movimientosService = movimientosService;            
+            _movimientosService = movimientosService;
         }
 
         [HttpPost("cuenta")]
@@ -444,7 +438,6 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
         public async Task<ActionResult> ActualizarCuentaPatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
         {
-            
             try
             {
                 _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);
@@ -479,6 +472,7 @@ namespace WebApi.Controllers.V1
                 });
             }
         }
+
         [HttpPatch("movimientos/{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, typeof(int), Description = "Operación exitosa. Se actualizó el estado de la cuenta.")]
         [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado la cuenta.")]
@@ -487,7 +481,6 @@ namespace WebApi.Controllers.V1
         [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
         public async Task<ActionResult> ActualizarMovimientosPatch([FromRoute] int id, [FromBody] ModificarEstadoRequest requestModifica)
         {
-
             try
             {
                 _logger.LogInformation("Iniciando el proceso de modificación del estado. {@RequestModifica}, {@Id}", requestModifica, id);

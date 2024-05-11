@@ -51,7 +51,7 @@ public class ClientePersonaService : IClientePersonaService
                 _logger.LogInformation("Ingrese el id la persona {@Request}", request);
                 throw new ReglaNegociosException("Ingrese el id de la persona.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
             }
-        }        
+        }
     }
 
     public async Task<PersonaEntity> InsertarPersona(PersonaRequest persona)
@@ -110,7 +110,7 @@ public class ClientePersonaService : IClientePersonaService
     public async Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
     {
         var existeCuenta = await _clientePersonaRepository.TieneUsuario(PersonaId);
-        
+
         if (existeCuenta)
         {
             var contraseñaCorrecta = await _clientePersonaRepository.ValidarPassword(new ClientePassword() { Id = PersonaId, ContraseñaAnterior = passwordAnterior });
@@ -149,7 +149,6 @@ public class ClientePersonaService : IClientePersonaService
             else
             {
                 throw new ReglaNegociosException("La persona que intenta eliminar es cliente", ErrorType.TIENE_USUARIO);
-
             }
         }
         else
@@ -186,7 +185,5 @@ public class ClientePersonaService : IClientePersonaService
         {
             throw new ReglaNegociosException("Operación seleccionada no corresponde a PersonaCliente.", ErrorType.VALIDACION_PARAMETROS_ENTRADA);
         }
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SelectPdf;
 
 namespace Core.Contracts.Helpers;
+
 public class PdfGenerator
 {
     public byte[] GeneratePdf(string htmlContent)

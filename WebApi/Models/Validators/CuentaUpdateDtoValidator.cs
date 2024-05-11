@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using System.Collections.Generic;
 using WebApi.Core.Contracts.Entities;
-using WebApi.Core.Contracts.Requests;
 
 namespace WebApi.Models.Validators
 {
@@ -9,7 +8,7 @@ namespace WebApi.Models.Validators
     {
         public CuentaUpdateDtoValidator()
         {
-            List<string> tiposCuentaValidos = new List<string> { "CC", "AH", "CH", "CAP"};
+            List<string> tiposCuentaValidos = new List<string> { "CC", "AH", "CH", "CAP" };
 
             RuleFor(x => x.TipoCuenta)
                 .NotEmpty().WithMessage("El tipo de cuenta es obligatorio.")
