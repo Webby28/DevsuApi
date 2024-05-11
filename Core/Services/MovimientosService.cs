@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Contracts.Helpers;
+using Core.Contracts.Models;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using WebApi.Core.Contracts.Entities;
@@ -184,7 +185,7 @@ public class MovimientosService : IMovimientosService
         return await _movimientosRepository.ObtenerMovimiento(codigoMovimiento);
     }
 
-    public async Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente)
+    public async Task<List<MovimientoReporte>> GenerarReporte(string rangoFechas, int codigoCliente)
     {
         var existeCliente = await _clientePersonaRepository.ExisteCliente(codigoCliente);
         if (!existeCliente)
@@ -208,10 +209,55 @@ public class MovimientosService : IMovimientosService
             DateTime hasta = DateTime.Parse(partesRango[1]);
             var reportData = await _movimientosRepository.ObtenerMovimientoPorFecha(codigoCliente, desde, hasta);
 
-            // Generar el HTML del reporte utilizando los datos obtenidos
+            MovimientosReporte movimientosReporte = new();
+            reportData = reportData.OrderBy(movimiento => movimiento.IdMovimiento);
+
+            foreach (var movimientoEntity in reportData)
+            {
+                var valor = movimientoEntity.TipoMovimiento == '1' ? -movimientoEntity.Valor : movimientoEntity.Valor;
+
+                var movimientoReporte = new MovimientoReporte
+                {
+                    IdMovimiento = movimientoEntity.IdMovimiento,
+                    Fecha = movimientoEntity.Fecha.ToString("d"),
+                    Valor = valor,
+                    Saldo = movimientoEntity.Saldo,
+                    NumeroCuenta = movimientoEntity.NumeroCuenta
+                };
+
+                movimientosReporte.MovimientoReportes.Add(movimientoReporte);
+            }
+
+            return movimientosReporte.MovimientoReportes;
+        }
+    }
+
+    public async Task<byte[]> GenerarReportePDF(string rangoFechas, int codigoCliente)
+    {
+        var existeCliente = await _clientePersonaRepository.ExisteCliente(codigoCliente);
+        if (!existeCliente)
+        {
+            throw new ReglaNegociosException("El código de cliente no existe.", ErrorType.CLIENTE_NO_EXISTE);
+        }
+        else
+        {
+            var tieneMovimiento = await _movimientosRepository.TieneMovimiento(codigoCliente);
+            if (!tieneMovimiento)
+            {
+                throw new ReglaNegociosException("El cliente no tiene movientos.", ErrorType.SIN_MOVIMIENTOS);
+            }
+
+            var partesRango = rangoFechas.Split('|');
+            if (partesRango.Length != 2)
+            {
+                throw new ArgumentException("El formato del rango de fechas es incorrecto.");
+            }
+            DateTime desde = DateTime.Parse(partesRango[0]);
+            DateTime hasta = DateTime.Parse(partesRango[1]);
+            var reportData = await _movimientosRepository.ObtenerMovimientoPorFecha(codigoCliente, desde, hasta);
+
             string htmlReport = GenerarHTMLReporte(reportData);
 
-            // Generar el PDF del reporte a partir del HTML utilizando la clase PdfGenerator
             var pdfGenerator = new PdfGenerator();
             byte[] pdfBytes = pdfGenerator.GeneratePdf(htmlReport);
 
@@ -233,6 +279,7 @@ public class MovimientosService : IMovimientosService
         htmlBuilder.AppendLine("</head>");
         htmlBuilder.AppendLine("<body>");
         htmlBuilder.AppendLine("<h1>Reporte de Movimientos</h1>");
+        reportData = reportData.OrderBy(movimiento => movimiento.IdMovimiento);
 
         if (reportData?.Any() == true)
         {
@@ -250,10 +297,12 @@ public class MovimientosService : IMovimientosService
 
             foreach (var movimiento in reportData)
             {
+                var valor = movimiento.TipoMovimiento == '1' ? (-movimiento.Valor).ToString() : movimiento.Valor.ToString();
+
                 htmlBuilder.AppendLine("<tr>");
                 htmlBuilder.AppendLine($"<td>{movimiento.IdMovimiento}</td>");
                 htmlBuilder.AppendLine($"<td>{movimiento.Fecha.ToShortDateString()}</td>");
-                htmlBuilder.AppendLine($"<td>{movimiento.Valor}</td>");
+                htmlBuilder.AppendLine($"<td>{valor}</td>");
                 htmlBuilder.AppendLine($"<td>{movimiento.Saldo}</td>");
                 htmlBuilder.AppendLine($"<td>{movimiento.NumeroCuenta}</td>");
                 htmlBuilder.AppendLine("</tr>");

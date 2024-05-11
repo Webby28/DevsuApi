@@ -1,9 +1,12 @@
 ﻿using Asp.Versioning;
+using Core.Contracts.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSwag.Annotations;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
@@ -386,8 +389,8 @@ namespace WebApi.Controllers.V1
         }
 
         [HttpGet("reportes")]
-        [OpenApiOperation("GenerarReporte", description: "Genera un reporte de los movimientos de una persona en un rango de fecha.")]
-        [SwaggerResponse(StatusCodes.Status200OK, typeof(FileContentResult), Description = "Operación exitosa. Genera un pdf con los movimientos.")]
+        [OpenApiOperation("GenerarReporte", description: "Genera un reporte en formato json de los movimientos de una persona en un rango de fecha.")]
+        [SwaggerResponse(StatusCodes.Status200OK, typeof(List<MovimientoReporte>), Description = "Operación exitosa. Genera un pdf con los movimientos.")]
         [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado el movimiento.")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
@@ -398,6 +401,51 @@ namespace WebApi.Controllers.V1
             {
                 _logger.LogInformation("Inicio solicitud de GenerarReporte {@RangoFechas} {@CodigoCliente}", rangoFechas, codigoCliente);
                 var result = await _movimientosService.GenerarReporte(rangoFechas, codigoCliente);
+
+                if (result.Any())
+                {
+                    _logger.LogInformation("Se muestra el reporte con éxito {@CodigoCliente}", codigoCliente);
+                    return StatusCode(StatusCodes.Status201Created, result);
+                }
+                else
+                {
+                    _logger.LogInformation("No se ha encontrado el movimiento {@CodigoCliente}", codigoCliente);
+                    return StatusCode(StatusCodes.Status204NoContent, "No se ha encontrado el movimiento.");
+                }
+            }
+            catch (ReglaNegociosException ex)
+            {
+                _logger.LogError(ex, "Ha ocurrido un error  al generar el reporte {@CodigoCliente}", codigoCliente);
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+                {
+                    ErrorType = ex.CodigoError,
+                    ErrorDescription = ex.Message,
+                });
+            }
+            catch (System.Exception e)
+            {
+                _logger.LogError(e, "Respuesta del servidor sobre la generación del reporte {@CodigoCliente}", codigoCliente);
+                return StatusCode(500, new ErrorResponse
+                {
+                    ErrorType = ErrorType.ERROR_INTERNO_EN_SERVIDOR,
+                    ErrorDescription = "Ha ocurrido un error  al generar el reporte. Intente nuevamente mas tarde",
+                });
+            }
+        }
+
+        [HttpGet("reportesPDF")]
+        [OpenApiOperation("GenerarReportePDF", description: "Genera un reporte pdf de los movimientos de una persona en un rango de fecha.")]
+        [SwaggerResponse(StatusCodes.Status200OK, typeof(FileContentResult), Description = "Operación exitosa. Genera un pdf con los movimientos.")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, typeof(void), Description = "No se ha encontrado el movimiento.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]
+        public async Task<IActionResult> GenerarReportePDF([Description("Rango de las fechas con separador | ")][FromQuery] string rangoFechas, [Description("Código del cliente asociado al movimiento")][FromQuery] int codigoCliente)
+        {
+            try
+            {
+                _logger.LogInformation("Inicio solicitud de GenerarReportePDF {@RangoFechas} {@CodigoCliente}", rangoFechas, codigoCliente);
+                var result = await _movimientosService.GenerarReportePDF(rangoFechas, codigoCliente);
 
                 if (result != null)
                 {

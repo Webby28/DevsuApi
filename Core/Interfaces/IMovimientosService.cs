@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Core.Contracts.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using WebApi.Core.Contracts.Entities;
 using WebApi.Core.Contracts.Enums;
 using WebApi.Core.Contracts.Requests;
@@ -23,7 +24,9 @@ public interface IMovimientosService
 
     Task<bool> EliminarMovimiento(int codigoMovimiento);
 
-    Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente);
+    Task<List<MovimientoReporte>> GenerarReporte(string rangoFechas, int codigoCliente);
+
+    Task<byte[]> GenerarReportePDF(string rangoFechas, int codigoCliente);
 
     Task<int> ActualizarEstado(string estado, int id, Tabla tabla);
 }

@@ -1646,8 +1646,97 @@
           "MovimientosController"
         ],
         "summary": "GenerarReporte",
-        "description": "Genera un reporte de los movimientos de una persona en un rango de fecha.",
+        "description": "Genera un reporte en formato json de los movimientos de una persona en un rango de fecha.",
         "operationId": "Movimientos_GenerarReporte",
+        "parameters": [
+          {
+            "name": "rangoFechas",
+            "in": "query",
+            "description": "Rango de las fechas con separador | ",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "codigoCliente",
+            "in": "query",
+            "description": "Código del cliente asociado al movimiento",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "ApiKey para poder autorizar peticion",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa. Genera un pdf con los movimientos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MovimientoReporte"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se ha encontrado el movimiento."
+          },
+          "400": {
+            "description": "La solicitud es incorrecta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado para realizar la operación.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/reportespdf": {
+      "get": {
+        "tags": [
+          "MovimientosController"
+        ],
+        "summary": "GenerarReportePDF",
+        "description": "Genera un reporte pdf de los movimientos de una persona en un rango de fecha.",
+        "operationId": "Movimientos_GenerarReportePDF",
         "parameters": [
           {
             "name": "rangoFechas",
@@ -2175,6 +2264,31 @@
             "type": "string"
           },
           "valor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MovimientoReporte": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idMovimiento": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fecha": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saldo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numeroCuenta": {
             "type": "integer",
             "format": "int32"
           }
