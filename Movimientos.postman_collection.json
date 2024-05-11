@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "6e85b610-bd06-4b97-9060-a438a1673a00",
+		"name": "Movimientos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21693508"
+	},
+	"item": [
+		{
+			"name": "Cuenta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.request.method === 'POST' && pm.request.url.toString().includes('/v1/api/cuenta')) {\r",
+							"    var responseData = pm.response.json();\r",
+							"    if (responseData.numeroCuenta) {\r",
+							"        pm.collectionVariables.set(\"numeroCuenta\", responseData.numeroCuenta);\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"numeroCuenta\": 2,\r\n  \"tipoCuenta\": \"AH\",\r\n  \"saldoInicial\": 10000,\r\n  \"estado\": \"A\",\r\n  \"idCliente\": 24\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cuenta",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cuenta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cuenta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cuenta/{{numeroCuenta}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cuenta",
+						"{{numeroCuenta}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cuenta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"tipoCuenta\": \"CAP\",\r\n  \"estado\": \"I\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cuenta/{{numeroCuenta}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cuenta",
+						"{{numeroCuenta}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cuenta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": \"I\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cuenta/{{numeroCuenta}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cuenta",
+						"{{numeroCuenta}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cuenta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cuenta/{{numeroCuenta}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cuenta",
+						"{{numeroCuenta}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Movimientos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.request.method === 'POST' && pm.request.url.toString().includes('/v1/api/movimientos')) {\r",
+							"    var responseData = pm.response.json();\r",
+							"    if (responseData.idMovimiento) {\r",
+							"        pm.collectionVariables.set(\"idMovimiento\", responseData.idMovimiento);\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fecha\": \"10/05/2024\",\r\n  \"tipoMovimiento\": \"1\",\r\n  \"valor\": 500,\r\n  \"numeroCuenta\": 444444\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/movimientos",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"movimientos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Movimientos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/movimientos/{{idMovimiento}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"movimientos",
+						"{{idMovimiento}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Movimientos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"tipoMovimiento\": \"1\",\r\n  \"valor\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/movimientos/{{idMovimiento}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"movimientos",
+						"{{idMovimiento}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Movimientos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": \"C\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/movimientos/{{idMovimiento}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"movimientos",
+						"{{idMovimiento}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Movimientos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/movimientos/{{idMovimiento}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"movimientos",
+						"{{idMovimiento}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reportes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/reportes?rangoFechas=09%2F05%2F2024%7C10%2F05%2F2024&codigoCliente=26",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"reportes"
+					],
+					"query": [
+						{
+							"key": "rangoFechas",
+							"value": "09%2F05%2F2024%7C10%2F05%2F2024"
+						},
+						{
+							"key": "codigoCliente",
+							"value": "26"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reportesPDF",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/reportespdf?rangoFechas=09%2F05%2F2024%7C10%2F05%2F2024&codigoCliente=26",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"reportespdf"
+					],
+					"query": [
+						{
+							"key": "rangoFechas",
+							"value": "09%2F05%2F2024%7C10%2F05%2F2024"
+						},
+						{
+							"key": "codigoCliente",
+							"value": "26"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "f33421@*4",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-API-KEY",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.variables.set(\"servidor\", \"localhost\");\r",
+					"pm.variables.set(\"puerto\", \"5000\");"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "numeroCuenta",
+			"value": ""
+		},
+		{
+			"key": "idMovimiento",
+			"value": ""
+		}
+	]
+}

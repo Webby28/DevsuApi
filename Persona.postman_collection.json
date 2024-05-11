@@ -1,0 +1,504 @@
+{
+	"info": {
+		"_postman_id": "1d6a0cb2-77cb-456e-bed4-15d3939c9308",
+		"name": "Persona",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21693508"
+	},
+	"item": [
+		{
+			"name": "Persona",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.request.method === 'POST' && pm.request.url.toString().includes('/v1/api/persona')) {\r",
+							"    var responseData = pm.response.json();\r",
+							"    if (responseData.idPersona) {\r",
+							"        pm.collectionVariables.set(\"idPersona\", responseData.idPersona);\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Carlos\",\r\n  \"genero\": \"O\",\r\n  \"edad\": 20,\r\n  \"identificacion\": \"22322\",\r\n  \"direccion\": \"asd\",\r\n  \"telefono\": \"sda\",\r\n  \"estado\": \"A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/persona",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"persona"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Persona",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/persona/{{idPersona}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"persona",
+						"{{idPersona}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Persona",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"ddss\",\r\n  \"genero\": \"M\",\r\n  \"edad\": 23,\r\n  \"identificacion\": \"asdas\",\r\n  \"direccion\": \"dd\",\r\n  \"telefono\": \"dd\",\r\n  \"estado\": \"A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/persona/{{idPersona}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"persona",
+						"{{idPersona}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Persona",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": \"A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/persona/{{idPersona}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"persona",
+						"{{idPersona}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Persona",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/persona/{{idPersona}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"persona",
+						"{{idPersona}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.request.method === 'POST' && pm.request.url.toString().includes('/v1/api/cliente')) {\r",
+							"    var responseData = pm.response.json();\r",
+							"    if (responseData.idCliente) {\r",
+							"        pm.collectionVariables.set(\"idCliente\", responseData.idCliente);\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"personaId\": 62,\r\n  \"contraseña\": \"123456\",\r\n  \"estado\": \"A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cliente",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cliente"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cliente/{{idCliente}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cliente",
+						"{{idCliente}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "passwordAnterior",
+						"value": "123456"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"contraseña\": \"1234\",\r\n  \"estado\": \"I\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cliente/{{idCliente}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cliente",
+						"{{idCliente}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": \"A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cliente/{{idCliente}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cliente",
+						"{{idCliente}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"servidor\", \"localhost\");\r",
+							"pm.variables.set(\"puerto\", \"5000\");\r",
+							"pm.variables.set(\"ApiKeyHeader\", \"X-API-KEY\");\r",
+							"pm.variables.set(\"ApiKey\", \"f33421@*4\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{servidor}}:{{puerto}}/v1/api/cliente/{{idCliente}}",
+					"host": [
+						"{{servidor}}"
+					],
+					"port": "{{puerto}}",
+					"path": [
+						"v1",
+						"api",
+						"cliente",
+						"{{idCliente}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "f33421@*4",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-API-KEY",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.variables.set(\"servidor\", \"localhost\");\r",
+					"pm.variables.set(\"puerto\", \"5000\");"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "idPersona",
+			"value": ""
+		},
+		{
+			"key": "idCliente",
+			"value": ""
+		}
+	]
+}
