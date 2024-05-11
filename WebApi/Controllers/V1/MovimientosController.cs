@@ -319,7 +319,7 @@ namespace WebApi.Controllers.V1
                 if (result)
                 {
                     _logger.LogInformation("Se ha eliminado el registro con éxito.{@Id}", id);
-                    return StatusCode(StatusCodes.Status201Created, result);
+                    return StatusCode(StatusCodes.Status201Created, "Se ha eliminado el registro con éxito.");
                 }
                 else
                 {

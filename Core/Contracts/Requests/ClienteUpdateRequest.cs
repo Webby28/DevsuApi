@@ -11,12 +11,12 @@ namespace WebApi.Core.Contracts.Requests
         /// Contraseña nueva del cliente.
         /// </summary>
         [Description("Contraseña nueva del cliente")]
-        public string Contraseña { get; set; }
+        public required string Contraseña { get; set; }
 
         /// <summary>
         /// Estado del cliente.
         /// </summary>
         [Description("Estado del cliente")]
-        public char Estado { get; set; }
+        public required string Estado { get; set; }
     }
 }

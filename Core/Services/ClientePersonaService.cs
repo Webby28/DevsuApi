@@ -108,7 +108,7 @@ public class ClientePersonaService : IClientePersonaService
     public async Task<ClienteEntity> ActualizarCliente(int PersonaId, ClienteUpdateRequest clienteUpdate, string passwordAnterior)
     {
         var existeCuenta = await _clientePersonaRepository.TieneUsuario(PersonaId);
-        if (clienteUpdate.Estado != 'A')
+        if (clienteUpdate.Estado != "A")
         {
             throw new ReglaNegociosException("La cuenta no se encuentra activa. Contacte con su gestor.", ErrorType.USUARIO_NO_ACTIVO);
         }
@@ -170,7 +170,7 @@ public class ClientePersonaService : IClientePersonaService
         }
     }
 
-    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         if (tabla.Equals(Tabla.CLIENTE) || tabla.Equals(Tabla.PERSONA))
         {

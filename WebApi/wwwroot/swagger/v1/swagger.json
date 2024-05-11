@@ -532,7 +532,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
+                  "$ref": "#/components/schemas/ClienteEntity"
                 }
               }
             }
@@ -542,7 +542,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClienteResponse"
+                  "$ref": "#/components/schemas/ClienteEntity"
                 }
               }
             }
@@ -1867,13 +1867,11 @@
           },
           "direccion": {
             "type": "string",
-            "description": "Dirección de la persona",
-            "nullable": true
+            "description": "Dirección de la persona"
           },
           "telefono": {
             "type": "string",
-            "description": "Teléfono de la persona",
-            "nullable": true
+            "description": "Teléfono de la persona"
           },
           "estado": {
             "type": "string",
@@ -1935,18 +1933,6 @@
         "properties": {
           "numeroCuenta": {
             "type": "string"
-          }
-        }
-      },
-      "ClienteResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "codigoCliente": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       },

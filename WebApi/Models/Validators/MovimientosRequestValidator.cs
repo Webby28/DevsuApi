@@ -13,7 +13,8 @@ namespace WebApi.Models.Validators
 
             RuleFor(x => x.TipoMovimiento)
             .NotEmpty().WithMessage("El tipo de movimiento es obligatorio.")
-            .Must(x => x == 0 || x == 1)
+            .Must(tipo => tipo.Length == 1).WithMessage("El campo TipoMovimiento debe tener exactamente un carácter.")
+            .Must(x => x == "0" || x == "1")
             .WithMessage("El tipo de movimiento no es válido. 0 - Depósito | 1 - Retiro");
 
             RuleFor(x => x.Valor)

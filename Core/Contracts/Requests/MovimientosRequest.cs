@@ -15,20 +15,22 @@ namespace WebApi.Core.Contracts.Requests
         [JsonProperty("fecha")]
         [Description("Fecha del movimiento")]
         [Required(ErrorMessage = "La fecha es obligatoria.")]
-        public string Fecha { get; set; }
+        public required string Fecha { get; set; }
 
         /// <summary>
         /// Tipo de movimiento.
         /// </summary>
         [Description("Tipo de movimiento")]
-        public char TipoMovimiento { get; set; }
+        public required string TipoMovimiento { get; set; }
 
         /// <summary>
         /// Valor del movimiento.
         /// </summary>
         [Description("Valor del movimiento")]
         public int Valor { get; set; }
-
+        /// <summary>
+        /// Numero de cuenta asociada al movimiento.
+        /// </summary>
         [Description("Numero de Cuenta asociada al movimiento")]
         public int NumeroCuenta { get; set; }
     }

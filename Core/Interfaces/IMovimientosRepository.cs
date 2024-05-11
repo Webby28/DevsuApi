@@ -37,5 +37,6 @@ public interface IMovimientosRepository
     Task<bool> CuentaConMovimiento(int numeroCuenta);
 
     Task<bool> TieneMovimiento(int codigoCliente);
-    Task<int> ActualizarEstado(char estado, int id, Tabla tabla);
+    Task<int> ActualizarEstado(string estado, int id, Tabla tabla);
+    Task<bool> TipoCuentaDuplicada(int numeroCuenta, string tipoCuenta);
 }

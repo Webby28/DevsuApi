@@ -21,5 +21,5 @@ public interface IClientePersonaService
     Task<bool> EliminarPersona(int codigoPersona);
 
     Task<bool> EliminarCliente(int codigoCliente);
-    Task<int> ActualizarEstado(char estado, int id, Tabla pERSONA);
+    Task<int> ActualizarEstado(string estado, int id, Tabla pERSONA);
 }

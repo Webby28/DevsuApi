@@ -70,11 +70,11 @@ public class MovimientosService : IMovimientosService
             }
             switch (movimiento.TipoMovimiento)
             {
-                case '0':
+                case "0":
                     saldoRestante = saldoActual + movimiento.Valor;
                     break;
 
-                case '1':
+                case "1":
                     saldoRestante = saldoActual - movimiento.Valor;
                     break;
             }
@@ -104,13 +104,18 @@ public class MovimientosService : IMovimientosService
         var existeCuenta = await _movimientosRepository.ExisteCuenta(numeroCuenta);
         if (existeCuenta)
         {
+            var tipoCuentaDuplicada = await _movimientosRepository.TipoCuentaDuplicada(numeroCuenta, cuentaUpdate.TipoCuenta);
+            if (tipoCuentaDuplicada)
+            {
+                throw new ReglaNegociosException("No puede actualizar a este tipo porque ya tiene una cuenta del mismo tipo. Intente de nuevo.", ErrorType.CUENTA_DUPLICADA);
+            }
             var updateCuenta = _mapper.Map<CuentaUpdateDto>(cuentaUpdate);
             _logger.LogInformation("Se procede a actualizar el registro. {@NumeroCuenta} {CuentaUpdate}", numeroCuenta, cuentaUpdate);
             return await _movimientosRepository.ActualizarCuenta(updateCuenta, numeroCuenta);
         }
         else
         {
-            throw new ReglaNegociosException("Persona no existe", ErrorType.PERSONA_NO_EXISTE);
+            throw new ReglaNegociosException("No existe la cuenta ingresada", ErrorType.CUENTA_NO_EXISTE);
         }
     }
 
@@ -271,7 +276,7 @@ public class MovimientosService : IMovimientosService
     /// <param name="id">Corresponde a los datos para el pago del subServicio.</param>
     /// <param name="codigoCliente">Corresponde al identificador del cliente.</param>
     /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
-    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         if(tabla.Equals(Tabla.CUENTA) || tabla.Equals(Tabla.MOVIMIENTO))
         {

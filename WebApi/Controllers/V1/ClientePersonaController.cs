@@ -167,8 +167,8 @@ public class ClientePersonaController : BaseApiController
 
     [HttpGet("cliente/{id}")]
     [OpenApiOperation("ObtenerCliente", description: "Endpoint que obtiene los datos del cliente.")]
-    [SwaggerResponse(StatusCodes.Status200OK, typeof(ClienteResponse), Description = "Operación exitosa. Devuelve el cliente.")]
-    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(ClienteResponse), Description = "No se ha encontrado coicidencias.")]
+    [SwaggerResponse(StatusCodes.Status200OK, typeof(ClienteEntity), Description = "Operación exitosa. Devuelve el cliente.")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, typeof(ClienteEntity), Description = "No se ha encontrado coicidencias.")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, typeof(ErrorResponse), Description = "La solicitud es incorrecta.")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "No autorizado para realizar la operación.")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, typeof(ErrorResponse), Description = "Error interno del servidor.")]

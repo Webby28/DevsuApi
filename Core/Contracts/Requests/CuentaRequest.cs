@@ -16,7 +16,7 @@ namespace WebApi.Core.Contracts.Requests
         /// Tipo de cuenta.
         /// </summary>
         [Description("Tipo de cuenta")]
-        public string TipoCuenta { get; set; }
+        public required string TipoCuenta { get; set; }
 
         /// <summary>
         /// Saldo inicial de la cuenta.
@@ -28,7 +28,7 @@ namespace WebApi.Core.Contracts.Requests
         /// Estado de la cuenta.
         /// </summary>
         [Description("Estado de la cuenta")]
-        public char Estado { get; set; }
+        public required string Estado { get; set; }
 
         /// <summary>
         /// Cliente asociado a la cuenta.

@@ -213,7 +213,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
         return true;
     }
 
-    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         switch (tabla)
         {
@@ -221,7 +221,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
                 var persona = await ObtenerPersona(id);
                 if (persona == null)
                     return 204; // Otra acción dependiendo de tus requisitos
-                persona.Estado = estado;
+                persona.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Persona.Update(persona).State = EntityState.Modified;
                 break;
 
@@ -229,7 +229,7 @@ public class ClientePersonaRepository : IClientePersonaRepository
                 var cliente = await ObtenerCliente(id);
                 if (cliente == null)
                     return 204; // Otra acción dependiendo de tus requisitos
-                cliente.Estado = estado;
+                cliente.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Cliente.Update(cliente).State = EntityState.Modified;
                 break;
             default:

@@ -24,5 +24,5 @@ public interface IMovimientosService
     Task<bool> EliminarMovimiento(int codigoMovimiento);
 
     Task<byte[]> GenerarReporte(string rangoFechas, int codigoCliente);
-    Task<int> ActualizarEstado(char estado, int id, Tabla tabla);
+    Task<int> ActualizarEstado(string estado, int id, Tabla tabla);
 }

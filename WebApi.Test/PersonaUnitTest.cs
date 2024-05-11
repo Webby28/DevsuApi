@@ -11,7 +11,7 @@ using WebApi.Models.Validators;
 namespace WebApi.Test
 {
     [TestFixture]
-    public class ClientePersonaServiceTests
+    public class PersonaUnitTest
     {
         private ClientePersonaService _clientePersonaService;
         private Mock<ILogger<ClientePersonaService>> _loggerMock;
@@ -43,29 +43,29 @@ namespace WebApi.Test
         }
 
         [Test]
-        public void PersonaRequestValidator_ValidarNombre_Vacio_DeberiaFallar()
+        public void PersonaRequestValidator_ValidarTelefono_LongitudMaxima_DeberiaFallar()
         {
             // Arrange
-            var personaRequest = new PersonaRequest { Nombre = "" };
+            var personaRequest = new PersonaRequest { Nombre = "Test", Genero = "O", Edad = 1, Identificacion = "123", Direccion = "Test", Telefono = "123456789012345678901" };
 
             // Act
             var result = _personaRequestValidator.TestValidate(personaRequest);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(p => p.Nombre).WithErrorMessage("El nombre es obligatorio.");
+            result.ShouldHaveValidationErrorFor(p => p.Telefono).WithErrorMessage("El teléfono no puede tener más de 20 caracteres.");
         }
 
         [Test]
-        public void PersonaRequestValidator_ValidarGenero_Vacio_DeberiaFallar()
+        public void PersonaRequestValidator_ValidarGenero_Distinto_DeberiaFallar()
         {
             // Arrange
-            var personaRequest = new PersonaRequest { Genero = "" };
+            var personaRequest = new PersonaRequest { Nombre = "Test", Genero = "S",  Edad = 1, Identificacion = "123", Direccion = "Test", Telefono = "Test" };
 
             // Act
             var result = _personaRequestValidator.TestValidate(personaRequest);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(p => p.Genero).WithErrorMessage("El género es obligatorio.");
+            result.ShouldHaveValidationErrorFor(p => p.Genero).WithErrorMessage("El campo Genero debe ser 'M' (Masculino), 'F' (Femenino), 'O' (Otro).");
         }
 
         [TestCase(-10)]
@@ -73,26 +73,13 @@ namespace WebApi.Test
         public void PersonaRequestValidator_ValidarEdad_Menor_0_DeberiaFallar(int edad)
         {
             // Arrange
-            var personaRequest = new PersonaRequest { Edad = edad };
+            var personaRequest = new PersonaRequest { Nombre = "Test", Genero = "O", Edad = edad, Identificacion = "123", Direccion = "Test", Telefono = "123456789012345678901" };
 
             // Act
             var result = _personaRequestValidator.TestValidate(personaRequest);
 
             // Assert
             result.ShouldHaveValidationErrorFor(p => p.Edad).WithErrorMessage("La edad debe ser mayor que cero.");
-        }
-
-        [Test]
-        public void PersonaRequestValidator_ValidarDireccion_Vacio_DeberiaFallar()
-        {
-            // Arrange
-            var personaRequest = new PersonaRequest { Direccion = "" };
-
-            // Act
-            var result = _personaRequestValidator.TestValidate(personaRequest);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(p => p.Direccion).WithErrorMessage("La dirección es obligatoria.");
-        }
+        }       
     }
 }

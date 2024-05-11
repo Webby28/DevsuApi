@@ -244,7 +244,7 @@ public class MovimientosRepository : IMovimientosRepository
     /// <param name="id">Corresponde al id principal de la tabla.</param>
     /// <param name="tabla">Se especifica la tabla donde se actualizará el estado.</param>
     /// <returns>Obtenemos el resultado de operación ejecutada.</returns>
-    public async Task<int> ActualizarEstado(char estado, int id, Tabla tabla)
+    public async Task<int> ActualizarEstado(string estado, int id, Tabla tabla)
     {
         switch (tabla)
         {
@@ -252,7 +252,7 @@ public class MovimientosRepository : IMovimientosRepository
                 var movimiento = await ObtenerMovimiento(id);
                 if (movimiento == null)
                     return 204; // Otra acción dependiendo de tus requisitos
-                movimiento.Estado = estado;
+                movimiento.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Movimientos.Update(movimiento).State = EntityState.Modified;
                 break;
 
@@ -260,7 +260,7 @@ public class MovimientosRepository : IMovimientosRepository
                 var cuenta = await ObtenerCuenta(id);
                 if (cuenta == null)
                     return 204; // Otra acción dependiendo de tus requisitos
-                cuenta.Estado = estado;
+                cuenta.Estado = char.Parse(estado);
                 _appDb.OracleDbContext.Cuenta.Update(cuenta).State = EntityState.Modified;
                 break;
             default:
@@ -268,5 +268,19 @@ public class MovimientosRepository : IMovimientosRepository
         }
 
         return await _appDb.OracleDbContext.SaveChangesAsync();
-    }   
+    }
+
+    public async Task<bool> TipoCuentaDuplicada(int numeroCuenta, string tipoCuenta)
+    {
+        var cuentaOriginal = await ObtenerCuenta(numeroCuenta);
+        if (cuentaOriginal.NumeroCuenta == numeroCuenta && cuentaOriginal.TipoCuenta != tipoCuenta)
+        {
+             var cuenta = await _appDb.OracleDbContext.Cuenta.FirstOrDefaultAsync(p => p.NumeroCuenta == numeroCuenta && p.TipoCuenta == tipoCuenta);
+            return true;
+
+        }
+        return false;
+
+
+    }
 }
