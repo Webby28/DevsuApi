@@ -16,6 +16,7 @@ namespace WebApi.Test
         private ClientePersonaService _clientePersonaService;
         private Mock<ILogger<ClientePersonaService>> _loggerMock;
         private Mock<IClientePersonaRepository> _clientePersonaRepository;
+        private Mock<IMovimientosRepository> _movimientosRepository;
         private Mock<IMapper> _mapperMock;
         private PersonaRequestValidator _personaRequestValidator;
 
@@ -24,9 +25,10 @@ namespace WebApi.Test
         {
             _loggerMock = new Mock<ILogger<ClientePersonaService>>();
             _clientePersonaRepository = new Mock<IClientePersonaRepository>();
+            _movimientosRepository = new Mock<IMovimientosRepository>();
             _mapperMock = new Mock<IMapper>();
             _personaRequestValidator = new PersonaRequestValidator();
-            _clientePersonaService = new ClientePersonaService(_clientePersonaRepository.Object, _loggerMock.Object, _mapperMock.Object);
+            _clientePersonaService = new ClientePersonaService(_clientePersonaRepository.Object, _loggerMock.Object, _mapperMock.Object, _movimientosRepository.Object);
         }
 
         [TestCase(0)]
