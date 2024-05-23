@@ -11,6 +11,7 @@ using WebApi.Core.Contracts.Helpers;
 using WebApi.Core.Contracts.Requests;
 using WebApi.Core.Contracts.Responses;
 using WebApi.Core.Interfaces;
+using WebApi.Infrastructure.Database.Configuration;
 using WebApi.Models;
 
 namespace WebApi.Controllers.V1;
@@ -41,7 +42,10 @@ public class ClientePersonaController : BaseApiController
     {
         try
         {
+            RedisPersona redisPersona = new RedisPersona();
             _logger.LogInformation("Inicio solicitud de InsertarPersona {@Persona}", persona);
+            redisPersona.SetValue("1", persona);
+            var dato = redisPersona.GetValue<object>("1");
             var result = await _clientePersonaService.InsertarPersona(persona);
 
             if (!string.IsNullOrWhiteSpace(result.Nombre))
